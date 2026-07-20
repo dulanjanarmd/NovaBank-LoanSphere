@@ -1,0 +1,6 @@
+{
+  "name": "NovaBank LoanSphere",
+  "description": "Digital Loan Origination and Account Opening System for NovaBank, supporting savings accounts and personal, home, vehicle, and SME loans.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
