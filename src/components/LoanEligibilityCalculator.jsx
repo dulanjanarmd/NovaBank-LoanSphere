@@ -84,7 +84,34 @@ export default function LoanEligibilityCalculator({ user, onStartDLO, onNavigate
   const [tenure, setTenure] = useState(36);
   const [liabilities, setLiabilities] = useState(15000);
 
-  const spec = PRODUCT_SPECS[loanType];
+  const [rates, setRates] = useState({
+    PERSONAL: PRODUCT_SPECS.PERSONAL.interestRate,
+    HOME: PRODUCT_SPECS.HOME.interestRate,
+    VEHICLE: PRODUCT_SPECS.VEHICLE.interestRate,
+    SME: PRODUCT_SPECS.SME.interestRate,
+  });
+
+  useEffect(() => {
+    const handleRateUpdate = (e) => {
+      const { loanType: updatedType, interestRate } = e.detail;
+      if (updatedType === "PERSONAL") {
+        const delta = interestRate - PRODUCT_SPECS.PERSONAL.interestRate;
+        setRates({
+          PERSONAL: interestRate,
+          HOME: parseFloat((PRODUCT_SPECS.HOME.interestRate + delta).toFixed(2)),
+          VEHICLE: parseFloat((PRODUCT_SPECS.VEHICLE.interestRate + delta).toFixed(2)),
+          SME: parseFloat((PRODUCT_SPECS.SME.interestRate + delta).toFixed(2)),
+        });
+      }
+    };
+    window.addEventListener("nova-rate-updated", handleRateUpdate);
+    return () => window.removeEventListener("nova-rate-updated", handleRateUpdate);
+  }, []);
+
+  const spec = {
+    ...PRODUCT_SPECS[loanType],
+    interestRate: rates[loanType]
+  };
 
   // Keep slider values within current active bounds when product type changes
   useEffect(() => {

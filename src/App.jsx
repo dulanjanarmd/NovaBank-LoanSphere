@@ -10,6 +10,7 @@ import ComplianceConsole from "./components/ComplianceConsole.jsx";
 import ManagerDashboard from "./components/ManagerDashboard.jsx";
 import AdminConsole from "./components/AdminConsole.jsx";
 import SupportContactWidget from "./components/SupportContactWidget.jsx";
+import RateFluctuationNotifier from "./components/RateFluctuationNotifier.jsx";
 import { Sparkles, Users, HelpCircle, FileText } from "lucide-react";
 
 export default function App() {
@@ -278,6 +279,9 @@ export default function App() {
 
       {/* Floating Support Assist Desk Widget */}
       <SupportContactWidget />
+
+      {/* Floating Rate Fluctuation Notifier & Live Watch Controls */}
+      <RateFluctuationNotifier user={user} />
 
     </div>
   );

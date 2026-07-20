@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LoanEligibilityCalculator from "./LoanEligibilityCalculator.jsx";
 import DebtPortfolioVisualizer from "./DebtPortfolioVisualizer.jsx";
 import NotificationCenter from "./NotificationCenter.jsx";
@@ -11,6 +11,26 @@ export default function DashboardCustomer({ user, customerAccounts, customerAppl
   const [calcTenure, setCalcTenure] = useState("24");
   const [calcRate, setCalcRate] = useState("12.5");
   const [calcEmi, setCalcEmi] = useState(null);
+
+  useEffect(() => {
+    const handleRateUpdate = (e) => {
+      const { interestRate } = e.detail;
+      setCalcRate(String(interestRate));
+    };
+    window.addEventListener("nova-rate-updated", handleRateUpdate);
+    return () => window.removeEventListener("nova-rate-updated", handleRateUpdate);
+  }, []);
+
+  // Auto re-estimate EMI when parameters or rates dynamically fluctuate
+  useEffect(() => {
+    const p = parseFloat(calcAmount);
+    const r = (parseFloat(calcRate) / 100) / 12;
+    const n = parseInt(calcTenure);
+    if (p > 0 && r > 0 && n > 0) {
+      const emiVal = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+      setCalcEmi(Math.round(emiVal));
+    }
+  }, [calcAmount, calcTenure, calcRate]);
 
   // E-Sign modal state
   const [selectedAppToSign, setSelectedAppToSign] = useState(null);
