@@ -77,7 +77,7 @@ const PRODUCT_SPECS = {
   }
 };
 
-export default function LoanEligibilityCalculator({ user, onStartDLO, onNavigateToRegister }) {
+export default function LoanEligibilityCalculator({ user, token, onStartDLO, onNavigateToRegister }) {
   const [loanType, setLoanType] = useState("PERSONAL");
   const [income, setIncome] = useState(120000);
   const [desiredAmount, setDesiredAmount] = useState(500000);
@@ -575,9 +575,15 @@ export default function LoanEligibilityCalculator({ user, onStartDLO, onNavigate
         {/* Amortization Schedule Section */}
         <div className="md:col-span-12 pt-4 border-t border-slate-150">
           <LoanAmortizationSchedule 
+            user={user}
+            token={token}
+            loanType={loanType}
             principal={desiredAmount}
             annualRate={spec.interestRate}
             tenureMonths={tenure}
+            metrics={{ totalPayment: totalRepayment, totalInterest: totalInterest }}
+            eligibilityStatus={eligibilityStatus}
+            dtiFixed={dtiFixed}
           />
         </div>
 

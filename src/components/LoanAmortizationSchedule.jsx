@@ -10,10 +10,22 @@ import {
   Download,
   Filter,
   Layers,
-  ArrowRight
+  ArrowRight,
+  FileText
 } from "lucide-react";
+import { exportLoanQuotePDF } from "../utils/pdfExport.js";
 
-export default function LoanAmortizationSchedule({ principal, annualRate, tenureMonths }) {
+export default function LoanAmortizationSchedule({ 
+  user, 
+  token,
+  loanType = "PERSONAL", 
+  principal, 
+  annualRate, 
+  tenureMonths, 
+  passedMetrics, 
+  eligibilityStatus = "ELIGIBLE", 
+  dtiFixed = "0.0" 
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedYear, setSelectedYear] = useState("ALL"); // "ALL" or specific year number 1, 2...
   const [searchQuery, setSearchQuery] = useState("");
@@ -155,6 +167,22 @@ export default function LoanAmortizationSchedule({ principal, annualRate, tenure
     document.body.removeChild(link);
   };
 
+  const handleDownloadPDF = () => {
+    if (schedule.length === 0) return;
+    exportLoanQuotePDF({
+      user,
+      token,
+      loanType,
+      principal,
+      annualRate,
+      tenureMonths,
+      schedule,
+      metrics: passedMetrics || metrics || periodSummary,
+      eligibilityStatus,
+      dtiFixed
+    });
+  };
+
   if (schedule.length === 0) return null;
 
   return (
@@ -250,9 +278,22 @@ export default function LoanAmortizationSchedule({ principal, annualRate, tenure
                 onClick={handleDownloadCSV}
                 className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 text-[10px] font-bold transition cursor-pointer text-slate-700"
                 title="Export complete schedule to CSV"
+                id="btn-export-csv"
               >
                 <Download className="h-3.5 w-3.5 text-blue-600" />
                 <span>Export CSV</span>
+              </button>
+
+              {/* PDF Export Button */}
+              <button
+                type="button"
+                onClick={handleDownloadPDF}
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 border border-red-200 rounded-lg bg-red-50 hover:bg-red-100/80 text-[10px] font-bold transition cursor-pointer text-red-700"
+                title="Export official quote and full amortization schedule to PDF"
+                id="btn-export-pdf"
+              >
+                <FileText className="h-3.5 w-3.5 text-red-600" />
+                <span>Export PDF Report</span>
               </button>
 
             </div>

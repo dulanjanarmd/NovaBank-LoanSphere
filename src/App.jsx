@@ -158,6 +158,7 @@ export default function App() {
                   ) : (
                     <DashboardCustomer
                       user={user}
+                      token={token}
                       customerAccounts={accounts}
                       customerApplications={applications}
                       onStartDAO={() => setCustomerMode("DAO")}

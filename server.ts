@@ -568,6 +568,94 @@ app.post("/api/v1/loans/disburse", (req, res) => {
   res.json({ success: true, application: appItem });
 });
 
+// 12.1 Audit PDF Export Events (Full-stack audit logger integration)
+app.post("/api/v1/loans/audit-export", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  const { export_type, ref_id, principal, loan_type, customer_name } = req.body;
+  
+  let userId = "guest";
+  let fullName = customer_name || "Unregistered Guest User";
+
+  if (token && token !== "null" && token !== "undefined") {
+    if (token.startsWith("cust_")) {
+      const custId = parseInt(token.split("_")[1]);
+      const customer = db.customers.find(c => c.customer_id === custId);
+      if (customer) {
+        userId = customer.nic_number;
+        fullName = customer.full_name;
+      }
+    } else if (token.startsWith("staff_")) {
+      const username = token.split("_")[1];
+      const staff = db.users.find(u => u.username === username);
+      if (staff) {
+        userId = staff.username;
+        fullName = staff.fullName;
+      }
+    }
+  }
+
+  const amtStr = principal ? ` (LKR ${Math.round(principal).toLocaleString()})` : "";
+  const details = `Generated and exported ${export_type === "quote" ? "Pre-qualification Quote PDF" : "Official Repayment Statement PDF"} for ${loan_type || "General"} Loan${amtStr}. Ref: ${ref_id || "N/A"}`;
+  
+  logAudit(userId, "EXPORT_PDF", `PDF Document Generation: ${fullName}`, req.ip || "127.0.0.1", details);
+  
+  res.json({ success: true, message: "PDF export event successfully registered in CBS Audit Trail." });
+});
+
+// 12.2 Server-Side Amortization Schedule Calculation Engine
+app.post("/api/v1/loans/calculate-schedule", (req, res) => {
+  const { principal, annualRate, tenureMonths } = req.body;
+  const p = parseFloat(principal);
+  const r = (parseFloat(annualRate) / 100) / 12;
+  const n = parseInt(tenureMonths);
+
+  if (isNaN(p) || isNaN(r) || isNaN(n) || p <= 0 || r <= 0 || n <= 0) {
+    return res.status(400).json({ success: false, message: "Invalid parameters supplied for CBS scheduler." });
+  }
+
+  const emi = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+  const monthlyPayment = isNaN(emi) || !isFinite(emi) ? 0 : emi;
+
+  let remainingBalance = p;
+  let cumulativeInterest = 0;
+  let cumulativePrincipal = 0;
+  const schedule = [];
+
+  for (let month = 1; month <= n; month++) {
+    const interestPayment = remainingBalance * r;
+    const principalPayment = Math.min(remainingBalance, monthlyPayment - interestPayment);
+    
+    cumulativeInterest += interestPayment;
+    cumulativePrincipal += principalPayment;
+    remainingBalance = Math.max(0, remainingBalance - principalPayment);
+
+    const yearNumber = Math.ceil(month / 12);
+
+    schedule.push({
+      month,
+      year: yearNumber,
+      payment: monthlyPayment,
+      principal: principalPayment,
+      interest: interestPayment,
+      cumulativeInterest,
+      cumulativePrincipal,
+      balance: remainingBalance
+    });
+  }
+
+  const totalPayment = cumulativeInterest + p;
+
+  res.json({
+    success: true,
+    schedule,
+    metrics: {
+      totalInterest: cumulativeInterest,
+      totalPayment,
+      monthlyEmi: monthlyPayment
+    }
+  });
+});
+
 // 13. Audit logs (Admin only)
 app.get("/api/v1/admin/audits", (req, res) => {
   res.json(db.audit_logs);
