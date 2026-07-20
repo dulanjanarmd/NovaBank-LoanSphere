@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { 
   Phone, 
   Mail, 
@@ -12,8 +12,44 @@ import {
   HelpCircle,
   ChevronRight,
   User,
-  FileText
+  FileText,
+  Search,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
+
+const FAQ_DATA = [
+  {
+    id: "faq-1",
+    category: "onboarding",
+    question: "How long does the digital savings account opening take?",
+    answer: "With our new Express Quick Open module, your savings account is provisioned instantly! The standard 5-step onboarding workflow usually takes up to 1 business day for full manual compliance review and registration with the Department of Persons."
+  },
+  {
+    id: "faq-2",
+    category: "loans",
+    question: "What documents are required to apply for a loan?",
+    answer: "Generally, you need: 1) A clear photo of your National Identity Card (NIC). 2) Last 3 months' salary payslips or audited accounts (for SME). 3) Last 3 months' bank statements showing your primary salary/income routing."
+  },
+  {
+    id: "faq-3",
+    category: "loans",
+    question: "What is CRIB and how does it affect my score?",
+    answer: "The Credit Information Bureau of Sri Lanka keeps track of your repayment histories. Our automated decision-engine connects to a mock CRIB gateway to compute your Debt-to-Income (DTI) and loan eligibility metrics instantly."
+  },
+  {
+    id: "faq-4",
+    category: "e-sign",
+    question: "Is the e-signature legally binding on the loan agreement?",
+    answer: "Absolutely. NovaBank uses consent-based multi-factor SMS OTP authentication to stamp your electronic signature, which is fully recognized and legally binding under the Electronic Transactions Act No. 19 of 2006."
+  },
+  {
+    id: "faq-5",
+    category: "loans",
+    question: "What is the maximum Debt-to-Income (DTI) ratio allowed?",
+    answer: "To comply with Central Bank risk criteria, the standard threshold is capped at 40%. Any application with a DTI higher than 40% is automatically flagged for manual credit underwriting appraisal."
+  }
+];
 
 export default function SupportContactWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,6 +58,21 @@ export default function SupportContactWidget() {
   const [ticketMessage, setTicketMessage] = useState("");
   const [ticketSubmitted, setTicketSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // FAQ States
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [expandedFaqId, setExpandedFaqId] = useState(null);
+
+  // Filtered FAQs
+  const filteredFaqs = useMemo(() => {
+    return FAQ_DATA.filter((faq) => {
+      const matchesCategory = selectedCategory === "all" || faq.category === selectedCategory;
+      const matchesSearch = faq.question.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                            faq.answer.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [selectedCategory, searchQuery]);
 
   const handleSubmitTicket = (e) => {
     e.preventDefault();
@@ -170,6 +221,100 @@ export default function SupportContactWidget() {
                     </div>
                   </div>
                   <p className="text-[9px] text-slate-400 italic pt-1">*All hours are indicated in Sri Lankan Standard Time (UTC+05:30).</p>
+                </div>
+              </div>
+
+              {/* Dynamic Customer Support FAQs Section */}
+              <div className="border-t border-slate-100 pt-5 space-y-4" id="faq-interactive-section">
+                <div className="flex items-center justify-between">
+                  <h5 className="font-mono font-bold text-[10px] text-slate-400 uppercase tracking-wider">
+                    Frequently Asked Questions
+                  </h5>
+                  <span className="text-[9px] font-mono text-teal-600 font-bold bg-teal-50 px-2 py-0.5 rounded border border-teal-100">
+                    Self-Service Assistance
+                  </span>
+                </div>
+
+                {/* FAQ Search and Filter inputs */}
+                <div className="space-y-3">
+                  {/* Search box */}
+                  <div className="relative">
+                    <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                    <input
+                      id="faq-search-input"
+                      type="text"
+                      className="w-full pl-9 pr-3 py-1.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                      placeholder="Search common answers (e.g., NIC, CRIB, e-sign)..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Category Filter Badges */}
+                  <div className="flex flex-wrap gap-1.5">
+                    {[
+                      { id: "all", label: "All Topics" },
+                      { id: "onboarding", label: "Onboarding" },
+                      { id: "loans", label: "Loans" },
+                      { id: "e-sign", label: "E-Sign" }
+                    ].map((cat) => (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedCategory(cat.id);
+                          setExpandedFaqId(null);
+                        }}
+                        className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer border ${
+                          selectedCategory === cat.id
+                            ? "bg-teal-600 text-white border-teal-600 shadow-sm"
+                            : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+                        }`}
+                      >
+                        {cat.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Accordion Questions List */}
+                <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+                  {filteredFaqs.length > 0 ? (
+                    filteredFaqs.map((faq) => {
+                      const isExpanded = expandedFaqId === faq.id;
+                      return (
+                        <div
+                          key={faq.id}
+                          className="border border-slate-150 rounded-xl overflow-hidden bg-slate-50/50 hover:bg-slate-50 transition-colors"
+                        >
+                          <button
+                            type="button"
+                            onClick={() => setExpandedFaqId(isExpanded ? null : faq.id)}
+                            className="w-full px-3.5 py-2.5 text-left flex items-center justify-between gap-3 text-[11px] font-bold text-slate-700 hover:text-slate-900 focus:outline-none"
+                          >
+                            <span>{faq.question}</span>
+                            {isExpanded ? (
+                              <ChevronUp className="h-3.5 w-3.5 text-slate-500 flex-shrink-0" />
+                            ) : (
+                              <ChevronDown className="h-3.5 w-3.5 text-slate-500 flex-shrink-0" />
+                            )}
+                          </button>
+
+                          {isExpanded && (
+                            <div className="px-3.5 pb-3 pt-0.5 text-[11px] text-slate-500 border-t border-slate-100 bg-white leading-relaxed animate-fade-in">
+                              {faq.answer}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="py-6 text-center text-slate-400 bg-slate-50 border border-slate-200/50 rounded-xl">
+                      <HelpCircle className="h-5 w-5 mx-auto text-slate-300 mb-1" />
+                      <p className="font-bold">No matches found</p>
+                      <p className="text-[10px]">Try searching for other keywords.</p>
+                    </div>
+                  )}
                 </div>
               </div>
 

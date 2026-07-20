@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar.jsx";
 import Login from "./components/Login.jsx";
 import DashboardCustomer from "./components/DashboardCustomer.jsx";
 import OnboardingWizard from "./components/OnboardingWizard.jsx";
+import QuickAccountOpen from "./components/QuickAccountOpen.jsx";
 import LoanWizard from "./components/LoanWizard.jsx";
 import OfficerConsole from "./components/OfficerConsole.jsx";
 import ComplianceConsole from "./components/ComplianceConsole.jsx";
@@ -135,6 +136,15 @@ export default function App() {
                       }}
                       onCancel={() => setCustomerMode(null)}
                     />
+                  ) : customerMode === "QUICK_DAO" ? (
+                    <QuickAccountOpen
+                      user={user}
+                      onSuccess={() => {
+                        setCustomerMode(null);
+                        fetchStateData();
+                      }}
+                      onCancel={() => setCustomerMode(null)}
+                    />
                   ) : customerMode === "DLO" ? (
                     <LoanWizard
                       user={user}
@@ -150,6 +160,7 @@ export default function App() {
                       customerAccounts={accounts}
                       customerApplications={applications}
                       onStartDAO={() => setCustomerMode("DAO")}
+                      onStartQuickDAO={() => setCustomerMode("QUICK_DAO")}
                       onStartDLO={() => setCustomerMode("DLO")}
                       fetchCustomerData={() => fetchStateData()}
                     />

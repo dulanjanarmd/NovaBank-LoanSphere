@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import LoanEligibilityCalculator from "./LoanEligibilityCalculator.jsx";
 import DebtPortfolioVisualizer from "./DebtPortfolioVisualizer.jsx";
+import NotificationCenter from "./NotificationCenter.jsx";
 import { Landmark, FileText, ArrowRight, Calculator, CheckCircle2, AlertCircle, Clock, CreditCard, ChevronRight, Download, Eye, ShieldCheck, TrendingUp, Sparkles, HelpCircle } from "lucide-react";
 
-export default function DashboardCustomer({ user, customerAccounts, customerApplications, onStartDAO, onStartDLO, fetchCustomerData }) {
+export default function DashboardCustomer({ user, customerAccounts, customerApplications, onStartDAO, onStartQuickDAO, onStartDLO, fetchCustomerData }) {
   
   // EMI Calculator state
   const [calcAmount, setCalcAmount] = useState("500000");
@@ -148,6 +149,20 @@ export default function DashboardCustomer({ user, customerAccounts, customerAppl
   return (
     <div className="space-y-8 animate-fade-in">
       
+      {/* Top Header Row with Portal Branding & Notification Center */}
+      <div className="flex items-center justify-between bg-slate-50 border border-slate-150 rounded-2xl px-5 py-3 shadow-sm">
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500">
+            NovaBank Secured Session Active
+          </span>
+        </div>
+        <NotificationCenter 
+          customerApplications={customerApplications} 
+          customerAccounts={customerAccounts} 
+        />
+      </div>
+
       {/* 1. Welcome banner & profile summary */}
       <div className="bg-gradient-to-r from-brand-primary to-blue-900 rounded-3xl p-6 md:p-8 text-white shadow-xl">
         <div className="max-w-3xl">
@@ -204,14 +219,31 @@ export default function DashboardCustomer({ user, customerAccounts, customerAppl
                     <span>Account Active: {customerAccounts[0].account_number}</span>
                   </div>
                 ) : (
-                  <button
-                    id="btn-start-dao"
-                    onClick={onStartDAO}
-                    className="text-[11px] font-bold text-teal-600 hover:text-teal-700 flex items-center gap-1 cursor-pointer"
-                  >
-                    <span>Launch Onboarding Wizard</span>
-                    <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
-                  </button>
+                  <div className="space-y-3 w-full">
+                    <button
+                      id="btn-start-dao"
+                      onClick={onStartDAO}
+                      className="w-full text-left text-[11px] font-bold text-teal-600 hover:text-teal-700 flex items-center justify-between group cursor-pointer bg-slate-50 hover:bg-teal-50/50 p-2 rounded-xl transition-all border border-slate-200 hover:border-teal-300"
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <Landmark className="h-3.5 w-3.5 text-teal-500" />
+                        Standard 5-Step Onboarding
+                      </span>
+                      <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform animate-pulse" />
+                    </button>
+
+                    <button
+                      id="btn-start-quick-dao"
+                      onClick={onStartQuickDAO}
+                      className="w-full text-left text-[11px] font-bold text-white bg-teal-600 hover:bg-teal-700 flex items-center justify-between group cursor-pointer p-2.5 rounded-xl transition-all shadow-sm shadow-teal-600/10 hover:shadow-md hover:scale-[1.01]"
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <Sparkles className="h-3.5 w-3.5 animate-pulse text-teal-100" />
+                        ⚡ Express Quick Open (Instant Setup)
+                      </span>
+                      <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
                 )}
               </div>
             </div>

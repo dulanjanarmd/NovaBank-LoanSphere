@@ -1,6 +1,7 @@
 import React from "react";
 import { Landmark, LogOut, UserCircle2, ShieldCheck, HelpCircle } from "lucide-react";
 import novabankLogo from "../assets/images/novabank_logo_1784551514973.jpg";
+import ThemeToggle from "./ThemeToggle.jsx";
 
 export default function Navbar({ user, onLogout }) {
   const getRoleBadgeColor = (role) => {
@@ -46,41 +47,45 @@ export default function Navbar({ user, onLogout }) {
           </div>
         </div>
 
-        {/* User context & profile actions */}
-        {user ? (
-          <div className="flex items-center space-x-4">
-            <div className="hidden md:flex flex-col items-end text-right">
-              <span className="text-sm font-semibold text-slate-200">{user.fullName}</span>
-              <span className={`text-[10px] font-mono font-medium px-2 py-0.5 mt-0.5 rounded-full border ${getRoleBadgeColor(user.role)}`}>
-                {getRoleLabel(user.role)}
-              </span>
-            </div>
-            
-            <div className="h-9 w-px bg-slate-800 hidden sm:block"></div>
-
-            <div className="flex items-center space-x-2">
-              <span className="p-1.5 rounded-lg bg-slate-800 text-slate-300 md:hidden flex items-center justify-center">
-                <UserCircle2 className="h-5 w-5" />
-              </span>
+        {/* User context & profile actions & Theme Toggle */}
+        <div className="flex items-center space-x-4">
+          <ThemeToggle />
+          
+          {user ? (
+            <div className="flex items-center space-x-4">
+              <div className="hidden md:flex flex-col items-end text-right">
+                <span className="text-sm font-semibold text-slate-200">{user.fullName}</span>
+                <span className={`text-[10px] font-mono font-medium px-2 py-0.5 mt-0.5 rounded-full border ${getRoleBadgeColor(user.role)}`}>
+                  {getRoleLabel(user.role)}
+                </span>
+              </div>
               
-              <button
-                id="btn-logout"
-                onClick={onLogout}
-                className="flex items-center space-x-1.5 px-3 py-2 text-xs font-medium text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all duration-200"
-                title="Logout from active session"
-              >
-                <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">Logout</span>
-              </button>
+              <div className="h-9 w-px bg-slate-800 hidden sm:block"></div>
+  
+              <div className="flex items-center space-x-2">
+                <span className="p-1.5 rounded-lg bg-slate-800 text-slate-300 md:hidden flex items-center justify-center">
+                  <UserCircle2 className="h-5 w-5" />
+                </span>
+                
+                <button
+                  id="btn-logout"
+                  onClick={onLogout}
+                  className="flex items-center space-x-1.5 px-3 py-2 text-xs font-medium text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all duration-200"
+                  title="Logout from active session"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span className="hidden sm:inline">Logout</span>
+                </button>
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="flex items-center space-x-3 text-xs text-slate-400 font-medium">
-            <span className="flex items-center gap-1 text-teal-400">
-              <ShieldCheck className="h-4 w-4" /> SECURE SSL (AES-256)
-            </span>
-          </div>
-        )}
+          ) : (
+            <div className="flex items-center space-x-3 text-xs text-slate-400 font-medium">
+              <span className="flex items-center gap-1 text-teal-400">
+                <ShieldCheck className="h-4 w-4" /> SECURE SSL (AES-256)
+              </span>
+            </div>
+          )}
+        </div>
 
       </div>
     </header>
