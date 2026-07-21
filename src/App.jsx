@@ -107,38 +107,17 @@ export default function App() {
             } />
             <Route path="/onboarding" element={
               user?.role === "CUSTOMER" ? (
-                <OnboardingWizard
-                  user={user}
-                  onCompleteDAO={() => {
-                    fetchStateData();
-                    navigate("/dashboard");
-                  }}
-                  onCancel={() => navigate("/dashboard")}
-                />
+                <OnboardingWizard user={user} />
               ) : <Navigate to="/" />
             } />
             <Route path="/quick-open" element={
               user?.role === "CUSTOMER" ? (
-                <QuickAccountOpen
-                  user={user}
-                  onSuccess={() => {
-                    fetchStateData();
-                    navigate("/dashboard");
-                  }}
-                  onCancel={() => navigate("/dashboard")}
-                />
+                <QuickAccountOpen user={user} />
               ) : <Navigate to="/" />
             } />
             <Route path="/loan-application" element={
               user?.role === "CUSTOMER" ? (
-                <LoanWizard
-                  user={user}
-                  onCompleteDLO={() => {
-                    fetchStateData();
-                    navigate("/dashboard");
-                  }}
-                  onCancel={() => navigate("/dashboard")}
-                />
+                <LoanWizard user={user} />
               ) : <Navigate to="/" />
             } />
 

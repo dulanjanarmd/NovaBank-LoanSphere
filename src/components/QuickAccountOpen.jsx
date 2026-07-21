@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { 
   User, 
   CreditCard, 
@@ -19,7 +20,9 @@ import {
   DollarSign
 } from "lucide-react";
 
-export default function QuickAccountOpen({ user, onSuccess, onCancel }) {
+export default function QuickAccountOpen({ user }) {
+  const navigate = useNavigate();
+
   // Form State
   const [fullName, setFullName] = useState(user?.fullName || "");
   const [nicNo, setNicNo] = useState(user?.username || "");
@@ -182,7 +185,7 @@ export default function QuickAccountOpen({ user, onSuccess, onCancel }) {
           <p className="text-xs text-slate-400">Captures identity, verifies OCR, and boots Core CBS ledger instantly.</p>
         </div>
         <button 
-          onClick={onCancel}
+          onClick={() => navigate("/dashboard")}
           className="text-xs text-slate-400 hover:text-white p-1 rounded-lg bg-slate-800 hover:bg-slate-700 transition-all cursor-pointer"
           title="Go Back"
         >
@@ -279,7 +282,7 @@ export default function QuickAccountOpen({ user, onSuccess, onCancel }) {
             <div className="pt-2 flex justify-center gap-3">
               <button
                 type="button"
-                onClick={onSuccess}
+                onClick={() => navigate("/dashboard")}
                 className="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-all shadow-sm cursor-pointer"
               >
                 Go to Dashboard
