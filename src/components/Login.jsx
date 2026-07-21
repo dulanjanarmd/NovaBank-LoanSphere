@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import LoanEligibilityCalculator from "./LoanEligibilityCalculator.jsx";
 import { 
   Landmark, 
   Shield, 
