@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Landmark, FileText, ChevronRight, ChevronLeft, CheckCircle2, UserCircle2, ShieldCheck, HelpCircle, Loader2, Award, Upload } from "lucide-react";
 
-export default function OnboardingWizard({ user, onCompleteDAO, onCancel }) {
+export default function OnboardingWizard({ user }) {
+  const navigate = useNavigate();
+
   const [step, setStep] = useState(1);
   const [loadingKyc, setLoadingKyc] = useState(false);
   const [kycDone, setKycDone] = useState(false);
@@ -70,7 +73,7 @@ export default function OnboardingWizard({ user, onCompleteDAO, onCancel }) {
       const data = await response.json();
       if (data.success) {
         alert(`Congratulations! Savings Account opened successfully. Your Core Account Number is: ${data.account.account_number}`);
-        onCompleteDAO();
+        navigate("/dashboard");
       } else {
         alert(data.message || "DAO Application processing error.");
       }
@@ -92,7 +95,7 @@ export default function OnboardingWizard({ user, onCompleteDAO, onCancel }) {
           <p className="text-xs text-slate-400">Apply for a premium savings account with automated biometric e-KYC.</p>
         </div>
         <button
-          onClick={onCancel}
+          onClick={() => navigate("/dashboard")}
           className="text-xs font-bold text-rose-400 hover:underline mt-2 md:mt-0"
         >
           Cancel Application
