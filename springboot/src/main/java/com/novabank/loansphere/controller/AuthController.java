@@ -1,13 +1,12 @@
 package com.novabank.loansphere.controller;
 
+import com.novabank.loansphere.model.Customer;
+import com.novabank.loansphere.service.AuthService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import lombok.Data;
-import java.util.HashMap;
+
 import java.util.Map;
 
 @RestController
@@ -15,87 +14,41 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final PasswordEncoder passwordEncoder;
-    private final JwtHelper jwtHelper;
+    private final AuthService authService;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        // Simple authentication check matching our seeded DB users
-        String username = loginRequest.getUsername();
-        String password = loginRequest.getPassword();
-        
-        // Simulating matching query against MySQL db
-        String matchedRole = null;
-        String fullName = null;
-        String branch = null;
-        
-        if ("officer".equals(username) && "password".equals(password)) {
-            matchedRole = "LOAN_OFFICER";
-            fullName = "Aruni Perera";
-            branch = "Colombo Fort";
-        } else if ("compliance".equals(username) && "password".equals(password)) {
-            matchedRole = "COMPLIANCE_OFFICER";
-            fullName = "Sajith Silva";
-            branch = "Head Office";
-        } else if ("manager".equals(username) && "password".equals(password)) {
-            matchedRole = "BRANCH_MANAGER";
-            fullName = "Niranjan Jayawardena";
-            branch = "Colombo Fort";
-        } else if ("admin".equals(username) && "password".equals(password)) {
-            matchedRole = "ADMIN";
-            fullName = "Admin Sphere";
-            branch = "Head Office";
-        } else if ("+94771234567".equals(username) && "password".equals(password)) {
-            matchedRole = "CUSTOMER";
-            fullName = "Kamal Bandara";
-            branch = "Digital Branch";
-        }
-
-        if (matchedRole != null) {
-            String token = jwtHelper.generateToken(username, matchedRole);
-            
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("token", token);
-            
-            Map<String, Object> userObj = new HashMap<>();
-            userObj.put("username", username);
-            userObj.put("fullName", fullName);
-            userObj.put("role", matchedRole);
-            userObj.put("branch", branch);
-            response.put("user", userObj);
-            
+        try {
+            Map<String, Object> response = authService.authenticateUser(loginRequest.getUsername(), loginRequest.getPassword());
             return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body(Map.of("success", false, "message", e.getMessage()));
         }
-
-        Map<String, Object> errResponse = new HashMap<>();
-        errResponse.put("success", false);
-        errResponse.put("message", "Invalid username or password credentials.");
-        return ResponseEntity.status(401).body(errResponse);
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerCustomer(@RequestBody RegisterRequest request) {
-        // Validating uniqueness of NIC in MySQL database tables
-        if (request.getNicNumber() == null || request.getNicNumber().length() < 10) {
-            return ResponseEntity.badRequest().body("Invalid Sri Lankan National Identity Card (NIC) identifier.");
+        try {
+            if (request.getNicNumber() == null || request.getNicNumber().length() < 10) {
+                return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Invalid Sri Lankan National Identity Card (NIC) identifier."));
+            }
+
+            Customer customer = new Customer();
+            customer.setNicNumber(request.getNicNumber());
+            customer.setFullName(request.getFullName());
+            customer.setMobileNumber(request.getMobileNumber());
+            customer.setEmail(request.getEmail());
+            customer.setAddress(request.getAddress());
+            customer.setOccupation(request.getOccupation());
+            customer.setSourceOfFunds(request.getSourceOfFunds());
+            customer.setMonthlyTurnover(java.math.BigDecimal.valueOf(request.getMonthlyTurnover()));
+            customer.setDateOfBirth(java.time.LocalDate.now().minusYears(20)); // Dummy DOB
+
+            Map<String, Object> response = authService.registerCustomer(customer);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", e.getMessage()));
         }
-
-        // Return registration response with fresh session token
-        String token = jwtHelper.generateToken(request.getNicNumber(), "CUSTOMER");
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("token", token);
-        
-        Map<String, Object> userObj = new HashMap<>();
-        userObj.put("username", request.getNicNumber());
-        userObj.put("fullName", request.getFullName());
-        userObj.put("role", "CUSTOMER");
-        userObj.put("branch", "Digital Branch");
-        response.put("user", userObj);
-
-        return ResponseEntity.ok(response);
     }
 }
 
