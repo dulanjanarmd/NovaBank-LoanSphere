@@ -117,40 +117,40 @@ export default function Login({ onLoginSuccess }) {
       <div className="grid md:grid-cols-12 gap-8 items-start">
 
         {/* ── Left: Brand Panel ── */}
-        <aside className="md:col-span-5 bg-color-brand-primary border border-color-brand-secondary rounded-lg shadow-sm p-6 flex flex-col gap-6">
+        <aside className="md:col-span-5 bg-white border border-slate-200 rounded-lg shadow-sm p-6 flex flex-col gap-6">
           <div className="flex items-center gap-3">
             <div className="bg-slate-800 p-3 rounded-md text-white">
               <Landmark className="h-6 w-6" />
             </div>
             <div>
-              <h2 className="text-lg font-bold tracking-tight text-white">NovaBank</h2>
-              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold">
+              <h2 className="text-lg font-bold tracking-tight text-slate-900">NovaBank</h2>
+              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-bold">
                 LoanSphere Core
               </span>
             </div>
           </div>
 
-          <p className="text-sm text-slate-300 leading-relaxed">
+          <p className="text-sm text-slate-600 leading-relaxed">
             Secure digital onboarding suite aligned with Central Bank of Sri Lanka (CBSL) AML and e‑KYC guidelines.
           </p>
 
-          <div className="border-t border-slate-700 pt-4 flex items-start gap-3">
-            <div className="bg-slate-700 text-slate-300 p-2 rounded mt-0.5 flex-shrink-0">
+          <div className="border-t border-slate-100 pt-4 flex items-start gap-3">
+            <div className="bg-slate-100 text-slate-700 p-2 rounded mt-0.5 flex-shrink-0">
               <Shield className="h-4 w-4" />
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-slate-200">Regulatory Compliance</h4>
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+              <h4 className="text-sm font-semibold text-slate-800">Regulatory Compliance</h4>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                 Full alignment with e‑KYC Guidelines No. 11 of 2018 for automated customer onboarding and AML screening.
               </p>
             </div>
           </div>
 
           {/* Demo shortcuts */}
-          <div className="bg-slate-800 border border-slate-700 rounded-md p-4 space-y-3">
-            <div className="flex items-center gap-2 pb-2 border-b border-slate-700">
-              <Info className="h-4 w-4 text-slate-400" />
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300">
+          <div className="bg-slate-50 border border-slate-200 rounded-md p-4 space-y-3">
+            <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
+              <Info className="h-4 w-4 text-slate-500" />
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-600">
                 Test Accounts
               </span>
             </div>
@@ -166,25 +166,25 @@ export default function Login({ onLoginSuccess }) {
                   key={d.val}
                   type="button"
                   onClick={() => prefillDemo(d.val)}
-                  className="text-xs px-3 py-1 bg-slate-700 border border-slate-600 rounded hover:bg-slate-600 transition-colors text-white"
+                  className="text-xs px-3 py-1 bg-white border border-slate-300 rounded hover:bg-slate-100 transition-colors"
                 >
                   {d.label}
                 </button>
               ))}
             </div>
-            <p className="text-[10px] text-slate-500">All test accounts use password: <code className="font-mono font-bold">password</code></p>
+            <p className="text-[10px] text-slate-400">All test accounts use password: <code className="font-mono font-bold">password</code></p>
           </div>
         </aside>
 
         {/* ── Right: Auth Card ── */}
-        <div className="md:col-span-7 bg-color-brand-primary border border-color-brand-secondary rounded-lg shadow-sm p-6 sm:p-8">
+        <div className="md:col-span-7 bg-white border border-slate-200 rounded-lg shadow-sm p-6 sm:p-8">
 
           {/* ── Registration Form ── */}
           {registerMode ? (
             <div className="space-y-5">
-              <div className="pb-4 border-b border-slate-700">
-                <h3 className="text-lg font-bold text-white">Create Digital Profile</h3>
-                <p className="text-sm text-slate-400 mt-1">Complete e‑KYC onboarding to open a customer account.</p>
+              <div className="pb-4 border-b border-slate-100">
+                <h3 className="text-lg font-bold text-slate-900">Create Digital Profile</h3>
+                <p className="text-sm text-slate-500 mt-1">Complete e‑KYC onboarding to open a customer account.</p>
               </div>
 
               {regSuccess ? (
@@ -204,44 +204,44 @@ export default function Login({ onLoginSuccess }) {
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-400 mb-1">NIC NUMBER *</label>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">NIC NUMBER *</label>
                       <input type="text" required value={regNic} onChange={(e) => setRegNic(e.target.value)}
-                        className="w-full px-3 py-2 border border-slate-600 rounded text-sm focus:outline-none focus:border-slate-400 bg-slate-800 text-white"
+                        className="w-full px-3 py-2 border border-slate-300 rounded text-sm focus:outline-none focus:border-slate-500"
                         placeholder="199234509123" />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-400 mb-1">FULL NAME *</label>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">FULL NAME *</label>
                       <input type="text" required value={regName} onChange={(e) => setRegName(e.target.value)}
-                        className="w-full px-3 py-2 border border-slate-600 rounded text-sm focus:outline-none focus:border-slate-400 bg-slate-800 text-white"
+                        className="w-full px-3 py-2 border border-slate-300 rounded text-sm focus:outline-none focus:border-slate-500"
                         placeholder="Kamal Bandara" />
                     </div>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-400 mb-1">DATE OF BIRTH *</label>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">DATE OF BIRTH *</label>
                       <input type="date" required value={regDob} onChange={(e) => setRegDob(e.target.value)}
-                        className="w-full px-3 py-2 border border-slate-600 rounded text-sm focus:outline-none focus:border-slate-400 bg-slate-800 text-white" />
+                        className="w-full px-3 py-2 border border-slate-300 rounded text-sm focus:outline-none focus:border-slate-500" />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-400 mb-1">MOBILE NUMBER *</label>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">MOBILE NUMBER *</label>
                       <input type="text" required value={regMobile} onChange={(e) => setRegMobile(e.target.value)}
-                        className="w-full px-3 py-2 border border-slate-600 rounded text-sm focus:outline-none focus:border-slate-400 bg-slate-800 text-white"
+                        className="w-full px-3 py-2 border border-slate-300 rounded text-sm focus:outline-none focus:border-slate-500"
                         placeholder="+94771234567" />
                     </div>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-400 mb-1">EMAIL ADDRESS *</label>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">EMAIL ADDRESS *</label>
                       <input type="email" required value={regEmail} onChange={(e) => setRegEmail(e.target.value)}
-                        className="w-full px-3 py-2 border border-slate-600 rounded text-sm focus:outline-none focus:border-slate-400 bg-slate-800 text-white"
+                        className="w-full px-3 py-2 border border-slate-300 rounded text-sm focus:outline-none focus:border-slate-500"
                         placeholder="kamal@gmail.com" />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-400 mb-1">OCCUPATION</label>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">OCCUPATION</label>
                       <input type="text" value={regOccupation} onChange={(e) => setRegOccupation(e.target.value)}
-                        className="w-full px-3 py-2 border border-slate-600 rounded text-sm focus:outline-none focus:border-slate-400 bg-slate-800 text-white"
+                        className="w-full px-3 py-2 border border-slate-300 rounded text-sm focus:outline-none focus:border-slate-500"
                         placeholder="Software Engineer" />
                     </div>
                   </div>
