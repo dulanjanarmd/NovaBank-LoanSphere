@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import LoanEligibilityCalculator from "./LoanEligibilityCalculator.jsx";
 import DebtPortfolioVisualizer from "./DebtPortfolioVisualizer.jsx";
 import NotificationCenter from "./NotificationCenter.jsx";
 import { Landmark, FileText, ArrowRight, Calculator, CheckCircle2, AlertCircle, Clock, CreditCard, ChevronRight, Download, Eye, ShieldCheck, TrendingUp, Sparkles, HelpCircle } from "lucide-react";
 import { exportDisbursedSchedulePDF } from "../utils/pdfExport.js";
 
-export default function DashboardCustomer({ user, token, customerAccounts, customerApplications, onStartDAO, onStartQuickDAO, onStartDLO, fetchCustomerData }) {
+export default function DashboardCustomer({ user, token, customerAccounts, customerApplications, fetchCustomerData }) {
+  const navigate = useNavigate();
   
   // EMI Calculator state
   const [calcAmount, setCalcAmount] = useState("500000");
@@ -252,7 +254,7 @@ export default function DashboardCustomer({ user, token, customerAccounts, custo
                   <div className="space-y-3 w-full">
                     <button
                       id="btn-start-dao"
-                      onClick={onStartDAO}
+                      onClick={() => navigate("/onboarding")}
                       className="w-full text-left text-[11px] font-bold text-teal-600 hover:text-teal-700 flex items-center justify-between group cursor-pointer bg-slate-50 hover:bg-teal-50/50 p-2 rounded-xl transition-all border border-slate-200 hover:border-teal-300"
                     >
                       <span className="flex items-center gap-1.5">
@@ -264,7 +266,7 @@ export default function DashboardCustomer({ user, token, customerAccounts, custo
 
                     <button
                       id="btn-start-quick-dao"
-                      onClick={onStartQuickDAO}
+                      onClick={() => navigate("/quick-open")}
                       className="w-full text-left text-[11px] font-bold text-white bg-teal-600 hover:bg-teal-700 flex items-center justify-between group cursor-pointer p-2.5 rounded-xl transition-all shadow-sm shadow-teal-600/10 hover:shadow-md hover:scale-[1.01]"
                     >
                       <span className="flex items-center gap-1.5">
@@ -292,7 +294,7 @@ export default function DashboardCustomer({ user, token, customerAccounts, custo
               <div className="pt-4 border-t border-slate-100 mt-4">
                 <button
                   id="btn-start-dlo"
-                  onClick={onStartDLO}
+                  onClick={() => navigate("/loan-application")}
                   className="text-[11px] font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 cursor-pointer"
                 >
                   <span>Launch Loan Wizard</span>
@@ -623,7 +625,7 @@ export default function DashboardCustomer({ user, token, customerAccounts, custo
         <LoanEligibilityCalculator 
           user={user} 
           token={token}
-          onStartDLO={onStartDLO} 
+          onStartDLO={() => navigate("/loan-application")} 
         />
       </div>
 

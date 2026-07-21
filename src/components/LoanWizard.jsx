@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { 
   FileText, 
   ChevronRight, 
@@ -24,7 +25,9 @@ import {
   Trash2
 } from "lucide-react";
 
-export default function LoanWizard({ user, onCompleteDLO, onCancel }) {
+export default function LoanWizard({ user }) {
+  const navigate = useNavigate();
+
   // --- Wizard Step ---
   const [step, setStep] = useState(1);
 
@@ -468,7 +471,7 @@ export default function LoanWizard({ user, onCompleteDLO, onCancel }) {
       const data = await response.json();
       if (data.success) {
         alert(`Application Submitted Successfully!\nReference: ${data.application.application_ref}\nOur Automated Scoring Engine is analyzing your eligibility scores.`);
-        onCompleteDLO();
+        navigate("/dashboard");
       } else {
         alert(data.message || "Failed to submit loan application.");
       }
@@ -509,7 +512,7 @@ export default function LoanWizard({ user, onCompleteDLO, onCancel }) {
           <p className="text-xs text-slate-400">Configure parameters, verify personal/financial stats, and submit for instant scoring.</p>
         </div>
         <button
-          onClick={onCancel}
+        onClick={() => navigate("/dashboard")}
           className="text-xs font-bold text-rose-400 hover:text-rose-300 hover:underline mt-2 md:mt-0 self-start md:self-center transition"
         >
           Cancel & Exit
