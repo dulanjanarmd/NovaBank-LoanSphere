@@ -256,6 +256,14 @@ export default function DebtPortfolioVisualizer({ customerApplications }) {
         <ResponsiveContainer width="100%" height="100%">
           {viewType === "pie" ? (
             <PieChart>
+              <defs>
+                {chartData.map((entry, index) => (
+                  <linearGradient key={`grad-${index}`} id={`colorPie${index}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={entry.color} stopOpacity={1}/>
+                    <stop offset="95%" stopColor={entry.color} stopOpacity={0.6}/>
+                  </linearGradient>
+                ))}
+              </defs>
               <Pie
                 data={chartData}
                 cx="50%"
@@ -265,9 +273,10 @@ export default function DebtPortfolioVisualizer({ customerApplications }) {
                 paddingAngle={4}
                 dataKey="value"
                 nameKey="name"
+                stroke="none"
               >
                 {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                  <Cell key={`cell-${index}`} fill={`url(#colorPie${index})`} style={{ filter: `drop-shadow(0px 0px 4px ${entry.color})` }} />
                 ))}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
@@ -281,27 +290,35 @@ export default function DebtPortfolioVisualizer({ customerApplications }) {
             </PieChart>
           ) : (
             <BarChart data={chartData} margin={{ top: 10, right: 10, left: -5, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+              <defs>
+                {chartData.map((entry, index) => (
+                  <linearGradient key={`gradBar-${index}`} id={`colorBar${index}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={entry.color} stopOpacity={1}/>
+                    <stop offset="95%" stopColor={entry.color} stopOpacity={0.2}/>
+                  </linearGradient>
+                ))}
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.1)" />
               <XAxis 
                 dataKey="name" 
-                stroke="#94a3b8" 
+                stroke="#64748b" 
                 fontSize={9} 
                 tickLine={false} 
                 axisLine={false}
                 fontWeight="bold"
               />
               <YAxis 
-                stroke="#94a3b8" 
+                stroke="#64748b" 
                 fontSize={9} 
                 tickLine={false} 
                 axisLine={false}
                 tickFormatter={(val) => `${(val / 1000000).toFixed(0)}M`}
                 fontWeight="bold"
               />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(148, 163, 184, 0.08)" }} />
+              <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(255, 255, 255, 0.05)" }} />
               <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                 {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                  <Cell key={`cell-${index}`} fill={`url(#colorBar${index})`} />
                 ))}
               </Bar>
             </BarChart>
