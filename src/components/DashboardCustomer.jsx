@@ -1,6 +1,5 @@
-import React
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoanEligibilityCalculator from "./LoanEligibilityCalculator.jsx";
 import DebtPortfolioVisualizer from "./DebtPortfolioVisualizer.jsx";
