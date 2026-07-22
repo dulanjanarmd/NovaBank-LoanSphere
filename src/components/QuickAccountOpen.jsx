@@ -169,12 +169,12 @@ export default function QuickAccountOpen({ user }) {
   };
 
   return (
-    <div className="bg-white border border-slate-200 shadow-xl rounded-3xl overflow-hidden animate-fade-in max-w-2xl mx-auto" id="quick-open-savings">
+    <div className="glass-panel rounded-2xl shadow-xl rounded-3xl overflow-hidden animate-fade-in max-w-2xl mx-auto" id="quick-open-savings">
       {/* Module Title Block */}
-      <div className="bg-slate-900 text-white p-5 sm:p-6 flex items-center justify-between border-b border-slate-800">
+      <div className="bg-neutral-900 text-white p-5 sm:p-6 flex items-center justify-between border-b border-neutral-800">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="bg-teal-500/15 text-teal-400 px-2 py-1 rounded-lg text-[9px] font-mono uppercase tracking-wider border border-teal-500/20 font-bold">
+            <span className="bg-teal-500/15 text-teal-400 px-2 py-1 rounded-xl text-[9px] font-mono uppercase tracking-wider border border-teal-500/20 font-bold">
               ⚡ Nova Express
             </span>
             <span className="text-teal-400 font-extrabold flex items-center gap-1">
@@ -182,11 +182,11 @@ export default function QuickAccountOpen({ user }) {
             </span>
           </div>
           <h3 className="text-md font-extrabold tracking-tight">Express Savings Account Opening</h3>
-          <p className="text-xs text-slate-400">Captures identity, verifies OCR, and boots Core CBS ledger instantly.</p>
+          <p className="text-xs text-neutral-400">Captures identity, verifies OCR, and boots Core CBS ledger instantly.</p>
         </div>
         <button 
           onClick={() => navigate("/dashboard")}
-          className="text-xs text-slate-400 hover:text-white p-1 rounded-lg bg-slate-800 hover:bg-slate-700 transition-all cursor-pointer"
+          className="text-xs text-neutral-400 hover:text-white p-1 rounded-xl bg-neutral-800 hover:bg-neutral-700 transition-all cursor-pointer"
           title="Go Back"
         >
           <X className="h-4 w-4" />
@@ -206,31 +206,31 @@ export default function QuickAccountOpen({ user }) {
             </div>
             
             <div className="space-y-2">
-              <h4 className="text-sm font-extrabold text-slate-800 uppercase tracking-tight">
+              <h4 className="text-sm font-extrabold text-neutral-50 uppercase tracking-tight">
                 Ledger Provisioning In Progress
               </h4>
-              <p className="text-xs text-slate-500 max-w-sm mx-auto">
+              <p className="text-xs text-neutral-500 max-w-sm mx-auto">
                 Triggering CBS API microservices and routing to Central Credit Registry...
               </p>
             </div>
 
             {/* Stepper tracker */}
-            <div className="max-w-md mx-auto bg-slate-50 border border-slate-150 rounded-2xl p-4 text-left space-y-3">
+            <div className="max-w-md mx-auto bg-neutral-900/30 border border-neutral-700/50 rounded-2xl p-4 text-left space-y-3">
               {processingMilestones.map((milestone, idx) => {
                 const isActive = idx === processingStep;
                 const isCompleted = idx < processingStep;
                 return (
                   <div key={idx} className="flex gap-3 text-xs items-start">
                     <span className={`h-4.5 w-4.5 rounded-full flex-shrink-0 flex items-center justify-center font-mono text-[9px] font-bold mt-0.5 ${
-                      isCompleted ? "bg-emerald-500 text-white" : isActive ? "bg-teal-500 text-white animate-pulse" : "bg-slate-200 text-slate-500"
+                      isCompleted ? "bg-success-500 text-white" : isActive ? "bg-teal-500 text-white animate-pulse" : "bg-neutral-200 text-neutral-500"
                     }`}>
                       {isCompleted ? "✓" : idx + 1}
                     </span>
                     <div>
-                      <p className={`font-bold ${isCompleted ? "text-slate-700 line-through" : isActive ? "text-teal-600" : "text-slate-400"}`}>
+                      <p className={`font-bold ${isCompleted ? "text-neutral-200 line-through" : isActive ? "text-teal-600" : "text-neutral-400"}`}>
                         {milestone.title}
                       </p>
-                      {isActive && <p className="text-[10px] text-slate-500 mt-0.5">{milestone.desc}</p>}
+                      {isActive && <p className="text-[10px] text-neutral-500 mt-0.5">{milestone.desc}</p>}
                     </div>
                   </div>
                 );
@@ -242,39 +242,39 @@ export default function QuickAccountOpen({ user }) {
         {/* Success Screen Panel */}
         {submitState === "success" && (
           <div className="py-8 px-4 text-center space-y-6 animate-scale-up" id="quick-open-success">
-            <div className="inline-flex items-center justify-center bg-emerald-100 text-emerald-600 p-4 rounded-full border border-emerald-200">
+            <div className="inline-flex items-center justify-center bg-success-100 text-success-600 p-4 rounded-full border border-success-200">
               <CheckCircle2 className="h-10 w-10" />
             </div>
 
             <div className="space-y-2">
-              <h4 className="text-base font-extrabold text-slate-800">
+              <h4 className="text-base font-extrabold text-neutral-50">
                 Savings Account Successfully Active!
               </h4>
-              <p className="text-xs text-slate-500 max-w-md mx-auto">
+              <p className="text-xs text-neutral-500 max-w-md mx-auto">
                 NovaBank Core Ledger has successfully bound your deposits facility. Your account has been provisioned and is active under low-risk e-KYC compliance rules.
               </p>
             </div>
 
             {/* Generated Account Details block */}
-            <div className="max-w-sm mx-auto bg-emerald-50 border border-emerald-100 rounded-2xl p-4 font-mono text-center">
-              <span className="text-[9px] uppercase tracking-wider font-bold text-emerald-700 block">
+            <div className="max-w-sm mx-auto bg-success-900/20 border border-success-100 rounded-2xl p-4 font-mono text-center">
+              <span className="text-[9px] uppercase tracking-wider font-bold text-success-700 block">
                 Assigned core account number
               </span>
-              <span className="text-xl font-bold text-slate-800 block mt-1 tracking-widest">
+              <span className="text-xl font-bold text-neutral-50 block mt-1 tracking-widest">
                 {newAccountNumber}
               </span>
-              <div className="flex justify-around border-t border-emerald-100/50 mt-3 pt-3 text-[10px] text-slate-600">
+              <div className="flex justify-around border-t border-success-100/50 mt-3 pt-3 text-[10px] text-neutral-300">
                 <div>
-                  <span className="text-slate-400 block text-[9px]">PRODUCT</span>
-                  <span className="font-bold text-slate-800">{selectedProduct}</span>
+                  <span className="text-neutral-400 block text-[9px]">PRODUCT</span>
+                  <span className="font-bold text-neutral-50">{selectedProduct}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[9px]">RATE</span>
-                  <span className="font-bold text-slate-800">4.50% p.a.</span>
+                  <span className="text-neutral-400 block text-[9px]">RATE</span>
+                  <span className="font-bold text-neutral-50">4.50% p.a.</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[9px]">LIMIT</span>
-                  <span className="font-bold text-slate-800">LKR 1.0M</span>
+                  <span className="text-neutral-400 block text-[9px]">LIMIT</span>
+                  <span className="font-bold text-neutral-50">LKR 1.0M</span>
                 </div>
               </div>
             </div>
@@ -283,7 +283,7 @@ export default function QuickAccountOpen({ user }) {
               <button
                 type="button"
                 onClick={() => navigate("/dashboard")}
-                className="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-all shadow-sm cursor-pointer"
+                className="px-5 py-2.5 bg-neutral-900 text-white rounded-xl text-xs font-bold hover:bg-neutral-800 transition-all shadow-md shadow-primary/5 cursor-pointer"
               >
                 Go to Dashboard
               </button>
@@ -294,15 +294,15 @@ export default function QuickAccountOpen({ user }) {
         {/* Error Screen Panel */}
         {submitState === "error" && (
           <div className="py-8 px-4 text-center space-y-6" id="quick-open-error">
-            <div className="inline-flex items-center justify-center bg-rose-100 text-rose-600 p-4 rounded-full border border-rose-200">
+            <div className="inline-flex items-center justify-center bg-error-100 text-error-600 p-4 rounded-full border border-error-200">
               <AlertCircle className="h-10 w-10" />
             </div>
 
             <div className="space-y-2">
-              <h4 className="text-base font-extrabold text-slate-800">
+              <h4 className="text-base font-extrabold text-neutral-50">
                 Setup Initiation Failed
               </h4>
-              <p className="text-xs text-rose-600 max-w-sm mx-auto font-medium">
+              <p className="text-xs text-error-600 max-w-sm mx-auto font-medium">
                 {errorMessage}
               </p>
             </div>
@@ -311,7 +311,7 @@ export default function QuickAccountOpen({ user }) {
               <button
                 type="button"
                 onClick={() => setSubmitState("idle")}
-                className="px-5 py-2.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-200 transition-all cursor-pointer"
+                className="px-5 py-2.5 bg-neutral-800/50 text-neutral-200 border border-neutral-700/50 rounded-xl text-xs font-bold hover:bg-neutral-200 transition-all cursor-pointer"
               >
                 Review Fields & Retry
               </button>
@@ -328,7 +328,7 @@ export default function QuickAccountOpen({ user }) {
               
               {/* Left Column: Drag & Drop Identity Uploader */}
               <div className="space-y-4">
-                <label className="block text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">
+                <label className="block text-[11px] font-extrabold text-neutral-500 uppercase tracking-wider">
                   1. Identification document proof
                 </label>
                 
@@ -343,8 +343,8 @@ export default function QuickAccountOpen({ user }) {
                     dragActive 
                       ? "border-teal-500 bg-teal-50/40" 
                       : uploadedFile 
-                      ? "border-emerald-500 bg-emerald-50/20" 
-                      : "border-slate-200 hover:border-slate-300 hover:bg-slate-50/50"
+                      ? "border-success-500 bg-success-900/20/20" 
+                      : "border-neutral-700/50 hover:border-neutral-300 hover:bg-neutral-900/30/50"
                   }`}
                 >
                   <input 
@@ -357,31 +357,31 @@ export default function QuickAccountOpen({ user }) {
 
                   {uploadedFile ? (
                     <div className="space-y-2">
-                      <div className="bg-emerald-100 text-emerald-600 p-2.5 rounded-xl inline-block border border-emerald-200">
+                      <div className="bg-success-100 text-success-600 p-2.5 rounded-xl inline-block border border-success-200">
                         <FileText className="h-5 w-5" />
                       </div>
-                      <p className="text-xs font-bold text-slate-800 line-clamp-1">{uploadedFile.name}</p>
-                      <p className="text-[10px] text-slate-400 font-mono">{uploadedFile.size} • Verified</p>
-                      <span className="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded font-mono block w-max mx-auto">
+                      <p className="text-xs font-bold text-neutral-50 line-clamp-1">{uploadedFile.name}</p>
+                      <p className="text-[10px] text-neutral-400 font-mono">{uploadedFile.size} • Verified</p>
+                      <span className="text-[9px] bg-success-100 text-success-800 font-bold px-2 py-0.5 rounded font-mono block w-max mx-auto">
                         OCR READY
                       </span>
                     </div>
                   ) : ocrScanning ? (
                     <div className="space-y-2">
                       <Loader2 className="h-6 w-6 text-teal-600 animate-spin mx-auto" />
-                      <p className="text-xs font-bold text-slate-700 animate-pulse">Scanning metadata via OCR...</p>
-                      <p className="text-[9px] text-slate-400">Extracting name, DOB and document authentication keys</p>
+                      <p className="text-xs font-bold text-neutral-200 animate-pulse">Scanning metadata via OCR...</p>
+                      <p className="text-[9px] text-neutral-400">Extracting name, DOB and document authentication keys</p>
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      <div className="bg-slate-100 text-slate-500 p-3 rounded-xl inline-block border border-slate-200/50">
+                      <div className="bg-neutral-800/50 text-neutral-500 p-3 rounded-xl inline-block border border-neutral-700/50/50">
                         <Upload className="h-5 w-5" />
                       </div>
                       <div className="space-y-1">
-                        <p className="text-xs font-bold text-slate-700">Drag & drop your NIC Card here</p>
-                        <p className="text-[10px] text-slate-400">or click to browse local folders (JPEG, PNG, PDF)</p>
+                        <p className="text-xs font-bold text-neutral-200">Drag & drop your NIC Card here</p>
+                        <p className="text-[10px] text-neutral-400">or click to browse local folders (JPEG, PNG, PDF)</p>
                       </div>
-                      <span className="text-[9px] text-slate-400 block pt-1 font-mono">
+                      <span className="text-[9px] text-neutral-400 block pt-1 font-mono">
                         Supports National Identity Cards (NIC)
                       </span>
                     </div>
@@ -389,10 +389,10 @@ export default function QuickAccountOpen({ user }) {
                 </div>
 
                 {/* Helpful Tips Alert Box */}
-                <div className="bg-slate-50 border border-slate-150 rounded-2xl p-3 flex gap-2 text-[10px] text-slate-500 leading-relaxed">
-                  <Info className="h-4 w-4 text-slate-400 flex-shrink-0 mt-0.5" />
+                <div className="bg-neutral-900/30 border border-neutral-700/50 rounded-2xl p-3 flex gap-2 text-[10px] text-neutral-500 leading-relaxed">
+                  <Info className="h-4 w-4 text-neutral-400 flex-shrink-0 mt-0.5" />
                   <p>
-                    <span className="font-bold text-slate-700">Pro-Tip: </span> 
+                    <span className="font-bold text-neutral-200">Pro-Tip: </span> 
                     Dragging a file triggers immediate automated OCR text parsing, which auto-fills the name and DOB fields for instant setup.
                   </p>
                 </div>
@@ -400,19 +400,19 @@ export default function QuickAccountOpen({ user }) {
 
               {/* Right Column: Identity fields */}
               <div className="space-y-4">
-                <label className="block text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">
+                <label className="block text-[11px] font-extrabold text-neutral-500 uppercase tracking-wider">
                   2. Identity Details
                 </label>
 
                 <div className="space-y-3">
                   {/* Account Product Select */}
                   <div>
-                    <label className="block text-[10px] font-extrabold text-slate-500 mb-1">Savings Account Product</label>
+                    <label className="block text-[10px] font-extrabold text-neutral-500 mb-1">Savings Account Product</label>
                     <select
                       id="quick-product"
                       value={selectedProduct}
                       onChange={(e) => setSelectedProduct(e.target.value)}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs bg-white text-slate-800 font-bold focus:outline-teal-500"
+                      className="w-full px-3 py-2 border border-neutral-700/50 rounded-xl text-xs bg-neutral-900/50 text-neutral-50 font-bold focus:outline-teal-500"
                     >
                       <option value="Regular Savings">Regular Savings (4.50% p.a.)</option>
                       <option value="Youth Savings">Youth Star Savings (5.25% p.a.)</option>
@@ -423,9 +423,9 @@ export default function QuickAccountOpen({ user }) {
 
                   {/* Full Name */}
                   <div>
-                    <label className="block text-[10px] font-extrabold text-slate-500 mb-1">Full Name (per Identity Doc)</label>
+                    <label className="block text-[10px] font-extrabold text-neutral-500 mb-1">Full Name (per Identity Doc)</label>
                     <div className="relative">
-                      <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                      <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-neutral-400">
                         <User className="h-3.5 w-3.5" />
                       </span>
                       <input
@@ -434,7 +434,7 @@ export default function QuickAccountOpen({ user }) {
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder="e.g. Kamal Bandara"
-                        className="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-xl text-xs focus:outline-teal-500"
+                        className="w-full pl-9 pr-3 py-2 border border-neutral-700/50 rounded-xl text-xs focus:outline-teal-500"
                         required
                       />
                     </div>
@@ -442,9 +442,9 @@ export default function QuickAccountOpen({ user }) {
 
                   {/* NIC Number */}
                   <div>
-                    <label className="block text-[10px] font-extrabold text-slate-500 mb-1">National ID Card (NIC) Number</label>
+                    <label className="block text-[10px] font-extrabold text-neutral-500 mb-1">National ID Card (NIC) Number</label>
                     <div className="relative">
-                      <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                      <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-neutral-400">
                         <CreditCard className="h-3.5 w-3.5" />
                       </span>
                       <input
@@ -453,7 +453,7 @@ export default function QuickAccountOpen({ user }) {
                         value={nicNo}
                         onChange={(e) => setNicNo(e.target.value)}
                         placeholder="e.g. 199512345678 or 952981244V"
-                        className="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-xl text-xs font-mono focus:outline-teal-500"
+                        className="w-full pl-9 pr-3 py-2 border border-neutral-700/50 rounded-xl text-xs font-mono focus:outline-teal-500"
                         required
                       />
                     </div>
@@ -461,9 +461,9 @@ export default function QuickAccountOpen({ user }) {
 
                   {/* Date of Birth */}
                   <div>
-                    <label className="block text-[10px] font-extrabold text-slate-500 mb-1">Date of Birth</label>
+                    <label className="block text-[10px] font-extrabold text-neutral-500 mb-1">Date of Birth</label>
                     <div className="relative">
-                      <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                      <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-neutral-400">
                         <Calendar className="h-3.5 w-3.5" />
                       </span>
                       <input
@@ -471,7 +471,7 @@ export default function QuickAccountOpen({ user }) {
                         type="date"
                         value={dob}
                         onChange={(e) => setDob(e.target.value)}
-                        className="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-xl text-xs focus:outline-teal-500"
+                        className="w-full pl-9 pr-3 py-2 border border-neutral-700/50 rounded-xl text-xs focus:outline-teal-500"
                         required
                       />
                     </div>
@@ -483,36 +483,36 @@ export default function QuickAccountOpen({ user }) {
             </div>
 
             {/* Split layout Row 2: Secondary Contact and Source details */}
-            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4 pt-2 border-t border-slate-100">
+            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4 pt-2 border-t border-neutral-700/30">
               
               <div>
-                <label className="block text-[10px] font-extrabold text-slate-500 mb-1">Mobile Contact</label>
+                <label className="block text-[10px] font-extrabold text-neutral-500 mb-1">Mobile Contact</label>
                 <input
                   id="quick-mobile"
                   type="text"
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-mono focus:outline-teal-500"
+                  className="w-full px-3 py-2 border border-neutral-700/50 rounded-xl text-xs font-mono focus:outline-teal-500"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-extrabold text-slate-500 mb-1">Email Link</label>
+                <label className="block text-[10px] font-extrabold text-neutral-500 mb-1">Email Link</label>
                 <input
                   id="quick-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs focus:outline-teal-500"
+                  className="w-full px-3 py-2 border border-neutral-700/50 rounded-xl text-xs focus:outline-teal-500"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-extrabold text-slate-500 mb-1">Current Occupation</label>
+                <label className="block text-[10px] font-extrabold text-neutral-500 mb-1">Current Occupation</label>
                 <div className="relative">
-                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-400">
+                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center text-neutral-400">
                     <Briefcase className="h-3 w-3" />
                   </span>
                   <input
@@ -520,23 +520,23 @@ export default function QuickAccountOpen({ user }) {
                     type="text"
                     value={occupation}
                     onChange={(e) => setOccupation(e.target.value)}
-                    className="w-full pl-8 pr-3 py-2 border border-slate-200 rounded-xl text-xs focus:outline-teal-500"
+                    className="w-full pl-8 pr-3 py-2 border border-neutral-700/50 rounded-xl text-xs focus:outline-teal-500"
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[10px] font-extrabold text-slate-500 mb-1">Source of Funds</label>
+                <label className="block text-[10px] font-extrabold text-neutral-500 mb-1">Source of Funds</label>
                 <div className="relative">
-                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-400">
+                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center text-neutral-400">
                     <DollarSign className="h-3 w-3" />
                   </span>
                   <select
                     id="quick-funds"
                     value={sourceOfFunds}
                     onChange={(e) => setSourceOfFunds(e.target.value)}
-                    className="w-full pl-8 pr-3 py-2 border border-slate-200 rounded-xl text-xs bg-white text-slate-800 focus:outline-teal-500"
+                    className="w-full pl-8 pr-3 py-2 border border-neutral-700/50 rounded-xl text-xs bg-neutral-900/50 text-neutral-50 focus:outline-teal-500"
                   >
                     <option value="Salary">Salary/Invoices</option>
                     <option value="Business">Business Turnover</option>
@@ -549,24 +549,24 @@ export default function QuickAccountOpen({ user }) {
             </div>
 
             {/* Compliance Consent Terms Box */}
-            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2">
+            <div className="bg-neutral-900/30 border border-neutral-700/50 rounded-2xl p-4 space-y-2">
               <div className="flex items-start gap-2.5">
                 <input
                   type="checkbox"
                   id="quick-consent"
                   checked={consentApproved}
                   onChange={(e) => setConsentApproved(e.target.checked)}
-                  className="mt-0.5 rounded border-slate-300 text-teal-600 focus:ring-teal-500 h-3.5 w-3.5 cursor-pointer"
+                  className="mt-0.5 rounded border-neutral-300 text-teal-600 focus:ring-teal-500 h-3.5 w-3.5 cursor-pointer transition-all duration-200"
                 />
-                <label htmlFor="quick-consent" className="text-[10px] text-slate-600 font-medium select-none cursor-pointer">
+                <label htmlFor="quick-consent" className="text-[10px] text-neutral-300 font-medium select-none cursor-pointer transition-all duration-200">
                   I hereby authorize NovaBank to process my identity credentials via automated optical document capture (OCR) and execute real-time cross-matching with FIU AML, PEP sanctions watch-lists, and Central Credit Bureau datasets per the Sri Lankan Personal Data Protection Act (PDPA) No. 9 of 2022.
                 </label>
               </div>
             </div>
 
             {/* Form Footer Action buttons */}
-            <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs">
-              <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400">
+            <div className="flex items-center justify-between pt-3 border-t border-neutral-700/30 text-xs">
+              <div className="flex items-center gap-1.5 text-[10px] font-mono text-neutral-400">
                 <Lock className="h-3 w-3 text-teal-500" />
                 <span>Secured via TLS 1.3 encryption</span>
               </div>
@@ -575,13 +575,13 @@ export default function QuickAccountOpen({ user }) {
                 <button
                   type="button"
                   onClick={onCancel}
-                  className="px-4 py-2 border border-slate-200 text-slate-500 rounded-xl hover:bg-slate-50 transition-all font-bold cursor-pointer"
+                  className="px-4 py-2 border border-neutral-700/50 text-neutral-500 rounded-xl hover:bg-neutral-900/30 transition-all font-bold cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-xl transition-all font-bold flex items-center gap-1 cursor-pointer shadow-sm shadow-teal-600/10"
+                  className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-xl transition-all font-bold flex items-center gap-1 cursor-pointer shadow-md shadow-primary/5 shadow-teal-600/10"
                 >
                   <span>Verify & Open Account</span>
                   <ArrowRight className="h-3.5 w-3.5" />

@@ -60,7 +60,7 @@ export default function App() {
     setToken(newToken);
     setUser(newUser);
     fetchStateData(newToken);
-    
+
     if (newUser.role === "CUSTOMER") navigate("/dashboard");
     else if (newUser.role === "LOAN_OFFICER") navigate("/staff/officer");
     else if (newUser.role === "COMPLIANCE_OFFICER") navigate("/staff/compliance");
@@ -83,16 +83,20 @@ export default function App() {
   }, [token]);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-between font-sans text-slate-800">
-      <div>
+    <div className="min-h-screen flex flex-col relative z-0">
+      {/* Dynamic Floating Navbar */}
+      <div className="sticky top-4 z-50 px-4 sm:px-6 lg:px-8 w-full max-w-7xl mx-auto">
         <Navbar user={user} onLogout={handleLogout} />
+      </div>
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main content area */}
+      <main className="flex-1 w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-12">
           <Routes>
             <Route path="/" element={
               !user ? <Login onLoginSuccess={handleLoginSuccess} /> : <Navigate to={user.role === "CUSTOMER" ? "/dashboard" : `/staff/${user.role.split('_')[0].toLowerCase()}`} />
             } />
-            
+
             {/* Customer Routes */}
             <Route path="/dashboard" element={
               user?.role === "CUSTOMER" ? (
@@ -143,14 +147,18 @@ export default function App() {
               ) : <Navigate to="/" />
             } />
           </Routes>
-        </main>
-      </div>
+        </div>
+      </main>
 
-      {/* Global Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 text-center text-[10px] font-mono uppercase tracking-wider">
+      {/* Sleek transparent footer */}
+      <footer className="bg-transparent text-neutral-500 py-8 border-t border-neutral-800/50 text-center relative z-10 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4">
-          <p>© 2026 NovaBank PLC Sri Lanka. All Rights Reserved. Licensed Commercial Bank regulated by CBSL.</p>
-          <p className="text-slate-500 mt-1">LoanSphere origination engine v1.0.0 (SHA-256 secure signed build).</p>
+          <p className="text-[11px] font-mono uppercase tracking-widest text-neutral-600">
+            © 2026 NovaBank PLC Sri Lanka. All Rights Reserved. Licensed Commercial Bank.
+          </p>
+          <p className="text-neutral-700 text-[10px] mt-2 tracking-widest font-mono">
+            LoanSphere origination engine v2.0.0-GLASS (SHA-256 secure signed build).
+          </p>
         </div>
       </footer>
     </div>

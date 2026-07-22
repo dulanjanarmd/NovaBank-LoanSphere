@@ -139,20 +139,20 @@ export default function RateFluctuationNotifier({ user }) {
               initial={{ opacity: 0, y: -20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
-              className="bg-white border border-slate-200/85 rounded-2xl shadow-2xl p-4.5 pointer-events-auto flex gap-3.5 relative overflow-hidden"
+              className="glass-panel rounded-2xl/85 rounded-2xl shadow-2xl p-4.5 pointer-events-auto flex gap-3.5 relative overflow-hidden"
             >
               {/* Highlight accent side-bar */}
               <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${
-                toast.type === "credit" ? "bg-emerald-500" : toast.direction === "down" ? "bg-teal-500" : "bg-rose-500"
+                toast.type === "credit" ? "bg-success-500" : toast.direction === "down" ? "bg-teal-500" : "bg-error-500"
               }`} />
 
               {/* Icon */}
               <div className={`h-9 w-9 rounded-xl flex items-center justify-center flex-shrink-0 border ${
                 toast.type === "credit" 
-                  ? "bg-emerald-50 text-emerald-600 border-emerald-100" 
+                  ? "bg-success-900/20 text-success-600 border-success-100" 
                   : toast.direction === "down"
                   ? "bg-teal-50 text-teal-600 border-teal-100"
-                  : "bg-rose-50 text-rose-600 border-rose-100"
+                  : "bg-error-900/20 text-error-600 border-error-100"
               }`}>
                 {toast.type === "credit" ? (
                   <Gauge className="h-4.5 w-4.5 animate-pulse" />
@@ -166,28 +166,28 @@ export default function RateFluctuationNotifier({ user }) {
               {/* Text content block */}
               <div className="space-y-1.5 flex-1">
                 <div className="flex items-center justify-between gap-2 pr-4">
-                  <span className="font-extrabold text-slate-800 text-[11px] uppercase tracking-tight">
+                  <span className="font-extrabold text-neutral-50 text-[11px] uppercase tracking-tight">
                     {toast.title}
                   </span>
-                  <span className="text-[8px] bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-500 font-bold uppercase">
+                  <span className="text-[8px] bg-neutral-800/50 px-1.5 py-0.5 rounded font-mono text-neutral-500 font-bold uppercase">
                     {toast.type}
                   </span>
                 </div>
                 
-                <p className="text-[10px] text-slate-500 leading-normal pr-3">
+                <p className="text-[10px] text-neutral-500 leading-normal pr-3">
                   {toast.description}
                 </p>
 
                 {/* Micro visual stats tracker */}
-                <div className="flex items-center gap-4 bg-slate-50 border border-slate-100 rounded-xl p-2 font-mono text-[10px]">
+                <div className="flex items-center gap-4 bg-neutral-900/30 border border-neutral-700/30 rounded-xl p-2 font-mono text-[10px]">
                   <div>
-                    <span className="text-slate-400 block text-[8px]">PREVIOUS RATE</span>
-                    <span className="font-bold text-slate-500 line-through">{toast.oldRate}%</span>
+                    <span className="text-neutral-400 block text-[8px]">PREVIOUS RATE</span>
+                    <span className="font-bold text-neutral-500 line-through">{toast.oldRate}%</span>
                   </div>
-                  <div className="text-slate-300 font-bold font-sans">&rarr;</div>
+                  <div className="text-neutral-300 font-bold font-sans">&rarr;</div>
                   <div>
-                    <span className="text-slate-400 block text-[8px]">NEW OFFER RATE</span>
-                    <span className={`font-extrabold ${toast.direction === "down" ? "text-teal-600" : "text-rose-500"}`}>
+                    <span className="text-neutral-400 block text-[8px]">NEW OFFER RATE</span>
+                    <span className={`font-extrabold ${toast.direction === "down" ? "text-teal-600" : "text-error-500"}`}>
                       {toast.rate}% p.a.
                     </span>
                   </div>
@@ -199,7 +199,7 @@ export default function RateFluctuationNotifier({ user }) {
                       handleApplyRate(toast.rate);
                       dismissToast(toast.id);
                     }}
-                    className="text-[10px] font-bold text-teal-600 hover:text-teal-700 flex items-center gap-1 cursor-pointer"
+                    className="text-[10px] font-bold text-teal-600 hover:text-teal-700 flex items-center gap-1 cursor-pointer transition-all duration-200"
                   >
                     <span>Analyze in Calculator</span>
                     <ArrowRight className="h-3 w-3" />
@@ -210,7 +210,7 @@ export default function RateFluctuationNotifier({ user }) {
               {/* Close Button */}
               <button
                 onClick={() => dismissToast(toast.id)}
-                className="absolute top-3 right-3 text-slate-400 hover:text-slate-600 p-0.5 rounded hover:bg-slate-50 transition cursor-pointer"
+                className="absolute top-3 right-3 text-neutral-400 hover:text-neutral-300 p-0.5 rounded hover:bg-neutral-900/30 transition cursor-pointer"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -221,13 +221,13 @@ export default function RateFluctuationNotifier({ user }) {
 
       {/* Floating Dynamic Simulator Controls Block */}
       <div 
-        className="fixed bottom-4 right-4 z-40 max-w-sm bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl shadow-xl p-4 font-sans text-xs select-none" 
+        className="fixed bottom-4 right-4 z-40 max-w-sm bg-neutral-900/50/95 backdrop-blur-md border border-neutral-700/50/90 rounded-2xl shadow-xl p-4 font-sans text-xs select-none" 
         id="rate-fluctuation-simulator-panel"
       >
-        <div className="flex items-center justify-between border-b border-slate-150 pb-2 mb-2">
+        <div className="flex items-center justify-between border-b border-neutral-700/50 pb-2 mb-2">
           <div className="flex items-center gap-1.5">
             <Activity className="h-4 w-4 text-teal-500 animate-pulse" />
-            <h5 className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500">
+            <h5 className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">
               Live Rate Watch Simulator
             </h5>
           </div>
@@ -236,7 +236,7 @@ export default function RateFluctuationNotifier({ user }) {
           </span>
         </div>
 
-        <p className="text-[9px] text-slate-500 mb-3 leading-relaxed">
+        <p className="text-[9px] text-neutral-500 mb-3 leading-relaxed">
           Test interactive interest rate update events! Triggering an option below dispatches a highly styled toast alert and automatically recalibrates loan/EMI calculators on the dashboard.
         </p>
 
@@ -252,29 +252,29 @@ export default function RateFluctuationNotifier({ user }) {
 
           <button
             onClick={() => triggerMarketRateChange("up")}
-            className="p-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200/50 transition duration-150 flex items-center gap-1.5 justify-center cursor-pointer"
+            className="p-2 rounded-xl bg-error-900/20 hover:bg-error-100 text-error-800 border border-error-200/50 transition duration-150 flex items-center gap-1.5 justify-center cursor-pointer"
           >
-            <TrendingUp className="h-3.5 w-3.5 text-rose-600" />
+            <TrendingUp className="h-3.5 w-3.5 text-error-600" />
             <span>Market Rate Hike (+0.45%)</span>
           </button>
 
           <button
             onClick={triggerCreditScoreImprovement}
-            className="col-span-2 p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white transition duration-150 flex items-center gap-1.5 justify-center cursor-pointer shadow-sm"
+            className="col-span-2 p-2 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-white transition duration-150 flex items-center gap-1.5 justify-center cursor-pointer shadow-md shadow-primary/5"
           >
             <Gauge className="h-3.5 w-3.5 text-teal-400 animate-bounce-short" />
             <span>Boost Credit Rating (CRIB Score Check)</span>
           </button>
         </div>
 
-        <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[8px] font-mono text-slate-400">
+        <div className="mt-3 pt-2.5 border-t border-neutral-700/30 flex items-center justify-between text-[8px] font-mono text-neutral-400">
           <div>
             <span>CURRENT SCORE: </span>
             <span className="font-bold text-teal-600">{creditScore}</span>
           </div>
           <div>
             <span>BASE RATE: </span>
-            <span className="font-bold text-slate-700">{baseRate}%</span>
+            <span className="font-bold text-neutral-200">{baseRate}%</span>
           </div>
         </div>
       </div>

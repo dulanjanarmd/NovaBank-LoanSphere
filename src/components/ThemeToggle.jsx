@@ -34,13 +34,13 @@ export default function ThemeToggle() {
     <button
       id="theme-toggle-button"
       onClick={toggleTheme}
-      className="p-2 rounded-xl text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700/80 transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-teal-500/50"
+      className="p-2 rounded-xl text-neutral-300 hover:text-white bg-neutral-800 hover:bg-neutral-700 border border-neutral-700/80 transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-teal-500/50"
       title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
     >
       {isDark ? (
         <>
-          <Sun className="h-4 w-4 text-amber-400 animate-pulse" />
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider hidden sm:inline text-amber-400">Light Mode</span>
+          <Sun className="h-4 w-4 text-warning-400 animate-pulse" />
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider hidden sm:inline text-warning-400">Light Mode</span>
         </>
       ) : (
         <>

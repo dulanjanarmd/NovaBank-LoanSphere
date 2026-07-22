@@ -57,14 +57,14 @@ VERDICT: LOW/MEDIUM PROBABILITY FRAUD METRICS ENCOUNTERED. RECOMMENDED FOR MANUA
     <div className="space-y-6 animate-fade-in text-xs">
       
       {/* Compliance banner */}
-      <div className="bg-purple-900 rounded-2xl p-5 text-white shadow-lg flex items-center justify-between">
+      <div className="bg-accent-violet-900 rounded-2xl p-5 text-white shadow-lg flex items-center justify-between">
         <div className="space-y-1">
-          <span className="text-[10px] font-mono tracking-wider font-bold text-purple-300 uppercase">AML & Sanctions Surveillance</span>
+          <span className="text-[10px] font-mono tracking-wider font-bold text-accent-violet-300 uppercase">AML & Sanctions Surveillance</span>
           <h2 className="text-sm font-bold">Compliance Officer Operations</h2>
-          <p className="text-[11px] text-purple-200">Enforce FIU AML/CFT directives, monitor high-risk PEP indicators, and audit e-KYC matching logs.</p>
+          <p className="text-[11px] text-accent-violet-200">Enforce FIU AML/CFT directives, monitor high-risk PEP indicators, and audit e-KYC matching logs.</p>
         </div>
-        <div className="hidden sm:block bg-purple-800 p-2.5 rounded-xl border border-purple-700">
-          <ShieldCheck className="h-6 w-6 text-purple-300" />
+        <div className="hidden sm:block bg-accent-violet-800 p-2.5 rounded-xl border border-accent-violet-700">
+          <ShieldCheck className="h-6 w-6 text-accent-violet-300" />
         </div>
       </div>
 
@@ -72,9 +72,9 @@ VERDICT: LOW/MEDIUM PROBABILITY FRAUD METRICS ENCOUNTERED. RECOMMENDED FOR MANUA
         
         {/* Left Side: Flagged Customers Inbox */}
         <div className="md:col-span-5 space-y-4">
-          <h3 className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400">KYC Sanctions Inbox</h3>
+          <h3 className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-400">KYC Sanctions Inbox</h3>
 
-          <div className="bg-white border border-slate-200 rounded-2xl divide-y divide-slate-100 overflow-hidden shadow-sm">
+          <div className="glass-panel rounded-2xl rounded-2xl divide-y divide-neutral-100 overflow-hidden shadow-md shadow-primary/5">
             {customers && customers.length > 0 ? (
               customers.map((cust) => (
                 <div
@@ -87,28 +87,28 @@ VERDICT: LOW/MEDIUM PROBABILITY FRAUD METRICS ENCOUNTERED. RECOMMENDED FOR MANUA
                   }}
                   className={`p-4 cursor-pointer transition flex items-center justify-between gap-4 ${
                     selectedCust?.customer_id === cust.customer_id
-                      ? "bg-purple-50/50"
-                      : "hover:bg-slate-50"
+                      ? "bg-accent-violet-900/20/50"
+                      : "hover:bg-neutral-900/30"
                   }`}
                 >
                   <div className="space-y-1">
-                    <h5 className="font-bold text-slate-800">{cust.full_name}</h5>
-                    <p className="text-[10px] text-slate-400 font-mono">NIC: {cust.nic_number}</p>
-                    <p className="text-[10px] text-slate-400 font-mono">Occupation: {cust.occupation}</p>
+                    <h5 className="font-bold text-neutral-50">{cust.full_name}</h5>
+                    <p className="text-[10px] text-neutral-400 font-mono">NIC: {cust.nic_number}</p>
+                    <p className="text-[10px] text-neutral-400 font-mono">Occupation: {cust.occupation}</p>
                   </div>
 
                   <div className="text-right space-y-1">
                     <span className={`px-2 py-0.5 rounded-full font-bold uppercase text-[8px] border ${
-                      cust.risk_tier === "HIGH" ? "bg-red-50 text-red-700 border-red-200" : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                      cust.risk_tier === "HIGH" ? "bg-error-900/20 text-error-700 border-error-200" : "bg-success-900/20 text-success-700 border-success-200"
                     }`}>
                       {cust.risk_tier} RISK
                     </span>
-                    <span className="text-[10px] text-slate-400 font-mono block">Turnover: {cust.monthly_turnover} LKR</span>
+                    <span className="text-[10px] text-neutral-400 font-mono block">Turnover: {cust.monthly_turnover} LKR</span>
                   </div>
                 </div>
               ))
             ) : (
-              <div className="p-8 text-center text-slate-400">
+              <div className="p-8 text-center text-neutral-400">
                 <span>No registered customer identities in database.</span>
               </div>
             )}
@@ -118,14 +118,14 @@ VERDICT: LOW/MEDIUM PROBABILITY FRAUD METRICS ENCOUNTERED. RECOMMENDED FOR MANUA
         {/* Right Side: Enhanced Due Diligence Panel */}
         <div className="md:col-span-7">
           {selectedCust ? (
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm animate-fade-in">
+            <div className="glass-panel rounded-2xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-md shadow-primary/5 animate-fade-in">
               
               {/* Header */}
-              <div className="flex items-start justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-start justify-between border-b border-neutral-700/30 pb-3">
                 <div className="space-y-1">
-                  <span className="text-[9px] font-mono font-bold text-purple-600 uppercase">Customer Due Diligence (CDD) Dossier</span>
-                  <h4 className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
-                    <UserCircle2 className="h-4.5 w-4.5 text-purple-600" /> {selectedCust.full_name}
+                  <span className="text-[9px] font-mono font-bold text-accent-violet-600 uppercase">Customer Due Diligence (CDD) Dossier</span>
+                  <h4 className="font-bold text-neutral-50 text-sm flex items-center gap-1.5">
+                    <UserCircle2 className="h-4.5 w-4.5 text-accent-violet-600" /> {selectedCust.full_name}
                   </h4>
                 </div>
                 <button
@@ -133,34 +133,34 @@ VERDICT: LOW/MEDIUM PROBABILITY FRAUD METRICS ENCOUNTERED. RECOMMENDED FOR MANUA
                     setSelectedCust(null);
                     setEddReport("");
                   }}
-                  className="text-xs text-rose-500 hover:underline font-bold"
+                  className="text-xs text-error-500 hover:underline font-bold transition-all duration-200"
                 >
                   Close Dossier
                 </button>
               </div>
 
               {/* Quick specs */}
-              <div className="grid sm:grid-cols-2 gap-4 text-xs bg-slate-50 p-4 border border-slate-200/60 rounded-2xl">
+              <div className="grid sm:grid-cols-2 gap-4 text-xs bg-neutral-900/30 p-4 border border-neutral-700/50/60 rounded-2xl">
                 <div>
-                  <span className="text-slate-400 text-[10px]">Source of Declared Funds:</span>
-                  <p className="font-bold text-slate-800">{selectedCust.source_of_funds || "Employment"}</p>
+                  <span className="text-neutral-400 text-[10px]">Source of Declared Funds:</span>
+                  <p className="font-bold text-neutral-50">{selectedCust.source_of_funds || "Employment"}</p>
                 </div>
                 <div>
-                  <span className="text-slate-400 text-[10px]">Residential Spec:</span>
-                  <p className="font-bold text-slate-800">{selectedCust.address}</p>
+                  <span className="text-neutral-400 text-[10px]">Residential Spec:</span>
+                  <p className="font-bold text-neutral-50">{selectedCust.address}</p>
                 </div>
               </div>
 
               {/* EDD triggering block */}
               <div className="space-y-3">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                  <h4 className="font-bold text-slate-700 uppercase font-mono tracking-wider text-[10px]">Enhanced Due Diligence (EDD) Matrix</h4>
+                <div className="flex items-center justify-between border-b border-neutral-700/30 pb-2">
+                  <h4 className="font-bold text-neutral-200 uppercase font-mono tracking-wider text-[10px]">Enhanced Due Diligence (EDD) Matrix</h4>
                   <button
                     id="btn-run-edd"
                     type="button"
                     onClick={handleRunEdd}
                     disabled={runningEdd}
-                    className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold flex items-center gap-1 cursor-pointer transition shadow"
+                    className="px-3 py-1.5 bg-accent-violet-600 hover:bg-accent-violet-700 text-white rounded-xl font-semibold flex items-center gap-1 cursor-pointer transition shadow"
                   >
                     <FileSearch className="h-3.5 w-3.5" />
                     <span>{runningEdd ? "Searching records..." : "Trigger Live AML / PEP check"}</span>
@@ -168,29 +168,29 @@ VERDICT: LOW/MEDIUM PROBABILITY FRAUD METRICS ENCOUNTERED. RECOMMENDED FOR MANUA
                 </div>
 
                 {eddReport ? (
-                  <pre className="bg-slate-950 text-emerald-400 p-4 rounded-xl font-mono text-[10px] overflow-x-auto whitespace-pre-wrap leading-tight shadow-inner">
+                  <pre className="bg-neutral-950 text-success-400 p-4 rounded-xl font-mono text-[10px] overflow-x-auto whitespace-pre-wrap leading-tight shadow-inner">
                     {eddReport}
                   </pre>
                 ) : (
-                  <div className="bg-slate-50 border border-dashed border-slate-200 p-6 rounded-xl text-center text-slate-400">
+                  <div className="bg-neutral-900/30 border border-dashed border-neutral-700/50 p-6 rounded-xl text-center text-neutral-400">
                     <span>Click the trigger button to scan national sanctions databases.</span>
                   </div>
                 )}
               </div>
 
               {/* Clearance action portal */}
-              <div className="bg-purple-50/50 border border-purple-100 rounded-2xl p-5 space-y-4">
-                <h4 className="font-bold text-purple-900 uppercase font-mono tracking-wider text-[10px] flex items-center gap-1">
+              <div className="bg-accent-violet-900/20/50 border border-accent-violet-100 rounded-2xl p-5 space-y-4">
+                <h4 className="font-bold text-accent-violet-900 uppercase font-mono tracking-wider text-[10px] flex items-center gap-1">
                   <ShieldCheck className="h-4 w-4" /> Compliance Audit Decision
                 </h4>
 
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-[10px] font-bold text-purple-700 mb-1">AUDIT CLEARANCE LOG COMMENTS</label>
+                    <label className="block text-[10px] font-bold text-accent-violet-700 mb-1">AUDIT CLEARANCE LOG COMMENTS</label>
                     <input
                       id="compliance-comments"
                       type="text"
-                      className="w-full px-3 py-2 border border-purple-200 bg-white rounded-xl"
+                      className="w-full px-3 py-2 border border-accent-violet-200 bg-neutral-900/50 rounded-xl"
                       placeholder="e.g. Scanned DRP and PEP databases. Low matching density, validated source of funds."
                       value={comments}
                       onChange={(e) => setComments(e.target.value)}
@@ -202,7 +202,7 @@ VERDICT: LOW/MEDIUM PROBABILITY FRAUD METRICS ENCOUNTERED. RECOMMENDED FOR MANUA
                       id="btn-compliance-clear"
                       type="button"
                       onClick={() => handleKycClear("CLEARED")}
-                      className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-xl transition cursor-pointer flex items-center justify-center gap-1"
+                      className="flex-1 bg-accent-violet-600 hover:bg-accent-violet-700 text-white font-bold py-2 rounded-xl transition cursor-pointer flex items-center justify-center gap-1"
                     >
                       <CheckCircle2 className="h-4 w-4" />
                       <span>Release Hold (Approve KYC)</span>
@@ -212,7 +212,7 @@ VERDICT: LOW/MEDIUM PROBABILITY FRAUD METRICS ENCOUNTERED. RECOMMENDED FOR MANUA
                       id="btn-compliance-restrict"
                       type="button"
                       onClick={() => handleKycClear("RESTRICTED")}
-                      className="px-4 bg-rose-100 hover:bg-rose-200 border border-rose-200 text-rose-700 font-bold py-2 rounded-xl transition cursor-pointer flex items-center justify-center gap-1"
+                      className="px-4 bg-error-100 hover:bg-error-200 border border-error-200 text-error-700 font-bold py-2 rounded-xl transition cursor-pointer flex items-center justify-center gap-1"
                     >
                       <Ban className="h-4 w-4" />
                       <span>Flag / Suspend Onboarding</span>
@@ -223,10 +223,10 @@ VERDICT: LOW/MEDIUM PROBABILITY FRAUD METRICS ENCOUNTERED. RECOMMENDED FOR MANUA
 
             </div>
           ) : (
-            <div className="bg-white border border-slate-200 rounded-3xl p-12 text-center text-slate-400 flex flex-col justify-center items-center h-full min-h-[400px]">
-              <FileSearch className="h-10 w-10 text-slate-300 mb-3" />
-              <h4 className="font-bold text-slate-700">No Dossier Active</h4>
-              <p className="text-slate-400 max-w-xs mt-1">Select an applicant file from the KYC registry list to verify risk scores and run watch-list screening.</p>
+            <div className="glass-panel rounded-2xl rounded-3xl p-12 text-center text-neutral-400 flex flex-col justify-center items-center h-full min-h-[400px]">
+              <FileSearch className="h-10 w-10 text-neutral-300 mb-3" />
+              <h4 className="font-bold text-neutral-200">No Dossier Active</h4>
+              <p className="text-neutral-400 max-w-xs mt-1">Select an applicant file from the KYC registry list to verify risk scores and run watch-list screening.</p>
             </div>
           )}
         </div>

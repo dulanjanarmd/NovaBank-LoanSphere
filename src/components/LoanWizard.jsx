@@ -491,37 +491,37 @@ export default function LoanWizard({ user }) {
   const isModerateRiskDti = parseFloat(dtiVal) >= 35 && parseFloat(dtiVal) <= 55;
 
   if (!selectedProduct) {
-    return <div className="p-8 text-center text-xs text-slate-500">Retrieving Loan Sphere configuration parameters...</div>;
+    return <div className="p-8 text-center text-xs text-neutral-500">Retrieving Loan Sphere configuration parameters...</div>;
   }
 
   const docsToUpload = getRequiredDocsForType(loanType);
 
   return (
-    <div className="max-w-3xl mx-auto my-6 bg-white border border-slate-200 shadow-xl rounded-3xl overflow-hidden animate-fade-in">
+    <div className="max-w-3xl mx-auto my-6 glass-panel rounded-2xl shadow-xl rounded-3xl overflow-hidden animate-fade-in">
       
       {/* Header Container */}
-      <div className="bg-slate-900 text-white p-6 flex flex-col md:flex-row md:items-center justify-between border-b border-slate-800">
+      <div className="bg-neutral-900 text-white p-6 flex flex-col md:flex-row md:items-center justify-between border-b border-neutral-800">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="text-[9px] font-mono tracking-widest font-bold bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded border border-blue-500/10 uppercase">
+            <span className="text-[9px] font-mono tracking-widest font-bold bg-primary-500/20 text-primary-400 px-2 py-0.5 rounded border border-primary-500/10 uppercase">
               Step {step} of 5
             </span>
-            <span className="text-[10px] font-mono text-slate-400">Maker-Checker Compliant</span>
+            <span className="text-[10px] font-mono text-neutral-400">Maker-Checker Compliant</span>
           </div>
           <h3 className="text-base font-bold tracking-tight">Digital Loan Origination (DLO)</h3>
-          <p className="text-xs text-slate-400">Configure parameters, verify personal/financial stats, and submit for instant scoring.</p>
+          <p className="text-xs text-neutral-400">Configure parameters, verify personal/financial stats, and submit for instant scoring.</p>
         </div>
         <button
         onClick={() => navigate("/dashboard")}
-          className="text-xs font-bold text-rose-400 hover:text-rose-300 hover:underline mt-2 md:mt-0 self-start md:self-center transition"
+          className="text-xs font-bold text-error-400 hover:text-error-300 hover:underline mt-2 md:mt-0 self-start md:self-center transition"
         >
           Cancel & Exit
         </button>
       </div>
 
       {/* Progress Bar */}
-      <div className="h-1.5 w-full bg-slate-100 flex">
-        <div className="h-full bg-blue-600 transition-all duration-300" style={{ width: `${(step / 5) * 100}%` }}></div>
+      <div className="h-1.5 w-full bg-neutral-800/50 flex">
+        <div className="h-full bg-primary-600 transition-all duration-300" style={{ width: `${(step / 5) * 100}%` }}></div>
       </div>
 
       <div className="p-6 sm:p-8">
@@ -532,7 +532,7 @@ export default function LoanWizard({ user }) {
             
             {/* Category Selectors */}
             <div>
-              <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-wider">Loan Category Selection</label>
+              <label className="block text-[11px] font-bold text-neutral-500 mb-2 uppercase tracking-wider">Loan Category Selection</label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 {[
                   { type: "PERSONAL", label: "Personal Loan", desc: "Unsecured Cash" },
@@ -547,31 +547,31 @@ export default function LoanWizard({ user }) {
                     onClick={() => handleTypeChange(item.type)}
                     className={`py-3 px-3.5 rounded-2xl border text-left transition cursor-pointer flex flex-col justify-between h-20 ${
                       loanType === item.type
-                        ? "bg-slate-900 text-white border-slate-900 shadow-lg"
-                        : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                        ? "bg-neutral-900 text-white border-neutral-900 shadow-lg"
+                        : "bg-neutral-900/30 text-neutral-200 border-neutral-700/50 hover:bg-neutral-800/50"
                     }`}
                   >
                     <span className="font-bold text-xs">{item.label}</span>
-                    <span className={`text-[9px] ${loanType === item.type ? "text-slate-300" : "text-slate-400"}`}>{item.desc}</span>
+                    <span className={`text-[9px] ${loanType === item.type ? "text-neutral-300" : "text-neutral-400"}`}>{item.desc}</span>
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Config terms */}
-            <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 space-y-5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-3 gap-2">
+            <div className="bg-neutral-900/30 border border-neutral-700/50/80 rounded-2xl p-5 space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-neutral-700/50 pb-3 gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="bg-blue-100 text-blue-800 p-1 rounded-lg">
+                  <span className="bg-primary-100 text-primary-800 p-1 rounded-xl">
                     <DollarSign className="h-4 w-4" />
                   </span>
                   <div>
-                    <h4 className="font-bold text-slate-800">{selectedProduct.name}</h4>
-                    <p className="text-[10px] text-slate-400">Underwriting ID: NBLS-P-{selectedProduct.id}</p>
+                    <h4 className="font-bold text-neutral-50">{selectedProduct.name}</h4>
+                    <p className="text-[10px] text-neutral-400">Underwriting ID: NBLS-P-{selectedProduct.id}</p>
                   </div>
                 </div>
                 <div className="text-right sm:text-right">
-                  <span className="text-xs font-bold text-emerald-600 font-mono tracking-tight bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100 block sm:inline-block">
+                  <span className="text-xs font-bold text-success-600 font-mono tracking-tight bg-success-900/20 px-2.5 py-1 rounded-xl border border-success-100 block sm:inline-block">
                     Interest: {selectedProduct.interestRate}% p.a. Fixed
                   </span>
                 </div>
@@ -582,8 +582,8 @@ export default function LoanWizard({ user }) {
                 {/* Desired Amount */}
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <label className="text-[11px] font-bold text-slate-500 uppercase">Requested Principal (LKR)</label>
-                    <span className="text-[10px] font-bold text-slate-400">Min: LKR {selectedProduct.minAmount.toLocaleString()}</span>
+                    <label className="text-[11px] font-bold text-neutral-500 uppercase">Requested Principal (LKR)</label>
+                    <span className="text-[10px] font-bold text-neutral-400">Min: LKR {selectedProduct.minAmount.toLocaleString()}</span>
                   </div>
                   
                   <input
@@ -591,8 +591,8 @@ export default function LoanWizard({ user }) {
                     type="number"
                     min={selectedProduct.minAmount}
                     max={selectedProduct.maxAmount}
-                    className={`w-full px-3.5 py-2 border rounded-xl font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      touched.amount && errors.amount ? "border-rose-400 bg-rose-50/15" : "border-slate-200 bg-white"
+                    className={`w-full px-3.5 py-2 border rounded-xl font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                      touched.amount && errors.amount ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50 bg-neutral-900/50"
                     }`}
                     value={reqAmount}
                     onChange={(e) => {
@@ -606,7 +606,7 @@ export default function LoanWizard({ user }) {
                     min={selectedProduct.minAmount}
                     max={selectedProduct.maxAmount}
                     step={loanType === "SME" ? 500000 : 50000}
-                    className="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg cursor-pointer"
+                    className="w-full accent-primary-600 h-1.5 bg-neutral-200 rounded-xl cursor-pointer transition-all duration-200"
                     value={parseFloat(reqAmount) || selectedProduct.minAmount}
                     onChange={(e) => {
                       setReqAmount(e.target.value);
@@ -615,24 +615,24 @@ export default function LoanWizard({ user }) {
                   />
                   
                   {touched.amount && errors.amount ? (
-                    <span className="text-[10px] text-rose-600 font-semibold block">{errors.amount}</span>
+                    <span className="text-[10px] text-error-600 font-semibold block">{errors.amount}</span>
                   ) : (
-                    <p className="text-[9px] text-slate-400">Maximum limit: LKR {selectedProduct.maxAmount.toLocaleString()}</p>
+                    <p className="text-[9px] text-neutral-400">Maximum limit: LKR {selectedProduct.maxAmount.toLocaleString()}</p>
                   )}
                 </div>
 
                 {/* Tenure */}
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <label className="text-[11px] font-bold text-slate-500 uppercase">Tenure Duration (Months)</label>
-                    <span className="text-[10px] font-bold text-slate-400">Default: {selectedProduct.defaultTenure} Mos</span>
+                    <label className="text-[11px] font-bold text-neutral-500 uppercase">Tenure Duration (Months)</label>
+                    <span className="text-[10px] font-bold text-neutral-400">Default: {selectedProduct.defaultTenure} Mos</span>
                   </div>
 
                   <input
                     id="loan-wizard-tenure"
                     type="number"
-                    className={`w-full px-3.5 py-2 border rounded-xl font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      touched.tenure && errors.tenure ? "border-rose-400 bg-rose-50/15" : "border-slate-200 bg-white"
+                    className={`w-full px-3.5 py-2 border rounded-xl font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                      touched.tenure && errors.tenure ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50 bg-neutral-900/50"
                     }`}
                     value={tenure}
                     onChange={(e) => {
@@ -646,7 +646,7 @@ export default function LoanWizard({ user }) {
                     min="12"
                     max="180"
                     step="12"
-                    className="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg cursor-pointer"
+                    className="w-full accent-primary-600 h-1.5 bg-neutral-200 rounded-xl cursor-pointer transition-all duration-200"
                     value={parseInt(tenure) || 12}
                     onChange={(e) => {
                       setTenure(e.target.value);
@@ -655,9 +655,9 @@ export default function LoanWizard({ user }) {
                   />
 
                   {touched.tenure && errors.tenure ? (
-                    <span className="text-[10px] text-rose-600 font-semibold block">{errors.tenure}</span>
+                    <span className="text-[10px] text-error-600 font-semibold block">{errors.tenure}</span>
                   ) : (
-                    <p className="text-[9px] text-slate-400">Enter a duration between 12 and 180 months.</p>
+                    <p className="text-[9px] text-neutral-400">Enter a duration between 12 and 180 months.</p>
                   )}
                 </div>
 
@@ -666,29 +666,29 @@ export default function LoanWizard({ user }) {
 
             {/* Dynamic Quote Breakdown */}
             {emiQuote > 0 && (
-              <div className="bg-blue-50/70 border border-blue-100 rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="bg-primary-900/20/70 border border-primary-100 rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-1.5 text-blue-600">
+                  <div className="flex items-center gap-1.5 text-primary-600">
                     <Scale className="h-4 w-4" />
                     <span className="font-bold tracking-wider uppercase text-[9px] font-mono">Indicative Repayment Estimate</span>
                   </div>
-                  <h4 className="text-xl font-bold text-slate-900 tracking-tight">
-                    LKR {emiQuote.toLocaleString()} <span className="text-[10px] font-normal text-slate-500">/ month</span>
+                  <h4 className="text-xl font-bold text-neutral-900 tracking-tight">
+                    LKR {emiQuote.toLocaleString()} <span className="text-[10px] font-normal text-neutral-500">/ month</span>
                   </h4>
-                  <p className="text-[10px] text-slate-400">Amortized at {selectedProduct.interestRate}% APR over {tenure} months.</p>
+                  <p className="text-[10px] text-neutral-400">Amortized at {selectedProduct.interestRate}% APR over {tenure} months.</p>
                 </div>
 
                 {/* Stacked mini chart represent interest/principal proportion */}
                 <div className="w-full md:w-52 space-y-1.5">
-                  <div className="flex justify-between text-[10px] text-slate-500">
+                  <div className="flex justify-between text-[10px] text-neutral-500">
                     <span>Principal (Est)</span>
                     <span>Interest (Est)</span>
                   </div>
-                  <div className="h-3 w-full bg-slate-200 rounded-full overflow-hidden flex">
-                    <div className="bg-blue-600 h-full" style={{ width: "70%" }}></div>
+                  <div className="h-3 w-full bg-neutral-200 rounded-full overflow-hidden flex">
+                    <div className="bg-primary-600 h-full" style={{ width: "70%" }}></div>
                     <div className="bg-teal-500 h-full" style={{ width: "30%" }}></div>
                   </div>
-                  <div className="flex justify-between text-[9px] text-slate-400">
+                  <div className="flex justify-between text-[9px] text-neutral-400">
                     <span>~70% of payment</span>
                     <span>~30% of payment</span>
                   </div>
@@ -702,10 +702,10 @@ export default function LoanWizard({ user }) {
         {/* STEP 2: Applicant Identity particulars */}
         {step === 2 && (
           <div className="space-y-5 animate-fade-in text-xs">
-            <h4 className="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2 flex items-center gap-1.5">
-              <User className="h-4.5 w-4.5 text-blue-600" /> Confirm Applicant Personal Particulars
+            <h4 className="text-sm font-bold text-neutral-50 border-b border-neutral-700/30 pb-2 flex items-center gap-1.5">
+              <User className="h-4.5 w-4.5 text-primary-600" /> Confirm Applicant Personal Particulars
             </h4>
-            <p className="text-slate-500 text-[11px] leading-relaxed">
+            <p className="text-neutral-500 text-[11px] leading-relaxed">
               Verify your official state identifiers and coordinates. Details must match your physical National Identity Card (NIC).
             </p>
 
@@ -713,13 +713,13 @@ export default function LoanWizard({ user }) {
               
               {/* Full Name */}
               <div className="space-y-1">
-                <label className="block text-[10px] font-bold text-slate-500 uppercase">Full Name (As per NIC)</label>
+                <label className="block text-[10px] font-bold text-neutral-500 uppercase">Full Name (As per NIC)</label>
                 <div className="relative">
-                  <User className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                  <User className="absolute left-3 top-2.5 h-4 w-4 text-neutral-400" />
                   <input
                     type="text"
-                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      touched.fullName && errors.fullName ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                      touched.fullName && errors.fullName ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                     }`}
                     placeholder="Kamal Bandara"
                     value={fullName}
@@ -730,19 +730,19 @@ export default function LoanWizard({ user }) {
                   />
                 </div>
                 {touched.fullName && errors.fullName && (
-                  <span className="text-[10px] text-rose-600 font-medium block">{errors.fullName}</span>
+                  <span className="text-[10px] text-error-600 font-medium block">{errors.fullName}</span>
                 )}
               </div>
 
               {/* NIC Number */}
               <div className="space-y-1">
-                <label className="block text-[10px] font-bold text-slate-500 uppercase">National Identity (NIC) Number</label>
+                <label className="block text-[10px] font-bold text-neutral-500 uppercase">National Identity (NIC) Number</label>
                 <div className="relative">
-                  <ClipboardCheck className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                  <ClipboardCheck className="absolute left-3 top-2.5 h-4 w-4 text-neutral-400" />
                   <input
                     type="text"
-                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      touched.nicNumber && errors.nicNumber ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                      touched.nicNumber && errors.nicNumber ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                     }`}
                     placeholder="199234509123 or 923450912V"
                     value={nicNumber}
@@ -753,21 +753,21 @@ export default function LoanWizard({ user }) {
                   />
                 </div>
                 {touched.nicNumber && errors.nicNumber ? (
-                  <span className="text-[10px] text-rose-600 font-medium block">{errors.nicNumber}</span>
+                  <span className="text-[10px] text-error-600 font-medium block">{errors.nicNumber}</span>
                 ) : (
-                  <p className="text-[9px] text-slate-400">9-digit V/X format or modern 12-digit format.</p>
+                  <p className="text-[9px] text-neutral-400">9-digit V/X format or modern 12-digit format.</p>
                 )}
               </div>
 
               {/* Date of Birth */}
               <div className="space-y-1">
-                <label className="block text-[10px] font-bold text-slate-500 uppercase">Applicant Date of Birth</label>
+                <label className="block text-[10px] font-bold text-neutral-500 uppercase">Applicant Date of Birth</label>
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                  <Calendar className="absolute left-3 top-2.5 h-4 w-4 text-neutral-400" />
                   <input
                     type="date"
-                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      touched.dateOfBirth && errors.dateOfBirth ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                      touched.dateOfBirth && errors.dateOfBirth ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                     }`}
                     value={dateOfBirth}
                     onChange={(e) => {
@@ -777,19 +777,19 @@ export default function LoanWizard({ user }) {
                   />
                 </div>
                 {touched.dateOfBirth && errors.dateOfBirth && (
-                  <span className="text-[10px] text-rose-600 font-medium block">{errors.dateOfBirth}</span>
+                  <span className="text-[10px] text-error-600 font-medium block">{errors.dateOfBirth}</span>
                 )}
               </div>
 
               {/* Mobile Phone */}
               <div className="space-y-1">
-                <label className="block text-[10px] font-bold text-slate-500 uppercase">Verified Mobile Contact</label>
+                <label className="block text-[10px] font-bold text-neutral-500 uppercase">Verified Mobile Contact</label>
                 <div className="relative">
-                  <Phone className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                  <Phone className="absolute left-3 top-2.5 h-4 w-4 text-neutral-400" />
                   <input
                     type="text"
-                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      touched.mobileNumber && errors.mobileNumber ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                      touched.mobileNumber && errors.mobileNumber ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                     }`}
                     placeholder="+94771234567"
                     value={mobileNumber}
@@ -800,19 +800,19 @@ export default function LoanWizard({ user }) {
                   />
                 </div>
                 {touched.mobileNumber && errors.mobileNumber && (
-                  <span className="text-[10px] text-rose-600 font-medium block">{errors.mobileNumber}</span>
+                  <span className="text-[10px] text-error-600 font-medium block">{errors.mobileNumber}</span>
                 )}
               </div>
 
               {/* Email Address */}
               <div className="space-y-1">
-                <label className="block text-[10px] font-bold text-slate-500 uppercase">Email Address</label>
+                <label className="block text-[10px] font-bold text-neutral-500 uppercase">Email Address</label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                  <Mail className="absolute left-3 top-2.5 h-4 w-4 text-neutral-400" />
                   <input
                     type="email"
-                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      touched.email && errors.email ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                      touched.email && errors.email ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                     }`}
                     placeholder="kamal@gmail.com"
                     value={email}
@@ -823,19 +823,19 @@ export default function LoanWizard({ user }) {
                   />
                 </div>
                 {touched.email && errors.email && (
-                  <span className="text-[10px] text-rose-600 font-medium block">{errors.email}</span>
+                  <span className="text-[10px] text-error-600 font-medium block">{errors.email}</span>
                 )}
               </div>
 
               {/* Physical Street Address */}
               <div className="space-y-1 sm:col-span-2">
-                <label className="block text-[10px] font-bold text-slate-500 uppercase">Residential Address</label>
+                <label className="block text-[10px] font-bold text-neutral-500 uppercase">Residential Address</label>
                 <div className="relative">
-                  <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                  <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-neutral-400" />
                   <input
                     type="text"
-                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      touched.address && errors.address ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                      touched.address && errors.address ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                     }`}
                     placeholder="No. 45, Flower Road, Colombo 07"
                     value={address}
@@ -846,7 +846,7 @@ export default function LoanWizard({ user }) {
                   />
                 </div>
                 {touched.address && errors.address && (
-                  <span className="text-[10px] text-rose-600 font-medium block">{errors.address}</span>
+                  <span className="text-[10px] text-error-600 font-medium block">{errors.address}</span>
                 )}
               </div>
 
@@ -858,10 +858,10 @@ export default function LoanWizard({ user }) {
         {/* STEP 3: Financials & Income Specs */}
         {step === 3 && (
           <div className="space-y-5 animate-fade-in text-xs">
-            <h4 className="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2 flex items-center gap-1.5">
-              <TrendingUp className="h-4.5 w-4.5 text-blue-600" /> Declare Income and Security Specifics
+            <h4 className="text-sm font-bold text-neutral-50 border-b border-neutral-700/30 pb-2 flex items-center gap-1.5">
+              <TrendingUp className="h-4.5 w-4.5 text-primary-600" /> Declare Income and Security Specifics
             </h4>
-            <p className="text-slate-500 text-[11px] leading-relaxed">
+            <p className="text-neutral-500 text-[11px] leading-relaxed">
               Declare reliable gross income and monthly liability streams. Inconsistent figures will trigger compliance checker holds.
             </p>
 
@@ -869,9 +869,9 @@ export default function LoanWizard({ user }) {
               
               {/* Employment Status */}
               <div className="space-y-1">
-                <label className="block text-[10px] font-bold text-slate-500 uppercase">Employment Status</label>
+                <label className="block text-[10px] font-bold text-neutral-500 uppercase">Employment Status</label>
                 <select
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3.5 py-2 border border-neutral-700/50 rounded-xl bg-neutral-900/50 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   value={employmentStatus}
                   onChange={(e) => setEmploymentStatus(e.target.value)}
                 >
@@ -883,13 +883,13 @@ export default function LoanWizard({ user }) {
 
               {/* Occupation */}
               <div className="space-y-1">
-                <label className="block text-[10px] font-bold text-slate-500 uppercase">Profession / Job Title</label>
+                <label className="block text-[10px] font-bold text-neutral-500 uppercase">Profession / Job Title</label>
                 <div className="relative">
-                  <Briefcase className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                  <Briefcase className="absolute left-3 top-2.5 h-4 w-4 text-neutral-400" />
                   <input
                     type="text"
-                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      touched.occupation && errors.occupation ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                      touched.occupation && errors.occupation ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                     }`}
                     placeholder="Senior Software Engineer"
                     value={occupation}
@@ -900,20 +900,20 @@ export default function LoanWizard({ user }) {
                   />
                 </div>
                 {touched.occupation && errors.occupation && (
-                  <span className="text-[10px] text-rose-600 font-medium block">{errors.occupation}</span>
+                  <span className="text-[10px] text-error-600 font-medium block">{errors.occupation}</span>
                 )}
               </div>
 
               {/* Employer Company Name (Conditional on Salaried) */}
               {employmentStatus === "Salaried" && (
                 <div className="space-y-1 sm:col-span-2">
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase">Employer Company Name</label>
+                  <label className="block text-[10px] font-bold text-neutral-500 uppercase">Employer Company Name</label>
                   <div className="relative">
-                    <Building className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                    <Building className="absolute left-3 top-2.5 h-4 w-4 text-neutral-400" />
                     <input
                       type="text"
-                      className={`w-full pl-10 pr-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        touched.employerName && errors.employerName ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                      className={`w-full pl-10 pr-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                        touched.employerName && errors.employerName ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                       }`}
                       placeholder="IFS Sri Lanka PLC"
                       value={employerName}
@@ -924,20 +924,20 @@ export default function LoanWizard({ user }) {
                     />
                   </div>
                   {touched.employerName && errors.employerName && (
-                    <span className="text-[10px] text-rose-600 font-medium block">{errors.employerName}</span>
+                    <span className="text-[10px] text-error-600 font-medium block">{errors.employerName}</span>
                   )}
                 </div>
               )}
 
               {/* Gross Income */}
               <div className="space-y-1">
-                <label className="block text-[10px] font-bold text-slate-500 uppercase">Gross Monthly Income (LKR)</label>
+                <label className="block text-[10px] font-bold text-neutral-500 uppercase">Gross Monthly Income (LKR)</label>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                  <DollarSign className="absolute left-3 top-2.5 h-4 w-4 text-neutral-400" />
                   <input
                     type="number"
-                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      touched.monthlyIncome && errors.monthlyIncome ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                      touched.monthlyIncome && errors.monthlyIncome ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                     }`}
                     placeholder="250000"
                     value={monthlyIncome}
@@ -948,19 +948,19 @@ export default function LoanWizard({ user }) {
                   />
                 </div>
                 {touched.monthlyIncome && errors.monthlyIncome && (
-                  <span className="text-[10px] text-rose-600 font-medium block">{errors.monthlyIncome}</span>
+                  <span className="text-[10px] text-error-600 font-medium block">{errors.monthlyIncome}</span>
                 )}
               </div>
 
               {/* Existing Liabilities */}
               <div className="space-y-1">
-                <label className="block text-[10px] font-bold text-slate-500 uppercase">Existing Monthly Expenses/EMIs (LKR)</label>
+                <label className="block text-[10px] font-bold text-neutral-500 uppercase">Existing Monthly Expenses/EMIs (LKR)</label>
                 <div className="relative">
-                  <Scale className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                  <Scale className="absolute left-3 top-2.5 h-4 w-4 text-neutral-400" />
                   <input
                     type="number"
-                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      touched.monthlyExpenses && errors.monthlyExpenses ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                    className={`w-full pl-10 pr-3.5 py-2 border rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                      touched.monthlyExpenses && errors.monthlyExpenses ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                     }`}
                     placeholder="45000"
                     value={monthlyExpenses}
@@ -971,15 +971,15 @@ export default function LoanWizard({ user }) {
                   />
                 </div>
                 {touched.monthlyExpenses && errors.monthlyExpenses && (
-                  <span className="text-[10px] text-rose-600 font-medium block">{errors.monthlyExpenses}</span>
+                  <span className="text-[10px] text-error-600 font-medium block">{errors.monthlyExpenses}</span>
                 )}
               </div>
 
               {/* Funds source */}
               <div className="space-y-1 sm:col-span-2">
-                <label className="block text-[10px] font-bold text-slate-500 uppercase">Primary Source of Funds</label>
+                <label className="block text-[10px] font-bold text-neutral-500 uppercase">Primary Source of Funds</label>
                 <select
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3.5 py-2 border border-neutral-700/50 rounded-xl bg-neutral-900/50 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   value={sourceOfFunds}
                   onChange={(e) => setSourceOfFunds(e.target.value)}
                 >
@@ -994,19 +994,19 @@ export default function LoanWizard({ user }) {
 
             {/* PRODUCT SPECIFIC COLLATERAL / SECURITIES */}
             {(loanType === "HOME" || loanType === "VEHICLE" || loanType === "SME") && (
-              <div className="mt-5 p-5 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-4">
-                <h5 className="font-bold text-slate-800 text-[11px] uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-200 pb-1.5">
-                  <Lock className="h-3.5 w-3.5 text-blue-600" /> Collateral & Security Details
+              <div className="mt-5 p-5 bg-neutral-900/30 border border-neutral-700/50/80 rounded-2xl space-y-4">
+                <h5 className="font-bold text-neutral-50 text-[11px] uppercase tracking-wider flex items-center gap-1.5 border-b border-neutral-700/50 pb-1.5">
+                  <Lock className="h-3.5 w-3.5 text-primary-600" /> Collateral & Security Details
                 </h5>
 
                 {loanType === "HOME" && (
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label className="block text-[9px] font-bold text-slate-500">Property Location / Town</label>
+                      <label className="block text-[9px] font-bold text-neutral-500">Property Location / Town</label>
                       <input
                         type="text"
-                        className={`w-full px-3 py-1.5 border rounded-lg text-xs focus:ring-2 focus:ring-blue-500 ${
-                          touched.homeLocation && errors.homeLocation ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                        className={`w-full px-3 py-1.5 border rounded-xl text-xs focus:ring-2 focus:ring-primary-500 ${
+                          touched.homeLocation && errors.homeLocation ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                         }`}
                         value={homeLocation}
                         onChange={(e) => {
@@ -1015,15 +1015,15 @@ export default function LoanWizard({ user }) {
                         }}
                       />
                       {touched.homeLocation && errors.homeLocation && (
-                        <span className="text-[9px] text-rose-600 block">{errors.homeLocation}</span>
+                        <span className="text-[9px] text-error-600 block">{errors.homeLocation}</span>
                       )}
                     </div>
                     <div className="space-y-1">
-                      <label className="block text-[9px] font-bold text-slate-500">Estimated Market Value (LKR)</label>
+                      <label className="block text-[9px] font-bold text-neutral-500">Estimated Market Value (LKR)</label>
                       <input
                         type="number"
-                        className={`w-full px-3 py-1.5 border rounded-lg text-xs font-mono focus:ring-2 focus:ring-blue-500 ${
-                          touched.homeCollateralVal && errors.homeCollateralVal ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                        className={`w-full px-3 py-1.5 border rounded-xl text-xs font-mono focus:ring-2 focus:ring-primary-500 ${
+                          touched.homeCollateralVal && errors.homeCollateralVal ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                         }`}
                         value={homeCollateralVal}
                         onChange={(e) => {
@@ -1032,7 +1032,7 @@ export default function LoanWizard({ user }) {
                         }}
                       />
                       {touched.homeCollateralVal && errors.homeCollateralVal && (
-                        <span className="text-[9px] text-rose-600 block">{errors.homeCollateralVal}</span>
+                        <span className="text-[9px] text-error-600 block">{errors.homeCollateralVal}</span>
                       )}
                     </div>
                   </div>
@@ -1041,11 +1041,11 @@ export default function LoanWizard({ user }) {
                 {loanType === "VEHICLE" && (
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label className="block text-[9px] font-bold text-slate-500">Vehicle Make, Year & Model</label>
+                      <label className="block text-[9px] font-bold text-neutral-500">Vehicle Make, Year & Model</label>
                       <input
                         type="text"
-                        className={`w-full px-3 py-1.5 border rounded-lg text-xs focus:ring-2 focus:ring-blue-500 ${
-                          touched.vehicleMake && errors.vehicleMake ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                        className={`w-full px-3 py-1.5 border rounded-xl text-xs focus:ring-2 focus:ring-primary-500 ${
+                          touched.vehicleMake && errors.vehicleMake ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                         }`}
                         value={vehicleMake}
                         onChange={(e) => {
@@ -1054,15 +1054,15 @@ export default function LoanWizard({ user }) {
                         }}
                       />
                       {touched.vehicleMake && errors.vehicleMake && (
-                        <span className="text-[9px] text-rose-600 block">{errors.vehicleMake}</span>
+                        <span className="text-[9px] text-error-600 block">{errors.vehicleMake}</span>
                       )}
                     </div>
                     <div className="space-y-1">
-                      <label className="block text-[9px] font-bold text-slate-500">Dealer Market Value (LKR)</label>
+                      <label className="block text-[9px] font-bold text-neutral-500">Dealer Market Value (LKR)</label>
                       <input
                         type="number"
-                        className={`w-full px-3 py-1.5 border rounded-lg text-xs font-mono focus:ring-2 focus:ring-blue-500 ${
-                          touched.vehicleVal && errors.vehicleVal ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                        className={`w-full px-3 py-1.5 border rounded-xl text-xs font-mono focus:ring-2 focus:ring-primary-500 ${
+                          touched.vehicleVal && errors.vehicleVal ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                         }`}
                         value={vehicleVal}
                         onChange={(e) => {
@@ -1071,7 +1071,7 @@ export default function LoanWizard({ user }) {
                         }}
                       />
                       {touched.vehicleVal && errors.vehicleVal && (
-                        <span className="text-[9px] text-rose-600 block">{errors.vehicleVal}</span>
+                        <span className="text-[9px] text-error-600 block">{errors.vehicleVal}</span>
                       )}
                     </div>
                   </div>
@@ -1080,11 +1080,11 @@ export default function LoanWizard({ user }) {
                 {loanType === "SME" && (
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label className="block text-[9px] font-bold text-slate-500">Business Registration Number (PV/N-xxxx)</label>
+                      <label className="block text-[9px] font-bold text-neutral-500">Business Registration Number (PV/N-xxxx)</label>
                       <input
                         type="text"
-                        className={`w-full px-3 py-1.5 border rounded-lg text-xs font-mono focus:ring-2 focus:ring-blue-500 ${
-                          touched.smeRegNo && errors.smeRegNo ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                        className={`w-full px-3 py-1.5 border rounded-xl text-xs font-mono focus:ring-2 focus:ring-primary-500 ${
+                          touched.smeRegNo && errors.smeRegNo ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                         }`}
                         value={smeRegNo}
                         onChange={(e) => {
@@ -1093,15 +1093,15 @@ export default function LoanWizard({ user }) {
                         }}
                       />
                       {touched.smeRegNo && errors.smeRegNo && (
-                        <span className="text-[9px] text-rose-600 block">{errors.smeRegNo}</span>
+                        <span className="text-[9px] text-error-600 block">{errors.smeRegNo}</span>
                       )}
                     </div>
                     <div className="space-y-1">
-                      <label className="block text-[9px] font-bold text-slate-500">Years of Operation</label>
+                      <label className="block text-[9px] font-bold text-neutral-500">Years of Operation</label>
                       <input
                         type="number"
-                        className={`w-full px-3 py-1.5 border rounded-lg text-xs focus:ring-2 focus:ring-blue-500 ${
-                          touched.smeYears && errors.smeYears ? "border-rose-400 bg-rose-50/15" : "border-slate-200"
+                        className={`w-full px-3 py-1.5 border rounded-xl text-xs focus:ring-2 focus:ring-primary-500 ${
+                          touched.smeYears && errors.smeYears ? "border-error-400 bg-error-900/20/15" : "border-neutral-700/50"
                         }`}
                         value={smeYears}
                         onChange={(e) => {
@@ -1110,7 +1110,7 @@ export default function LoanWizard({ user }) {
                         }}
                       />
                       {touched.smeYears && errors.smeYears && (
-                        <span className="text-[9px] text-rose-600 block">{errors.smeYears}</span>
+                        <span className="text-[9px] text-error-600 block">{errors.smeYears}</span>
                       )}
                     </div>
                   </div>
@@ -1122,10 +1122,10 @@ export default function LoanWizard({ user }) {
             {parsedIncome > 1 && (
               <div className={`p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-5 transition ${
                 isHighRiskDti 
-                  ? "bg-rose-50 border-rose-100 text-rose-900" 
+                  ? "bg-error-900/20 border-error-100 text-error-900" 
                   : isModerateRiskDti 
-                  ? "bg-amber-50/50 border-amber-100 text-amber-900" 
-                  : "bg-emerald-50/45 border-emerald-100 text-emerald-900"
+                  ? "bg-warning-900/20/50 border-warning-100 text-warning-900" 
+                  : "bg-success-900/20/45 border-success-100 text-success-900"
               }`}>
                 <div className="space-y-1">
                   <div className="flex items-center gap-1.5">
@@ -1135,7 +1135,7 @@ export default function LoanWizard({ user }) {
                   <h4 className="text-base font-bold">
                     Ratio Estimate: {dtiVal}%
                   </h4>
-                  <p className="text-[10px] text-slate-500 leading-snug">
+                  <p className="text-[10px] text-neutral-500 leading-snug">
                     {isHighRiskDti 
                       ? "High Risk: Total expenses exceed 55% of income. Approval might require co-signers." 
                       : isModerateRiskDti 
@@ -1158,10 +1158,10 @@ export default function LoanWizard({ user }) {
         {/* STEP 4: Documents Upload & Verification */}
         {step === 4 && (
           <div className="space-y-5 animate-fade-in text-xs">
-            <h4 className="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2 flex items-center gap-1.5">
-              <Upload className="h-4.5 w-4.5 text-blue-600" /> Secure Document Vault Uploads
+            <h4 className="text-sm font-bold text-neutral-50 border-b border-neutral-700/30 pb-2 flex items-center gap-1.5">
+              <Upload className="h-4.5 w-4.5 text-primary-600" /> Secure Document Vault Uploads
             </h4>
-            <p className="text-slate-500 text-[11px] leading-relaxed">
+            <p className="text-neutral-500 text-[11px] leading-relaxed">
               CBSL and FIU digital directives mandate cryptographically secured proof attachments for e-KYC validation. You can **drag-and-drop** files directly, browse manually, or run immediate progress-tracked simulations.
             </p>
 
@@ -1180,12 +1180,12 @@ export default function LoanWizard({ user }) {
                     onDrop={(e) => handleDrop(e, doc)}
                     className={`relative p-5 border-2 border-dashed rounded-3xl transition-all duration-200 flex flex-col md:flex-row md:items-center justify-between gap-4 ${
                       fileObj?.uploaded 
-                        ? "bg-emerald-50/20 border-emerald-300" 
+                        ? "bg-success-900/20/20 border-success-300" 
                         : isUploading
-                        ? "bg-blue-50/10 border-blue-400"
+                        ? "bg-primary-900/20/10 border-primary-400"
                         : isDragOver
-                        ? "bg-blue-50/50 border-blue-500 ring-4 ring-blue-50 scale-[1.01]"
-                        : "bg-slate-50/50 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                        ? "bg-primary-900/20/50 border-primary-500 ring-4 ring-primary-50 scale-[1.01]"
+                        : "bg-neutral-900/30/50 border-neutral-700/50 hover:border-neutral-300 hover:bg-neutral-900/30"
                     }`}
                   >
                     {/* Hidden Native File Input */}
@@ -1203,12 +1203,12 @@ export default function LoanWizard({ user }) {
 
                     <div className="space-y-1.5 max-w-md flex-1">
                       <div className="flex items-center gap-2">
-                        <span className={`p-1.5 rounded-lg ${fileObj?.uploaded ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-500'}`}>
+                        <span className={`p-1.5 rounded-xl ${fileObj?.uploaded ? 'bg-success-100 text-success-800' : 'bg-neutral-800/50 text-neutral-500'}`}>
                           <FileText className="h-4 w-4" />
                         </span>
                         <div>
-                          <h5 className="font-bold text-slate-800 text-[11px]">{doc}</h5>
-                          <p className="text-[10px] text-slate-400 leading-normal">
+                          <h5 className="font-bold text-neutral-50 text-[11px]">{doc}</h5>
+                          <p className="text-[10px] text-neutral-400 leading-normal">
                             Requires official PDF statement or scanned/biometric JPEG copy. Max size 5MB.
                           </p>
                         </div>
@@ -1216,14 +1216,14 @@ export default function LoanWizard({ user }) {
 
                       {/* Progress Bar Indicator */}
                       {isUploading && (
-                        <div className="space-y-1 mt-2.5 max-w-xs bg-white p-2 rounded-xl border border-blue-100 shadow-sm animate-pulse">
-                          <div className="flex justify-between text-[9px] font-bold text-blue-600">
+                        <div className="space-y-1 mt-2.5 max-w-xs bg-neutral-900/50 p-2 rounded-xl border border-primary-100 shadow-md shadow-primary/5 animate-pulse">
+                          <div className="flex justify-between text-[9px] font-bold text-primary-600">
                             <span>Transmitting securely...</span>
                             <span>{progress}%</span>
                           </div>
-                          <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                          <div className="h-2 w-full bg-neutral-800/50 rounded-full overflow-hidden">
                             <div 
-                              className="h-full bg-blue-600 rounded-full transition-all duration-150"
+                              className="h-full bg-primary-600 rounded-full transition-all duration-150"
                               style={{ width: `${progress}%` }}
                             ></div>
                           </div>
@@ -1232,10 +1232,10 @@ export default function LoanWizard({ user }) {
 
                       {/* File Details display */}
                       {fileObj?.uploaded && (
-                        <div className="flex items-center gap-2 mt-1.5 text-[10px] font-mono font-bold text-slate-600 bg-emerald-50/50 border border-emerald-100/60 py-1 px-2.5 rounded-lg w-fit">
-                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0" />
+                        <div className="flex items-center gap-2 mt-1.5 text-[10px] font-mono font-bold text-neutral-300 bg-success-900/20/50 border border-success-100/60 py-1 px-2.5 rounded-xl w-fit">
+                          <CheckCircle2 className="h-3.5 w-3.5 text-success-500 flex-shrink-0" />
                           <span className="truncate max-w-[200px]">{fileObj.name}</span>
-                          <span className="text-slate-400 text-[9px]">({fileObj.size || "1,245.8 KB"})</span>
+                          <span className="text-neutral-400 text-[9px]">({fileObj.size || "1,245.8 KB"})</span>
                         </div>
                       )}
                     </div>
@@ -1245,14 +1245,14 @@ export default function LoanWizard({ user }) {
                         <button
                           type="button"
                           onClick={() => handleDeleteFile(doc)}
-                          className="px-3 py-1.5 border border-rose-200 text-rose-600 hover:bg-rose-50 rounded-xl text-[10px] font-bold transition flex items-center gap-1 cursor-pointer"
+                          className="px-3 py-1.5 border border-error-200 text-error-600 hover:bg-error-900/20 rounded-xl text-[10px] font-bold transition flex items-center gap-1 cursor-pointer"
                           title="Remove uploaded document"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                           <span>Delete</span>
                         </button>
                       ) : isUploading ? (
-                        <div className="text-[10px] font-semibold text-blue-600 animate-pulse bg-blue-50 px-2.5 py-1.5 rounded-lg border border-blue-100">
+                        <div className="text-[10px] font-semibold text-primary-600 animate-pulse bg-primary-900/20 px-2.5 py-1.5 rounded-xl border border-primary-100">
                           Encrypting...
                         </div>
                       ) : (
@@ -1260,16 +1260,16 @@ export default function LoanWizard({ user }) {
                           <button
                             type="button"
                             onClick={() => document.getElementById(`file-input-${doc.replace(/\s+/g, "-")}`).click()}
-                            className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[10px] font-bold transition duration-150 shadow-sm cursor-pointer whitespace-nowrap text-center"
+                            className="px-3 py-2 btn-premium rounded-xl text-white rounded-xl text-[10px] font-bold transition duration-150 shadow-md shadow-primary/5 cursor-pointer whitespace-nowrap text-center"
                           >
                             Browse File
                           </button>
-                          <span className="text-[10px] text-slate-400 text-center self-center font-bold">or</span>
+                          <span className="text-[10px] text-neutral-400 text-center self-center font-bold">or</span>
                           <button
                             id={`btn-upload-${doc.replace(/\s+/g, "-")}`}
                             type="button"
                             onClick={() => handleSimulateUpload(doc)}
-                            className="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-[10px] font-bold transition duration-150 shadow-sm cursor-pointer whitespace-nowrap text-center"
+                            className="px-3 py-2 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-[10px] font-bold transition duration-150 shadow-md shadow-primary/5 cursor-pointer whitespace-nowrap text-center"
                           >
                             Simulate Upload
                           </button>
@@ -1281,8 +1281,8 @@ export default function LoanWizard({ user }) {
               })}
             </div>
 
-            <div className="p-4 bg-blue-50/60 border border-blue-100 rounded-2xl flex gap-3 text-[11px] text-slate-500 leading-relaxed mt-4">
-              <ShieldCheck className="h-4.5 w-4.5 text-blue-500 flex-shrink-0 mt-0.5" />
+            <div className="p-4 bg-primary-900/20/60 border border-primary-100 rounded-2xl flex gap-3 text-[11px] text-neutral-500 leading-relaxed mt-4">
+              <ShieldCheck className="h-4.5 w-4.5 text-primary-500 flex-shrink-0 mt-0.5" />
               <div>
                 <strong>Secured Document Vault Protocol:</strong> NovaBank utilizes end-to-end AES-256 GCM cryptographic envelope technology. Uploaded materials are strictly hashed for automated credit assessment without manual file persistence leaks.
               </div>
@@ -1294,71 +1294,71 @@ export default function LoanWizard({ user }) {
         {/* STEP 5: Summary, Scoring & Submit */}
         {step === 5 && (
           <div className="space-y-5 animate-fade-in text-xs">
-            <h4 className="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2 flex items-center gap-1.5">
-              <ClipboardCheck className="h-4.5 w-4.5 text-blue-600" /> Review Particulars & Sign Contract
+            <h4 className="text-sm font-bold text-neutral-50 border-b border-neutral-700/30 pb-2 flex items-center gap-1.5">
+              <ClipboardCheck className="h-4.5 w-4.5 text-primary-600" /> Review Particulars & Sign Contract
             </h4>
 
             {/* Bento Summary Grid */}
             <div className="grid md:grid-cols-2 gap-4">
               
               {/* Product Specifications Summary */}
-              <div className="border border-slate-200/80 rounded-2xl p-4 space-y-2 bg-slate-50/40">
-                <h5 className="font-bold text-[10px] text-slate-400 uppercase tracking-wider">Loan Specifications</h5>
-                <div className="divide-y divide-slate-100 text-[11px]">
+              <div className="border border-neutral-700/50/80 rounded-2xl p-4 space-y-2 bg-neutral-900/30/40">
+                <h5 className="font-bold text-[10px] text-neutral-400 uppercase tracking-wider">Loan Specifications</h5>
+                <div className="divide-y divide-neutral-100 text-[11px]">
                   <div className="py-1.5 flex justify-between">
-                    <span className="text-slate-400">Loan Type:</span>
-                    <span className="font-bold text-slate-800">{loanType} LOAN</span>
+                    <span className="text-neutral-400">Loan Type:</span>
+                    <span className="font-bold text-neutral-50">{loanType} LOAN</span>
                   </div>
                   <div className="py-1.5 flex justify-between">
-                    <span className="text-slate-400">Product:</span>
-                    <span className="font-bold text-blue-600 font-mono text-[10px]">{selectedProduct.name}</span>
+                    <span className="text-neutral-400">Product:</span>
+                    <span className="font-bold text-primary-600 font-mono text-[10px]">{selectedProduct.name}</span>
                   </div>
                   <div className="py-1.5 flex justify-between">
-                    <span className="text-slate-400">Principal Requested:</span>
-                    <span className="font-bold text-slate-800 font-mono">LKR {(parseFloat(reqAmount) || 0).toLocaleString()}</span>
+                    <span className="text-neutral-400">Principal Requested:</span>
+                    <span className="font-bold text-neutral-50 font-mono">LKR {(parseFloat(reqAmount) || 0).toLocaleString()}</span>
                   </div>
                   <div className="py-1.5 flex justify-between">
-                    <span className="text-slate-400">Tenure:</span>
-                    <span className="font-bold text-slate-800 font-mono">{tenure} Months</span>
+                    <span className="text-neutral-400">Tenure:</span>
+                    <span className="font-bold text-neutral-50 font-mono">{tenure} Months</span>
                   </div>
                   <div className="py-1.5 flex justify-between">
-                    <span className="text-slate-400">Interest Rate:</span>
-                    <span className="font-bold text-slate-800 font-mono">{selectedProduct.interestRate}% p.a. Fixed</span>
+                    <span className="text-neutral-400">Interest Rate:</span>
+                    <span className="font-bold text-neutral-50 font-mono">{selectedProduct.interestRate}% p.a. Fixed</span>
                   </div>
                   <div className="py-1.5 flex justify-between">
-                    <span className="text-slate-400">Indicative EMI Amount:</span>
-                    <span className="font-bold text-emerald-600 font-mono">LKR {emiQuote.toLocaleString()} / mo</span>
+                    <span className="text-neutral-400">Indicative EMI Amount:</span>
+                    <span className="font-bold text-success-600 font-mono">LKR {emiQuote.toLocaleString()} / mo</span>
                   </div>
                 </div>
               </div>
 
               {/* Applicant Personal Summary */}
-              <div className="border border-slate-200/80 rounded-2xl p-4 space-y-2 bg-slate-50/40">
-                <h5 className="font-bold text-[10px] text-slate-400 uppercase tracking-wider">Applicant Particulars</h5>
-                <div className="divide-y divide-slate-100 text-[11px]">
+              <div className="border border-neutral-700/50/80 rounded-2xl p-4 space-y-2 bg-neutral-900/30/40">
+                <h5 className="font-bold text-[10px] text-neutral-400 uppercase tracking-wider">Applicant Particulars</h5>
+                <div className="divide-y divide-neutral-100 text-[11px]">
                   <div className="py-1.5 flex justify-between">
-                    <span className="text-slate-400">Full Name:</span>
-                    <span className="font-bold text-slate-800 truncate max-w-[150px]">{fullName}</span>
+                    <span className="text-neutral-400">Full Name:</span>
+                    <span className="font-bold text-neutral-50 truncate max-w-[150px]">{fullName}</span>
                   </div>
                   <div className="py-1.5 flex justify-between">
-                    <span className="text-slate-400">NIC Identifier:</span>
-                    <span className="font-bold text-slate-800 font-mono">{nicNumber}</span>
+                    <span className="text-neutral-400">NIC Identifier:</span>
+                    <span className="font-bold text-neutral-50 font-mono">{nicNumber}</span>
                   </div>
                   <div className="py-1.5 flex justify-between">
-                    <span className="text-slate-400">Mobile Phone:</span>
-                    <span className="font-bold text-slate-800 font-mono">{mobileNumber}</span>
+                    <span className="text-neutral-400">Mobile Phone:</span>
+                    <span className="font-bold text-neutral-50 font-mono">{mobileNumber}</span>
                   </div>
                   <div className="py-1.5 flex justify-between">
-                    <span className="text-slate-400">Assigned Email:</span>
-                    <span className="font-bold text-slate-800 truncate max-w-[150px]">{email}</span>
+                    <span className="text-neutral-400">Assigned Email:</span>
+                    <span className="font-bold text-neutral-50 truncate max-w-[150px]">{email}</span>
                   </div>
                   <div className="py-1.5 flex justify-between">
-                    <span className="text-slate-400">Income Declared:</span>
-                    <span className="font-bold text-slate-800 font-mono">LKR {(parseFloat(monthlyIncome) || 0).toLocaleString()}</span>
+                    <span className="text-neutral-400">Income Declared:</span>
+                    <span className="font-bold text-neutral-50 font-mono">LKR {(parseFloat(monthlyIncome) || 0).toLocaleString()}</span>
                   </div>
                   <div className="py-1.5 flex justify-between">
-                    <span className="text-slate-400">DTI Calculated:</span>
-                    <span className={`font-bold ${isHighRiskDti ? "text-rose-600" : "text-emerald-600"}`}>{dtiVal}%</span>
+                    <span className="text-neutral-400">DTI Calculated:</span>
+                    <span className={`font-bold ${isHighRiskDti ? "text-error-600" : "text-success-600"}`}>{dtiVal}%</span>
                   </div>
                 </div>
               </div>
@@ -1366,23 +1366,23 @@ export default function LoanWizard({ user }) {
             </div>
 
             {/* Simulated Underwriting Scores */}
-            <div className="bg-slate-900 text-white p-5 rounded-2xl space-y-3 shadow-md">
-              <div className="flex items-center gap-1.5 text-blue-400">
+            <div className="bg-neutral-900 text-white p-5 rounded-2xl space-y-3 shadow-md">
+              <div className="flex items-center gap-1.5 text-primary-400">
                 <Sparkles className="h-4 w-4 animate-spin-slow" />
                 <span className="font-bold text-[9px] font-mono tracking-wider uppercase">Liveness Underwriting Estimate</span>
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <h4 className="font-bold text-sm">Automated Preliminary Analysis</h4>
-                  <p className="text-[10px] text-slate-400">We scanned mock credit registry files and estimated your initial risk profile.</p>
+                  <p className="text-[10px] text-neutral-400">We scanned mock credit registry files and estimated your initial risk profile.</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="bg-blue-600/30 text-blue-300 border border-blue-500/20 px-3 py-1.5 rounded-xl text-center">
-                    <span className="text-[8px] uppercase font-mono block text-slate-400">Credit Score</span>
+                  <div className="bg-primary-600/30 text-primary-300 border border-primary-500/20 px-3 py-1.5 rounded-xl text-center">
+                    <span className="text-[8px] uppercase font-mono block text-neutral-400">Credit Score</span>
                     <span className="font-bold font-mono text-sm">745 / 900</span>
                   </div>
-                  <div className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/10 px-3 py-1.5 rounded-xl text-center">
-                    <span className="text-[8px] uppercase font-mono block text-slate-400">CRIB Rank</span>
+                  <div className="bg-success-500/20 text-success-300 border border-success-500/10 px-3 py-1.5 rounded-xl text-center">
+                    <span className="text-[8px] uppercase font-mono block text-neutral-400">CRIB Rank</span>
                     <span className="font-bold text-sm">Grade A</span>
                   </div>
                 </div>
@@ -1390,19 +1390,19 @@ export default function LoanWizard({ user }) {
             </div>
 
             {/* Agreement Terms */}
-            <div className="p-4 border border-slate-200 bg-slate-50 rounded-2xl flex items-start gap-3">
+            <div className="p-4 border border-neutral-700/50 bg-neutral-900/30 rounded-2xl flex items-start gap-3">
               <input
                 id="terms-accepted"
                 type="checkbox"
-                className="mt-1 h-4 w-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer"
+                className="mt-1 h-4 w-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500 cursor-pointer transition-all duration-200"
                 checked={termsAccepted}
                 onChange={(e) => setTermsAccepted(e.target.checked)}
               />
               <div className="space-y-1">
-                <label htmlFor="terms-accepted" className="font-bold text-slate-800 text-[11px] cursor-pointer block">
+                <label htmlFor="terms-accepted" className="font-bold text-neutral-50 text-[11px] cursor-pointer block transition-all duration-200">
                   CRIB Verification & Information Disclosure Authorization
                 </label>
-                <p className="text-[10px] text-slate-500 leading-normal">
+                <p className="text-[10px] text-neutral-500 leading-normal">
                   I hereby authorize NovaBank PLC to request my Credit Information Bureau of Sri Lanka (CRIB) history, perform background e-KYC watchlist scans, and evaluate financial metrics strictly for digital loan origination underwriting.
                 </p>
               </div>
@@ -1412,13 +1412,13 @@ export default function LoanWizard({ user }) {
         )}
 
         {/* Action Controls Footer */}
-        <div className="flex justify-between pt-6 border-t border-slate-100 mt-8">
+        <div className="flex justify-between pt-6 border-t border-neutral-700/30 mt-8">
           <button
             id="btn-loan-back"
             type="button"
             disabled={step === 1}
             onClick={handleBack}
-            className="flex items-center gap-1.5 px-4.5 py-2 border border-slate-200 text-slate-600 hover:bg-slate-50 rounded-xl text-xs font-semibold disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer transition"
+            className="flex items-center gap-1.5 px-4.5 py-2 border border-neutral-700/50 text-neutral-300 hover:bg-neutral-900/30 rounded-xl text-xs font-semibold disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer transition"
           >
             <ChevronLeft className="h-4 w-4" />
             <span>Back</span>
@@ -1429,7 +1429,7 @@ export default function LoanWizard({ user }) {
               id="btn-loan-next"
               type="button"
               onClick={handleNext}
-              className="flex items-center gap-1.5 px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow transition cursor-pointer"
+              className="flex items-center gap-1.5 px-5 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-bold shadow transition cursor-pointer"
             >
               <span>Next Step</span>
               <ChevronRight className="h-4 w-4" />
@@ -1440,7 +1440,7 @@ export default function LoanWizard({ user }) {
               type="button"
               disabled={submitting}
               onClick={handleSubmitApplication}
-              className="flex items-center gap-1.5 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex items-center gap-1.5 px-6 py-2.5 btn-premium rounded-xl text-white rounded-xl text-xs font-bold shadow transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {submitting ? (
                 <>

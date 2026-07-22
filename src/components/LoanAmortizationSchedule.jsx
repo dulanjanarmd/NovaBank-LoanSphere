@@ -186,50 +186,50 @@ export default function LoanAmortizationSchedule({
   if (schedule.length === 0) return null;
 
   return (
-    <div className="bg-slate-50 rounded-3xl border border-slate-200 overflow-hidden" id="amortization-schedule-widget">
+    <div className="bg-neutral-900/30 rounded-3xl border border-neutral-700/50 overflow-hidden" id="amortization-schedule-widget">
       
       {/* Accordion Trigger Header */}
       <button
         type="button"
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-slate-100/60 transition cursor-pointer"
+        className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-neutral-800/50/60 transition cursor-pointer"
         id="btn-toggle-amortization"
       >
         <div className="flex items-center gap-3">
-          <div className="bg-blue-100 text-blue-700 p-2 rounded-xl border border-blue-200">
+          <div className="bg-primary-100 text-primary-700 p-2 rounded-xl border border-primary-200">
             <Layers className="h-4.5 w-4.5" />
           </div>
           <div>
-            <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">
+            <h4 className="text-xs font-extrabold text-neutral-50 uppercase tracking-wider">
               Interactive Amortization Schedule
             </h4>
-            <p className="text-[10px] text-slate-500 font-medium">
+            <p className="text-[10px] text-neutral-500 font-medium">
               View month-by-month repayment & principal amortization breakdown
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-bold text-blue-600 bg-blue-100/60 px-2.5 py-0.5 rounded-full border border-blue-200">
+          <span className="text-[10px] font-bold text-primary-600 bg-primary-100/60 px-2.5 py-0.5 rounded-full border border-primary-200">
             {schedule.length} Installments
           </span>
           {isExpanded ? (
-            <ChevronUp className="h-4 w-4 text-slate-400" />
+            <ChevronUp className="h-4 w-4 text-neutral-400" />
           ) : (
-            <ChevronDown className="h-4 w-4 text-slate-400" />
+            <ChevronDown className="h-4 w-4 text-neutral-400" />
           )}
         </div>
       </button>
 
       {/* Amortization Body (Expandable) */}
       {isExpanded && (
-        <div className="p-5 border-t border-slate-200 bg-white space-y-5 animate-fade-in text-xs text-slate-700">
+        <div className="p-5 border-t border-neutral-700/50 bg-neutral-900/50 space-y-5 animate-fade-in text-xs text-neutral-200">
           
           {/* Quick Filters and Search bar */}
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3.5 pb-2 border-b border-slate-100">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3.5 pb-2 border-b border-neutral-700/30">
             
             {/* Year tabs selection */}
             <div className="space-y-1">
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">
+              <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider block">
                 Filter by Year
               </span>
               <div className="flex flex-wrap gap-1">
@@ -238,10 +238,10 @@ export default function LoanAmortizationSchedule({
                     key={opt.value}
                     type="button"
                     onClick={() => setSelectedYear(opt.value)}
-                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition cursor-pointer ${
+                    className={`px-2.5 py-1 rounded-xl text-[10px] font-bold border transition cursor-pointer ${
                       selectedYear === opt.value
-                        ? "bg-slate-900 text-white border-slate-900"
-                        : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+                        ? "bg-neutral-900 text-white border-neutral-900"
+                        : "bg-neutral-900/30 border-neutral-700/50 text-neutral-300 hover:bg-neutral-800/50"
                     }`}
                   >
                     {opt.label}
@@ -255,17 +255,17 @@ export default function LoanAmortizationSchedule({
               
               {/* Search month input */}
               <div className="space-y-1">
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block sm:hidden">
+                <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider block sm:hidden">
                   Search Month
                 </span>
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-2 h-3.5 w-3.5 text-slate-400" />
+                  <Search className="absolute left-2.5 top-2 h-3.5 w-3.5 text-neutral-400" />
                   <input
                     type="number"
                     min="1"
                     max={schedule.length}
                     placeholder="Search Month (e.g. 12)"
-                    className="pl-8 pr-3 py-1.5 border border-slate-200 rounded-lg w-full sm:w-44 font-mono text-[11px] focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="pl-8 pr-3 py-1.5 border border-neutral-700/50 rounded-xl w-full sm:w-44 font-mono text-[11px] focus:outline-none focus:ring-1 focus:ring-primary-500"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -276,11 +276,11 @@ export default function LoanAmortizationSchedule({
               <button
                 type="button"
                 onClick={handleDownloadCSV}
-                className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 text-[10px] font-bold transition cursor-pointer text-slate-700"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 border border-neutral-700/50 rounded-xl bg-neutral-900/30 hover:bg-neutral-800/50 text-[10px] font-bold transition cursor-pointer text-neutral-200"
                 title="Export complete schedule to CSV"
                 id="btn-export-csv"
               >
-                <Download className="h-3.5 w-3.5 text-blue-600" />
+                <Download className="h-3.5 w-3.5 text-primary-600" />
                 <span>Export CSV</span>
               </button>
 
@@ -288,11 +288,11 @@ export default function LoanAmortizationSchedule({
               <button
                 type="button"
                 onClick={handleDownloadPDF}
-                className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 border border-red-200 rounded-lg bg-red-50 hover:bg-red-100/80 text-[10px] font-bold transition cursor-pointer text-red-700"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 border border-error-200 rounded-xl bg-error-900/20 hover:bg-error-100/80 text-[10px] font-bold transition cursor-pointer text-error-700"
                 title="Export official quote and full amortization schedule to PDF"
                 id="btn-export-pdf"
               >
-                <FileText className="h-3.5 w-3.5 text-red-600" />
+                <FileText className="h-3.5 w-3.5 text-error-600" />
                 <span>Export PDF Report</span>
               </button>
 
@@ -301,73 +301,73 @@ export default function LoanAmortizationSchedule({
           </div>
 
           {/* Quick Metrics of Selected Filter Period */}
-          <div className="grid grid-cols-3 gap-3.5 bg-slate-50/50 p-4 rounded-2xl border border-slate-150">
+          <div className="grid grid-cols-3 gap-3.5 bg-neutral-900/30/50 p-4 rounded-2xl border border-neutral-700/50">
             <div>
-              <span className="text-slate-400 text-[9px] block font-mono font-bold uppercase tracking-wider">
+              <span className="text-neutral-400 text-[9px] block font-mono font-bold uppercase tracking-wider">
                 {selectedYear === "ALL" ? "Total Term Principal" : "Yearly Principal Portion"}
               </span>
-              <span className="font-extrabold text-slate-800 text-xs font-mono">
+              <span className="font-extrabold text-neutral-50 text-xs font-mono">
                 LKR {Math.round(periodSummary.principal).toLocaleString()}
               </span>
             </div>
             <div>
-              <span className="text-slate-400 text-[9px] block font-mono font-bold uppercase tracking-wider">
+              <span className="text-neutral-400 text-[9px] block font-mono font-bold uppercase tracking-wider">
                 {selectedYear === "ALL" ? "Total Term Interest" : "Yearly Interest Portion"}
               </span>
-              <span className="font-extrabold text-amber-600 text-xs font-mono">
+              <span className="font-extrabold text-warning-600 text-xs font-mono">
                 LKR {Math.round(periodSummary.interest).toLocaleString()}
               </span>
             </div>
             <div>
-              <span className="text-slate-400 text-[9px] block font-mono font-bold uppercase tracking-wider">
+              <span className="text-neutral-400 text-[9px] block font-mono font-bold uppercase tracking-wider">
                 Cumulative Payment
               </span>
-              <span className="font-extrabold text-blue-700 text-xs font-mono">
+              <span className="font-extrabold text-primary-700 text-xs font-mono">
                 LKR {Math.round(periodSummary.total).toLocaleString()}
               </span>
             </div>
           </div>
 
           {/* Table Element */}
-          <div className="overflow-x-auto rounded-xl border border-slate-150 shadow-sm">
-            <table className="w-full text-left border-collapse bg-white">
+          <div className="overflow-x-auto rounded-xl border border-neutral-700/50 shadow-md shadow-primary/5">
+            <table className="w-full text-left border-collapse bg-neutral-900/50">
               <thead>
-                <tr className="bg-slate-900 text-white font-mono text-[10px] tracking-wider uppercase border-b border-slate-800">
+                <tr className="bg-neutral-900 text-white font-mono text-[10px] tracking-wider uppercase border-b border-neutral-800">
                   <th className="py-2.5 px-3 text-center w-14">Month</th>
                   <th className="py-2.5 px-3 text-right">Installment (EMI)</th>
-                  <th className="py-2.5 px-3 text-right text-blue-300">Principal Paid</th>
-                  <th className="py-2.5 px-3 text-right text-amber-300">Interest Paid</th>
-                  <th className="py-2.5 px-3 text-right text-slate-300">Cumulative Interest</th>
+                  <th className="py-2.5 px-3 text-right text-primary-300">Principal Paid</th>
+                  <th className="py-2.5 px-3 text-right text-warning-300">Interest Paid</th>
+                  <th className="py-2.5 px-3 text-right text-neutral-300">Cumulative Interest</th>
                   <th className="py-2.5 px-3 text-right">Outstanding Balance</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 font-mono text-[11px] font-bold text-slate-700">
+              <tbody className="divide-y divide-neutral-100 font-mono text-[11px] font-bold text-neutral-200">
                 {paginatedSchedule.length > 0 ? (
                   paginatedSchedule.map((item) => (
-                    <tr key={item.month} className="hover:bg-slate-50/70 transition">
-                      <td className="py-2 px-3 text-center text-slate-500 bg-slate-50/50 font-bold border-r border-slate-100">
+                    <tr key={item.month} className="hover:bg-neutral-900/30/70 transition">
+                      <td className="py-2 px-3 text-center text-neutral-500 bg-neutral-900/30/50 font-bold border-r border-neutral-700/30">
                         {item.month}
                       </td>
-                      <td className="py-2 px-3 text-right text-slate-800">
+                      <td className="py-2 px-3 text-right text-neutral-50">
                         LKR {Math.round(item.payment).toLocaleString()}
                       </td>
-                      <td className="py-2 px-3 text-right text-blue-600">
+                      <td className="py-2 px-3 text-right text-primary-600">
                         LKR {Math.round(item.principal).toLocaleString()}
                       </td>
-                      <td className="py-2 px-3 text-right text-amber-600">
+                      <td className="py-2 px-3 text-right text-warning-600">
                         LKR {Math.round(item.interest).toLocaleString()}
                       </td>
-                      <td className="py-2 px-3 text-right text-slate-500 font-medium">
+                      <td className="py-2 px-3 text-right text-neutral-500 font-medium">
                         LKR {Math.round(item.cumulativeInterest).toLocaleString()}
                       </td>
-                      <td className="py-2 px-3 text-right text-slate-950 font-extrabold">
+                      <td className="py-2 px-3 text-right text-neutral-950 font-extrabold">
                         LKR {Math.round(item.balance).toLocaleString()}
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="6" className="py-6 px-3 text-center text-slate-400 font-sans font-bold">
+                    <td colSpan="6" className="py-6 px-3 text-center text-neutral-400 font-sans font-bold">
                       No matching installments found. Try resetting the filters.
                     </td>
                   </tr>
@@ -379,7 +379,7 @@ export default function LoanAmortizationSchedule({
           {/* Pagination Controls */}
           {totalPages > 1 && (
             <div className="flex items-center justify-between pt-1 font-sans">
-              <span className="text-[10px] text-slate-500 font-bold">
+              <span className="text-[10px] text-neutral-500 font-bold">
                 Showing {filteredSchedule.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).length} of {filteredSchedule.length} months
               </span>
               <div className="flex items-center gap-1.5">
@@ -387,18 +387,18 @@ export default function LoanAmortizationSchedule({
                   type="button"
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                  className="px-2.5 py-1 rounded-lg border border-slate-200 text-[10px] font-bold bg-slate-50 hover:bg-slate-100 disabled:opacity-40 transition cursor-pointer"
+                  className="px-2.5 py-1 rounded-xl border border-neutral-700/50 text-[10px] font-bold bg-neutral-900/30 hover:bg-neutral-800/50 disabled:opacity-40 transition cursor-pointer"
                 >
                   Prev
                 </button>
-                <span className="text-[10px] font-mono font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded border">
+                <span className="text-[10px] font-mono font-bold text-neutral-300 bg-neutral-800/50 px-2 py-0.5 rounded border">
                   Page {currentPage} of {totalPages}
                 </span>
                 <button
                   type="button"
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                  className="px-2.5 py-1 rounded-lg border border-slate-200 text-[10px] font-bold bg-slate-50 hover:bg-slate-100 disabled:opacity-40 transition cursor-pointer"
+                  className="px-2.5 py-1 rounded-xl border border-neutral-700/50 text-[10px] font-bold bg-neutral-900/30 hover:bg-neutral-800/50 disabled:opacity-40 transition cursor-pointer"
                 >
                   Next
                 </button>
@@ -407,14 +407,14 @@ export default function LoanAmortizationSchedule({
           )}
 
           {/* Educational Insights / Amortization Concept note */}
-          <div className="p-4 bg-blue-50/50 border border-blue-100 rounded-2xl flex gap-3 leading-normal text-[11px] text-slate-500">
-            <Info className="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" />
+          <div className="p-4 bg-primary-900/20/50 border border-primary-100 rounded-2xl flex gap-3 leading-normal text-[11px] text-neutral-500">
+            <Info className="h-4 w-4 text-primary-500 flex-shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <p className="font-bold text-slate-800">Financial Planning Tip:</p>
+              <p className="font-bold text-neutral-50">Financial Planning Tip:</p>
               <p>
-                As the tenure progresses, note how the interest portion <strong className="text-amber-600">(amber)</strong> decreases while the principal portion <strong className="text-blue-600">(blue)</strong> increases. This is due to the interest being calculated on the reducing outstanding principal balance.
+                As the tenure progresses, note how the interest portion <strong className="text-warning-600">(amber)</strong> decreases while the principal portion <strong className="text-primary-600">(blue)</strong> increases. This is due to the interest being calculated on the reducing outstanding principal balance.
               </p>
-              <p className="text-[10px] italic text-slate-400">
+              <p className="text-[10px] italic text-neutral-400">
                 *Making lump-sum pre-payments early in the term significantly reduces overall interest paid and shortens the tenure.
               </p>
             </div>

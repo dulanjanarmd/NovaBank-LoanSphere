@@ -82,23 +82,23 @@ export default function AdminConsole({ user }) {
       
       {/* Admin stats */}
       <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
-          <span className="text-[10px] text-slate-400 font-mono font-bold uppercase">System Integrity</span>
-          <p className="text-sm font-bold text-emerald-600 flex items-center gap-1.5 mt-1">
+        <div className="glass-panel rounded-2xl p-4 rounded-2xl shadow-md shadow-primary/5">
+          <span className="text-[10px] text-neutral-400 font-mono font-bold uppercase">System Integrity</span>
+          <p className="text-sm font-bold text-success-600 flex items-center gap-1.5 mt-1">
             <ShieldCheck className="h-4.5 w-4.5" /> Core Active
           </p>
         </div>
-        <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
-          <span className="text-[10px] text-slate-400 font-mono font-bold uppercase">Connected Stubs</span>
-          <p className="text-sm font-bold text-slate-700 mt-1">5/5 APIs Online</p>
+        <div className="glass-panel rounded-2xl p-4 rounded-2xl shadow-md shadow-primary/5">
+          <span className="text-[10px] text-neutral-400 font-mono font-bold uppercase">Connected Stubs</span>
+          <p className="text-sm font-bold text-neutral-200 mt-1">5/5 APIs Online</p>
         </div>
-        <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
-          <span className="text-[10px] text-slate-400 font-mono font-bold uppercase">Active DB Driver</span>
-          <p className="text-sm font-bold text-blue-600 font-mono mt-1">MySQL 8.x</p>
+        <div className="glass-panel rounded-2xl p-4 rounded-2xl shadow-md shadow-primary/5">
+          <span className="text-[10px] text-neutral-400 font-mono font-bold uppercase">Active DB Driver</span>
+          <p className="text-sm font-bold text-primary-600 font-mono mt-1">MySQL 8.x</p>
         </div>
-        <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
-          <span className="text-[10px] text-slate-400 font-mono font-bold uppercase">Server Uptime</span>
-          <p className="text-sm font-bold text-slate-700 font-mono mt-1">{health?.uptimeSeconds || 240}s</p>
+        <div className="glass-panel rounded-2xl p-4 rounded-2xl shadow-md shadow-primary/5">
+          <span className="text-[10px] text-neutral-400 font-mono font-bold uppercase">Server Uptime</span>
+          <p className="text-sm font-bold text-neutral-200 font-mono mt-1">{health?.uptimeSeconds || 240}s</p>
         </div>
       </div>
 
@@ -106,24 +106,24 @@ export default function AdminConsole({ user }) {
         
         {/* Left Side: Product Configuration Manager */}
         <div className="md:col-span-4 space-y-4">
-          <h3 className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400">Rate & Limit Editor</h3>
+          <h3 className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-400">Rate & Limit Editor</h3>
 
-          <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm space-y-4">
+          <div className="glass-panel rounded-2xl rounded-2xl p-4 shadow-md shadow-primary/5 space-y-4">
             
             {/* Savings section */}
             <div>
-              <h4 className="font-bold text-slate-800 border-b border-slate-100 pb-1.5 uppercase font-mono text-[10px] tracking-wider">Deposit Products</h4>
-              <div className="divide-y divide-slate-100">
+              <h4 className="font-bold text-neutral-50 border-b border-neutral-700/30 pb-1.5 uppercase font-mono text-[10px] tracking-wider">Deposit Products</h4>
+              <div className="divide-y divide-neutral-100">
                 {products?.savings?.map(prod => (
                   <div key={prod.id} className="py-2.5 flex justify-between items-center">
                     <div>
-                      <p className="font-bold text-slate-800">{prod.name}</p>
-                      <span className="text-[9px] text-slate-400">Rate: {prod.interestRate}</span>
+                      <p className="font-bold text-neutral-50">{prod.name}</p>
+                      <span className="text-[9px] text-neutral-400">Rate: {prod.interestRate}</span>
                     </div>
                     <button
                       id={`edit-sav-${prod.id}`}
                       onClick={() => handleEditProductClick(prod, "savings")}
-                      className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded font-bold uppercase text-[9px] cursor-pointer"
+                      className="px-2 py-1 bg-neutral-900/30 border border-neutral-700/50 hover:bg-neutral-800/50 hover:border-neutral-300 transition-all duration-200 text-neutral-300 rounded font-bold uppercase text-[9px] cursor-pointer"
                     >
                       Edit
                     </button>
@@ -134,18 +134,18 @@ export default function AdminConsole({ user }) {
 
             {/* Loans section */}
             <div>
-              <h4 className="font-bold text-slate-800 border-b border-slate-100 pb-1.5 uppercase font-mono text-[10px] tracking-wider">Lending Products</h4>
-              <div className="divide-y divide-slate-100">
+              <h4 className="font-bold text-neutral-50 border-b border-neutral-700/30 pb-1.5 uppercase font-mono text-[10px] tracking-wider">Lending Products</h4>
+              <div className="divide-y divide-neutral-100">
                 {products?.loans?.map(prod => (
                   <div key={prod.id} className="py-2.5 flex justify-between items-center">
                     <div>
-                      <p className="font-bold text-slate-800">{prod.name}</p>
-                      <span className="text-[9px] text-slate-400">Rate: {prod.interestRate}% | Limit: {prod.maxAmount.toLocaleString()} LKR</span>
+                      <p className="font-bold text-neutral-50">{prod.name}</p>
+                      <span className="text-[9px] text-neutral-400">Rate: {prod.interestRate}% | Limit: {prod.maxAmount.toLocaleString()} LKR</span>
                     </div>
                     <button
                       id={`edit-loan-${prod.id}`}
                       onClick={() => handleEditProductClick(prod, "loans")}
-                      className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded font-bold uppercase text-[9px] cursor-pointer"
+                      className="px-2 py-1 bg-neutral-900/30 border border-neutral-700/50 hover:bg-neutral-800/50 hover:border-neutral-300 transition-all duration-200 text-neutral-300 rounded font-bold uppercase text-[9px] cursor-pointer"
                     >
                       Edit
                     </button>
@@ -158,18 +158,18 @@ export default function AdminConsole({ user }) {
 
           {/* Product Editor Modal Form */}
           {editingProduct && (
-            <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-md space-y-3 animate-fade-in">
-              <h4 className="font-bold text-slate-800 border-b border-slate-100 pb-1.5 flex items-center gap-1">
-                <Settings2 className="h-4 w-4 text-blue-600" /> Editing: {editingProduct.name}
+            <div className="glass-panel rounded-2xl rounded-2xl p-4 shadow-md space-y-3 animate-fade-in">
+              <h4 className="font-bold text-neutral-50 border-b border-neutral-700/30 pb-1.5 flex items-center gap-1">
+                <Settings2 className="h-4 w-4 text-primary-600" /> Editing: {editingProduct.name}
               </h4>
 
               <form onSubmit={handleSaveProduct} className="space-y-3 text-xs">
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-500 mb-1">INTEREST RATE</label>
+                  <label className="block text-[10px] font-bold text-neutral-500 mb-1">INTEREST RATE</label>
                   <input
                     id="edit-prod-rate"
                     type="text"
-                    className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg"
+                    className="w-full px-2.5 py-1.5 border border-neutral-700/50 rounded-xl"
                     value={editRate}
                     onChange={(e) => setEditRate(e.target.value)}
                   />
@@ -179,32 +179,32 @@ export default function AdminConsole({ user }) {
                   <>
                     <div className="grid grid-cols-2 gap-2">
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-500 mb-1">MIN AMOUNT (LKR)</label>
+                        <label className="block text-[10px] font-bold text-neutral-500 mb-1">MIN AMOUNT (LKR)</label>
                         <input
                           id="edit-prod-min"
                           type="number"
-                          className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg font-mono text-[10px]"
+                          className="w-full px-2.5 py-1.5 border border-neutral-700/50 rounded-xl font-mono text-[10px]"
                           value={editMin}
                           onChange={(e) => setEditMin(e.target.value)}
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-500 mb-1">MAX AMOUNT (LKR)</label>
+                        <label className="block text-[10px] font-bold text-neutral-500 mb-1">MAX AMOUNT (LKR)</label>
                         <input
                           id="edit-prod-max"
                           type="number"
-                          className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg font-mono text-[10px]"
+                          className="w-full px-2.5 py-1.5 border border-neutral-700/50 rounded-xl font-mono text-[10px]"
                           value={editMax}
                           onChange={(e) => setEditMax(e.target.value)}
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-slate-500 mb-1">DEFAULT TENURE (MONTHS)</label>
+                      <label className="block text-[10px] font-bold text-neutral-500 mb-1">DEFAULT TENURE (MONTHS)</label>
                       <input
                         id="edit-prod-tenure"
                         type="number"
-                        className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg"
+                        className="w-full px-2.5 py-1.5 border border-neutral-700/50 rounded-xl"
                         value={editTenure}
                         onChange={(e) => setEditTenure(e.target.value)}
                       />
@@ -217,14 +217,14 @@ export default function AdminConsole({ user }) {
                     id="btn-edit-cancel"
                     type="button"
                     onClick={() => setEditingProduct(null)}
-                    className="w-1/2 py-1.5 border rounded-lg hover:bg-slate-50"
+                    className="w-1/2 py-1.5 border rounded-xl hover:bg-neutral-900/30 transition-all duration-200"
                   >
                     Cancel
                   </button>
                   <button
                     id="btn-edit-save"
                     type="submit"
-                    className="w-1/2 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold"
+                    className="w-1/2 py-1.5 bg-primary-600 text-white rounded-xl hover:bg-primary-700 font-bold transition-all duration-200"
                   >
                     Save Specifications
                   </button>
@@ -238,26 +238,26 @@ export default function AdminConsole({ user }) {
         {/* Right Side: Immutable Audit Logs Monitor */}
         <div className="md:col-span-8 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400">Security Audit Logs</h3>
+            <h3 className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-400">Security Audit Logs</h3>
             <button
               id="btn-audit-export"
               onClick={handleSimulateExport}
-              className="px-3 py-1.5 border border-slate-200 hover:bg-slate-100 text-slate-600 rounded-lg flex items-center gap-1 transition font-bold text-[10px]"
+              className="px-3 py-1.5 border border-neutral-700/50 hover:bg-neutral-800/50 text-neutral-300 rounded-xl flex items-center gap-1 transition font-bold text-[10px]"
             >
               <Download className="h-3.5 w-3.5" />
               <span>Export Audit Trail (CSV)</span>
             </button>
           </div>
 
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden p-4 space-y-4">
+          <div className="glass-panel rounded-2xl rounded-2xl shadow-md shadow-primary/5 overflow-hidden p-4 space-y-4">
             
             {/* Search filtering bar */}
             <div className="relative">
-              <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-slate-400" />
+              <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-neutral-400" />
               <input
                 id="audit-search"
                 type="text"
-                className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-xl"
+                className="w-full pl-10 pr-4 py-2 border border-neutral-700/50 rounded-xl"
                 placeholder="Search audit actions, user ID, details..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -268,7 +268,7 @@ export default function AdminConsole({ user }) {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-[10px]">
                 <thead>
-                  <tr className="border-b border-slate-200 text-slate-400 font-mono font-bold uppercase bg-slate-50">
+                  <tr className="border-b border-neutral-700/50 text-neutral-400 font-mono font-bold uppercase bg-neutral-900/30">
                     <th className="py-2 px-3">Date</th>
                     <th className="py-2 px-3">User ID</th>
                     <th className="py-2 px-3">Action Type</th>
@@ -276,20 +276,20 @@ export default function AdminConsole({ user }) {
                     <th className="py-2 px-3">Details Summary</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 font-mono">
+                <tbody className="divide-y divide-neutral-100 font-mono">
                   {filteredAudits.length > 0 ? (
                     filteredAudits.map(log => (
-                      <tr key={log.id} className="hover:bg-slate-50/60">
-                        <td className="py-2 px-3 text-slate-400 whitespace-nowrap">{new Date(log.timestamp).toLocaleTimeString()}</td>
-                        <td className="py-2 px-3 font-bold text-slate-700">{log.userId}</td>
+                      <tr key={log.id} className="hover:bg-neutral-900/30/60 transition-all duration-200">
+                        <td className="py-2 px-3 text-neutral-400 whitespace-nowrap">{new Date(log.timestamp).toLocaleTimeString()}</td>
+                        <td className="py-2 px-3 font-bold text-neutral-200">{log.userId}</td>
                         <td className="py-2 px-3 font-bold text-brand-primary">{log.action_type}</td>
-                        <td className="py-2 px-3 text-slate-500 whitespace-nowrap">{log.entity_reference}</td>
-                        <td className="py-2 px-3 text-slate-600 min-w-[200px]">{log.details}</td>
+                        <td className="py-2 px-3 text-neutral-500 whitespace-nowrap">{log.entity_reference}</td>
+                        <td className="py-2 px-3 text-neutral-300 min-w-[200px]">{log.details}</td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={5} className="py-4 text-center text-slate-400">No logs found.</td>
+                      <td colSpan={5} className="py-4 text-center text-neutral-400">No logs found.</td>
                     </tr>
                   )}
                 </tbody>

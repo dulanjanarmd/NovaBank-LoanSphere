@@ -26,12 +26,12 @@ import {
 } from "lucide-react";
 
 const COLORS = {
-  PERSONAL: "#3b82f6", // Blue
-  HOME: "#10b981",     // Emerald
-  VEHICLE: "#f59e0b",  // Amber
-  SME: "#8b5cf6",      // Purple
+  PERSONAL: "var(--color-primary-500)", // Blue
+  HOME: "var(--color-success-500)",     // Emerald
+  VEHICLE: "var(--color-warning-500)",  // Amber
+  SME: "var(--color-accent-violet-500)",      // Purple
   BUSINESS: "#ec4899", // Pink
-  OTHER: "#64748b"     // Slate
+  OTHER: "var(--color-neutral-500)"     // Slate
 };
 
 const SIMULATED_DATA = [
@@ -110,18 +110,18 @@ export default function DebtPortfolioVisualizer({ customerApplications }) {
       const data = payload[0].payload;
       const percentage = metrics.total > 0 ? ((data.value / metrics.total) * 100).toFixed(1) : 0;
       return (
-        <div className="bg-slate-900 text-white p-3.5 rounded-2xl border border-slate-800 shadow-xl font-sans text-xs space-y-1">
-          <p className="font-extrabold tracking-tight text-[11px] uppercase text-slate-300">
+        <div className="bg-neutral-900 text-white p-3.5 rounded-2xl border border-neutral-800 shadow-xl font-sans text-xs space-y-1">
+          <p className="font-extrabold tracking-tight text-[11px] uppercase text-neutral-300">
             {data.name} LOAN DEBT
           </p>
           <p className="text-sm font-mono font-bold text-teal-400">
             LKR {data.value.toLocaleString()}
           </p>
-          <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-800 mt-1">
+          <div className="flex items-center justify-between text-[10px] text-neutral-400 pt-1 border-t border-neutral-800 mt-1">
             <span>Portfolio Share:</span>
             <span className="font-bold text-white">{percentage}%</span>
           </div>
-          <div className="flex items-center justify-between text-[10px] text-slate-400">
+          <div className="flex items-center justify-between text-[10px] text-neutral-400">
             <span>Active Facilities:</span>
             <span className="font-bold text-white">{data.count}</span>
           </div>
@@ -132,20 +132,20 @@ export default function DebtPortfolioVisualizer({ customerApplications }) {
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-3xl p-5 sm:p-6 shadow-sm space-y-5" id="debt-portfolio-visualizer">
+    <div className="glass-panel rounded-2xl rounded-3xl p-5 sm:p-6 shadow-md shadow-primary/5 space-y-5" id="debt-portfolio-visualizer">
       
       {/* Header section with toggle option */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-neutral-700/30">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="bg-blue-100 text-blue-800 p-1.5 rounded-xl border border-blue-200">
+            <span className="bg-primary-100 text-primary-800 p-1.5 rounded-xl border border-primary-200">
               <TrendingUp className="h-4.5 w-4.5" />
             </span>
             <div>
-              <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">
+              <h4 className="text-xs font-extrabold text-neutral-50 uppercase tracking-wider">
                 Debt Portfolio Allocator
               </h4>
-              <p className="text-[10px] text-slate-500 font-medium">
+              <p className="text-[10px] text-neutral-500 font-medium">
                 Asset-Liability risk visualizer and portfolio aggregation
               </p>
             </div>
@@ -161,8 +161,8 @@ export default function DebtPortfolioVisualizer({ customerApplications }) {
               onClick={() => setIsSimulated(!isSimulated)}
               className={`px-3 py-1.5 rounded-xl text-[10px] font-bold border transition-all cursor-pointer ${
                 isSimulated 
-                  ? "bg-amber-100 text-amber-800 border-amber-300" 
-                  : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100"
+                  ? "bg-warning-100 text-warning-800 border-warning-300" 
+                  : "bg-neutral-900/30 text-neutral-500 border-neutral-700/50 hover:bg-neutral-800/50"
               }`}
             >
               {isSimulated ? "📊 Viewing Simulated Demo" : "⚡ Try Portfolio Demo"}
@@ -170,11 +170,11 @@ export default function DebtPortfolioVisualizer({ customerApplications }) {
           )}
 
           {/* Pie vs Bar toggle */}
-          <div className="bg-slate-100 p-0.5 rounded-xl border border-slate-200/50 flex items-center">
+          <div className="bg-neutral-800/50 p-0.5 rounded-xl border border-neutral-700/50/50 flex items-center">
             <button
               onClick={() => setViewType("pie")}
-              className={`p-1.5 rounded-lg transition-all cursor-pointer ${
-                viewType === "pie" ? "bg-white text-slate-800 shadow-sm" : "text-slate-400 hover:text-slate-600"
+              className={`p-1.5 rounded-xl transition-all cursor-pointer ${
+                viewType === "pie" ? "bg-neutral-900/50 text-neutral-50 shadow-md shadow-primary/5" : "text-neutral-400 hover:text-neutral-300"
               }`}
               title="Pie Chart View"
             >
@@ -182,8 +182,8 @@ export default function DebtPortfolioVisualizer({ customerApplications }) {
             </button>
             <button
               onClick={() => setViewType("bar")}
-              className={`p-1.5 rounded-lg transition-all cursor-pointer ${
-                viewType === "bar" ? "bg-white text-slate-800 shadow-sm" : "text-slate-400 hover:text-slate-600"
+              className={`p-1.5 rounded-xl transition-all cursor-pointer ${
+                viewType === "bar" ? "bg-neutral-900/50 text-neutral-50 shadow-md shadow-primary/5" : "text-neutral-400 hover:text-neutral-300"
               }`}
               title="Bar Chart View"
             >
@@ -196,17 +196,17 @@ export default function DebtPortfolioVisualizer({ customerApplications }) {
 
       {/* Info notification about multiple loans */}
       {!hasMultipleActive && !isSimulated && (
-        <div className="bg-blue-50/70 border border-blue-100/80 rounded-2xl p-4 flex gap-3 text-xs leading-relaxed text-slate-600 animate-fade-in">
-          <Sparkles className="h-4.5 w-4.5 text-blue-500 flex-shrink-0 mt-0.5" />
+        <div className="bg-primary-900/20/70 border border-primary-100/80 rounded-2xl p-4 flex gap-3 text-xs leading-relaxed text-neutral-300 animate-fade-in">
+          <Sparkles className="h-4.5 w-4.5 text-primary-500 flex-shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <p className="font-bold text-slate-800">Diversified Risk Aggregation</p>
+            <p className="font-bold text-neutral-50">Diversified Risk Aggregation</p>
             <p>
               You currently have {activeApps.length === 1 ? "only one active application" : "no active applications"}. Submit multiple applications (e.g. Home and Vehicle) to generate a live, multi-facility debt distribution report.
             </p>
             <button
               type="button"
               onClick={() => setIsSimulated(true)}
-              className="text-blue-600 font-bold hover:underline text-[10px] mt-1 block"
+              className="text-primary-600 font-bold hover:underline text-[10px] mt-1 block transition-all duration-200"
             >
               Load Simulated Multi-Loan Scenario &rarr;
             </button>
@@ -215,44 +215,44 @@ export default function DebtPortfolioVisualizer({ customerApplications }) {
       )}
 
       {/* Key Portfolio Metrics Grid */}
-      <div className="grid grid-cols-3 gap-3.5 bg-slate-50 p-4 rounded-2xl border border-slate-150">
+      <div className="grid grid-cols-3 gap-3.5 bg-neutral-900/30 p-4 rounded-2xl border border-neutral-700/50">
         <div>
-          <span className="text-slate-400 text-[9px] block font-mono font-bold uppercase tracking-wider">
+          <span className="text-neutral-400 text-[9px] block font-mono font-bold uppercase tracking-wider">
             Total Combined Debt
           </span>
-          <span className="font-extrabold text-slate-800 text-xs sm:text-sm font-mono block mt-0.5">
+          <span className="font-extrabold text-neutral-50 text-xs sm:text-sm font-mono block mt-0.5">
             {formatLKR(metrics.total)}
           </span>
-          <span className="text-[9px] text-slate-400 block mt-0.5">
+          <span className="text-[9px] text-neutral-400 block mt-0.5">
             {isSimulated ? "Demo Sandbox" : "Live Obligations"}
           </span>
         </div>
         <div>
-          <span className="text-slate-400 text-[9px] block font-mono font-bold uppercase tracking-wider">
+          <span className="text-neutral-400 text-[9px] block font-mono font-bold uppercase tracking-wider">
             Active credit lines
           </span>
-          <span className="font-extrabold text-blue-600 text-xs sm:text-sm font-mono block mt-0.5">
+          <span className="font-extrabold text-primary-600 text-xs sm:text-sm font-mono block mt-0.5">
             {metrics.totalCount} Facilities
           </span>
-          <span className="text-[9px] text-slate-400 block mt-0.5">
+          <span className="text-[9px] text-neutral-400 block mt-0.5">
             Across types
           </span>
         </div>
         <div>
-          <span className="text-slate-400 text-[9px] block font-mono font-bold uppercase tracking-wider">
+          <span className="text-neutral-400 text-[9px] block font-mono font-bold uppercase tracking-wider">
             Avg facility size
           </span>
-          <span className="font-extrabold text-purple-600 text-xs sm:text-sm font-mono block mt-0.5">
+          <span className="font-extrabold text-accent-violet-600 text-xs sm:text-sm font-mono block mt-0.5">
             {formatLKR(metrics.average)}
           </span>
-          <span className="text-[9px] text-slate-400 block mt-0.5 font-sans font-medium">
+          <span className="text-[9px] text-neutral-400 block mt-0.5 font-sans font-medium">
             Per active file
           </span>
         </div>
       </div>
 
       {/* Recharts Visual Canvas Container */}
-      <div className="h-56 w-full flex items-center justify-center bg-slate-50/30 rounded-2xl p-2 border border-slate-100">
+      <div className="h-56 w-full flex items-center justify-center bg-neutral-900/30/30 rounded-2xl p-2 border border-neutral-700/30">
         <ResponsiveContainer width="100%" height="100%">
           {viewType === "pie" ? (
             <PieChart>
@@ -311,7 +311,7 @@ export default function DebtPortfolioVisualizer({ customerApplications }) {
 
       {/* Side Color Legends & Share Table */}
       <div className="space-y-2">
-        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">
+        <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider block">
           Asset class distribution breakdown
         </span>
         <div className="grid grid-cols-2 gap-2.5">
@@ -320,16 +320,16 @@ export default function DebtPortfolioVisualizer({ customerApplications }) {
             return (
               <div 
                 key={item.name} 
-                className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-100 text-[10px] font-sans"
+                className="flex items-center justify-between p-2 rounded-xl bg-neutral-900/30 border border-neutral-700/30 text-[10px] font-sans"
               >
                 <div className="flex items-center gap-2">
                   <span 
                     className="h-2 w-2 rounded-full inline-block" 
                     style={{ backgroundColor: item.color }}
                   ></span>
-                  <span className="font-extrabold text-slate-700 uppercase tracking-tight">{item.name}</span>
+                  <span className="font-extrabold text-neutral-200 uppercase tracking-tight">{item.name}</span>
                 </div>
-                <div className="text-right font-mono font-bold text-slate-600">
+                <div className="text-right font-mono font-bold text-neutral-300">
                   <span>{pct}%</span>
                 </div>
               </div>
@@ -339,8 +339,8 @@ export default function DebtPortfolioVisualizer({ customerApplications }) {
       </div>
 
       {/* Security note footer */}
-      <div className="pt-3 border-t border-slate-100 flex items-center justify-center gap-1.5 text-[9px] font-mono text-slate-400">
-        <Lock className="h-3 w-3 text-blue-500" />
+      <div className="pt-3 border-t border-neutral-700/30 flex items-center justify-center gap-1.5 text-[9px] font-mono text-neutral-400">
+        <Lock className="h-3 w-3 text-primary-500" />
         <span>Aggregated via secure Central Bank Credit Information Bureau (CRIB) APIs.</span>
       </div>
 

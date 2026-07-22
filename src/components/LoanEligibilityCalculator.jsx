@@ -221,20 +221,20 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
   };
 
   return (
-    <div className="bg-white border border-slate-200 shadow-xl rounded-3xl overflow-hidden" id="loan-eligibility-calculator-widget">
+    <div className="glass-panel rounded-2xl shadow-xl rounded-3xl overflow-hidden" id="loan-eligibility-calculator-widget">
       
       {/* Widget Header */}
-      <div className="bg-slate-900 text-white p-5 flex items-center justify-between border-b border-slate-800">
+      <div className="bg-neutral-900 text-white p-5 flex items-center justify-between border-b border-neutral-800">
         <div className="flex items-center gap-2.5">
-          <div className="bg-blue-600/25 text-blue-400 p-2 rounded-xl border border-blue-500/20">
+          <div className="bg-primary-600/25 text-primary-400 p-2 rounded-xl border border-primary-500/20">
             <Calculator className="h-5 w-5" />
           </div>
           <div>
             <h3 className="text-sm font-bold tracking-tight">Loan Eligibility & EMI Estimator</h3>
-            <p className="text-[11px] text-slate-400">CBSL Policy Compliant Real-time Underwriting Tool</p>
+            <p className="text-[11px] text-neutral-400">CBSL Policy Compliant Real-time Underwriting Tool</p>
           </div>
         </div>
-        <span className="text-[9px] font-mono font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-500/10">
+        <span className="text-[9px] font-mono font-bold uppercase tracking-wider bg-primary-500/20 text-primary-300 px-2 py-0.5 rounded border border-primary-500/10">
           v1.2.0 Live
         </span>
       </div>
@@ -246,7 +246,7 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
           
           {/* Loan Type Category Selector */}
           <div>
-            <label className="block text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider mb-2.5">
+            <label className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-wider mb-2.5">
               Select Loan Product Category
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -261,11 +261,11 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
                     onClick={() => setLoanType(type)}
                     className={`py-2 px-3 rounded-xl border text-left transition flex flex-col justify-between h-16 cursor-pointer ${
                       isActive 
-                        ? "bg-slate-900 text-white border-slate-900 shadow-md" 
-                        : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100"
+                        ? "bg-neutral-900 text-white border-neutral-900 shadow-md" 
+                        : "bg-neutral-900/30 border-neutral-700/50 text-neutral-200 hover:bg-neutral-800/50"
                     }`}
                   >
-                    <ItemIcon className={`h-4 w-4 ${isActive ? "text-blue-400" : "text-slate-400"}`} />
+                    <ItemIcon className={`h-4 w-4 ${isActive ? "text-primary-400" : "text-neutral-400"}`} />
                     <span className="font-bold text-[11px] block mt-1.5 truncate">{item.name.split(" ")[0]}</span>
                   </button>
                 );
@@ -274,20 +274,20 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
           </div>
 
           {/* Core Numeric Inputs Grid */}
-          <div className="grid sm:grid-cols-2 gap-4 bg-slate-50 border border-slate-200/50 rounded-2xl p-4 sm:p-5">
+          <div className="grid sm:grid-cols-2 gap-4 bg-neutral-900/30 border border-neutral-700/50/50 rounded-2xl p-4 sm:p-5">
             
             {/* Monthly Gross Income */}
             <div className="space-y-1.5">
               <div className="flex justify-between items-center">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Gross Income / Mo</label>
-                <span className="text-[9px] font-mono text-slate-400">Min: LKR {spec.minIncome.toLocaleString()}</span>
+                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Gross Income / Mo</label>
+                <span className="text-[9px] font-mono text-neutral-400">Min: LKR {spec.minIncome.toLocaleString()}</span>
               </div>
               <div className="relative">
-                <span className="absolute left-3.5 top-2.5 font-bold text-slate-400 font-mono">LKR</span>
+                <span className="absolute left-3.5 top-2.5 font-bold text-neutral-400 font-mono">LKR</span>
                 <input
                   id="calc-income-input"
                   type="number"
-                  className="w-full pl-11 pr-3.5 py-2 border border-slate-200 rounded-xl bg-white font-mono text-xs focus:ring-2 focus:ring-blue-500 font-bold text-slate-800"
+                  className="w-full pl-11 pr-3.5 py-2 border border-neutral-700/50 rounded-xl bg-neutral-900/50 font-mono text-xs focus:ring-2 focus:ring-primary-500 font-bold text-neutral-50"
                   value={income || ""}
                   onChange={(e) => handleIncomeChange(e.target.value)}
                   placeholder="0"
@@ -298,7 +298,7 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
                 min="30000"
                 max="1000000"
                 step="5000"
-                className="w-full accent-blue-600 h-1 bg-slate-200 rounded-lg cursor-pointer"
+                className="w-full accent-primary-600 h-1 bg-neutral-200 rounded-xl cursor-pointer transition-all duration-200"
                 value={income}
                 onChange={(e) => setIncome(parseFloat(e.target.value))}
               />
@@ -307,15 +307,15 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
             {/* Desired Loan Principal */}
             <div className="space-y-1.5">
               <div className="flex justify-between items-center">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Requested Loan Principal</label>
-                <span className="text-[9px] font-mono text-slate-400">Max: LKR {(spec.maxAmount/1000000).toFixed(0)}M</span>
+                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Requested Loan Principal</label>
+                <span className="text-[9px] font-mono text-neutral-400">Max: LKR {(spec.maxAmount/1000000).toFixed(0)}M</span>
               </div>
               <div className="relative">
-                <span className="absolute left-3.5 top-2.5 font-bold text-slate-400 font-mono">LKR</span>
+                <span className="absolute left-3.5 top-2.5 font-bold text-neutral-400 font-mono">LKR</span>
                 <input
                   id="calc-desired-input"
                   type="number"
-                  className="w-full pl-11 pr-3.5 py-2 border border-slate-200 rounded-xl bg-white font-mono text-xs focus:ring-2 focus:ring-blue-500 font-bold text-slate-800"
+                  className="w-full pl-11 pr-3.5 py-2 border border-neutral-700/50 rounded-xl bg-neutral-900/50 font-mono text-xs focus:ring-2 focus:ring-primary-500 font-bold text-neutral-50"
                   value={desiredAmount || ""}
                   onChange={(e) => handleAmountChange(e.target.value)}
                   placeholder="0"
@@ -326,7 +326,7 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
                 min={spec.minAmount}
                 max={spec.maxAmount}
                 step={loanType === "SME" ? 500000 : 50000}
-                className="w-full accent-blue-600 h-1 bg-slate-200 rounded-lg cursor-pointer"
+                className="w-full accent-primary-600 h-1 bg-neutral-200 rounded-xl cursor-pointer transition-all duration-200"
                 value={desiredAmount}
                 onChange={(e) => setDesiredAmount(parseFloat(e.target.value))}
               />
@@ -335,15 +335,15 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
             {/* Tenure Duration */}
             <div className="space-y-1.5">
               <div className="flex justify-between items-center">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Loan Tenure</label>
-                <span className="text-[9px] font-mono text-slate-400">Max: {spec.maxTenure} Mos</span>
+                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Loan Tenure</label>
+                <span className="text-[9px] font-mono text-neutral-400">Max: {spec.maxTenure} Mos</span>
               </div>
               <div className="relative">
-                <Calendar className="absolute left-3.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                <Calendar className="absolute left-3.5 top-2.5 h-3.5 w-3.5 text-neutral-400" />
                 <input
                   id="calc-tenure-input"
                   type="number"
-                  className="w-full pl-10 pr-3.5 py-2 border border-slate-200 rounded-xl bg-white font-mono text-xs focus:ring-2 focus:ring-blue-500 font-bold text-slate-800"
+                  className="w-full pl-10 pr-3.5 py-2 border border-neutral-700/50 rounded-xl bg-neutral-900/50 font-mono text-xs focus:ring-2 focus:ring-primary-500 font-bold text-neutral-50"
                   value={tenure || ""}
                   onChange={(e) => handleTenureChange(e.target.value)}
                   placeholder="0"
@@ -354,7 +354,7 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
                 min="12"
                 max={spec.maxTenure}
                 step="12"
-                className="w-full accent-blue-600 h-1 bg-slate-200 rounded-lg cursor-pointer"
+                className="w-full accent-primary-600 h-1 bg-neutral-200 rounded-xl cursor-pointer transition-all duration-200"
                 value={tenure}
                 onChange={(e) => setTenure(parseInt(e.target.value))}
               />
@@ -363,15 +363,15 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
             {/* Other Monthly Commitments */}
             <div className="space-y-1.5">
               <div className="flex justify-between items-center">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Existing Monthly Debts/EMIs</label>
-                <span className="text-[9px] font-mono text-slate-400">Declared to CRIB</span>
+                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Existing Monthly Debts/EMIs</label>
+                <span className="text-[9px] font-mono text-neutral-400">Declared to CRIB</span>
               </div>
               <div className="relative">
-                <span className="absolute left-3.5 top-2.5 font-bold text-slate-400 font-mono">LKR</span>
+                <span className="absolute left-3.5 top-2.5 font-bold text-neutral-400 font-mono">LKR</span>
                 <input
                   id="calc-liabilities-input"
                   type="number"
-                  className="w-full pl-11 pr-3.5 py-2 border border-slate-200 rounded-xl bg-white font-mono text-xs focus:ring-2 focus:ring-blue-500 font-bold text-slate-800"
+                  className="w-full pl-11 pr-3.5 py-2 border border-neutral-700/50 rounded-xl bg-neutral-900/50 font-mono text-xs focus:ring-2 focus:ring-primary-500 font-bold text-neutral-50"
                   value={liabilities || ""}
                   onChange={(e) => handleLiabilitiesChange(e.target.value)}
                   placeholder="0"
@@ -382,7 +382,7 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
                 min="0"
                 max="250000"
                 step="5000"
-                className="w-full accent-blue-600 h-1 bg-slate-200 rounded-lg cursor-pointer"
+                className="w-full accent-primary-600 h-1 bg-neutral-200 rounded-xl cursor-pointer transition-all duration-200"
                 value={liabilities}
                 onChange={(e) => setLiabilities(parseFloat(e.target.value))}
               />
@@ -391,21 +391,21 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
           </div>
 
           {/* Product Specifications Badge */}
-          <div className="bg-blue-50/50 border border-blue-100 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="bg-primary-900/20/50 border border-primary-100 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <span className="bg-blue-100 text-blue-800 p-1 rounded-lg">
+              <span className="bg-primary-100 text-primary-800 p-1 rounded-xl">
                 <Info className="h-3.5 w-3.5" />
               </span>
               <div>
-                <p className="font-bold text-slate-800">{spec.name} Policy Info</p>
-                <p className="text-[10px] text-slate-400">Underwriting parameters set by Credit Committee</p>
+                <p className="font-bold text-neutral-50">{spec.name} Policy Info</p>
+                <p className="text-[10px] text-neutral-400">Underwriting parameters set by Credit Committee</p>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-right text-[10px] font-mono font-bold text-slate-600">
-              <div>Interest: <span className="text-blue-600">{spec.interestRate}%</span></div>
-              <div>Max DTI: <span className="text-blue-600">{spec.maxDti}%</span></div>
-              <div>Min Principal: <span className="text-blue-600">LKR {spec.minAmount.toLocaleString()}</span></div>
-              <div>Max Principal: <span className="text-blue-600">LKR {spec.maxAmount.toLocaleString()}</span></div>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-right text-[10px] font-mono font-bold text-neutral-300">
+              <div>Interest: <span className="text-primary-600">{spec.interestRate}%</span></div>
+              <div>Max DTI: <span className="text-primary-600">{spec.maxDti}%</span></div>
+              <div>Min Principal: <span className="text-primary-600">LKR {spec.minAmount.toLocaleString()}</span></div>
+              <div>Max Principal: <span className="text-primary-600">LKR {spec.maxAmount.toLocaleString()}</span></div>
             </div>
           </div>
 
@@ -420,24 +420,24 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
             {/* Status Card Banner */}
             <div className={`p-4 rounded-2xl border text-xs flex items-start gap-3 transition-colors ${
               statusColor === "emerald" 
-                ? "bg-emerald-50 border-emerald-200 text-emerald-950" 
+                ? "bg-success-900/20 border-success-200 text-success-950" 
                 : statusColor === "teal"
                 ? "bg-teal-50 border-teal-200 text-teal-950"
                 : statusColor === "amber" 
-                ? "bg-amber-50 border-amber-200 text-amber-950" 
-                : "bg-rose-50 border-rose-200 text-rose-950"
+                ? "bg-warning-900/20 border-warning-200 text-warning-950" 
+                : "bg-error-900/20 border-error-200 text-error-950"
             }`}>
               <div className="mt-0.5">
                 {statusColor === "emerald" || statusColor === "teal" ? (
-                  <CheckCircle2 className={`h-5 w-5 ${statusColor === "emerald" ? "text-emerald-600" : "text-teal-600"}`} />
+                  <CheckCircle2 className={`h-5 w-5 ${statusColor === "emerald" ? "text-success-600" : "text-teal-600"}`} />
                 ) : statusColor === "amber" ? (
-                  <AlertTriangle className="h-5 w-5 text-amber-600" />
+                  <AlertTriangle className="h-5 w-5 text-warning-600" />
                 ) : (
-                  <XCircle className="h-5 w-5 text-rose-600" />
+                  <XCircle className="h-5 w-5 text-error-600" />
                 )}
               </div>
               <div className="space-y-1">
-                <span className="font-mono tracking-wider font-bold uppercase text-[9px] bg-white/60 px-1.5 py-0.5 rounded border border-black/5">
+                <span className="font-mono tracking-wider font-bold uppercase text-[9px] bg-neutral-900/50/60 px-1.5 py-0.5 rounded border border-black/5">
                   {eligibilityStatus === "ELIGIBLE" ? "Eligible" : eligibilityStatus === "CONDITIONAL" ? "Conditionally Eligible" : eligibilityStatus === "HIGH_RISK" ? "High Debt Risk" : "Ineligible"}
                 </span>
                 <p className="font-bold leading-tight mt-1">{statusMessage}</p>
@@ -445,60 +445,60 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
             </div>
 
             {/* Calculated Repayments Breakdown */}
-            <div className="bg-slate-900 text-white rounded-3xl p-5 shadow-inner space-y-4">
+            <div className="bg-neutral-900 text-white rounded-3xl p-5 shadow-inner space-y-4">
               <div className="text-center pb-3 border-b border-white/10">
-                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest font-bold">Estimated Monthly EMI</span>
+                <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest font-bold">Estimated Monthly EMI</span>
                 <h4 className="text-2xl font-bold tracking-tight text-white mt-1">
-                  LKR {calculatedEmi.toLocaleString()} <span className="text-xs font-normal text-slate-400">/ month</span>
+                  LKR {calculatedEmi.toLocaleString()} <span className="text-xs font-normal text-neutral-400">/ month</span>
                 </h4>
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-[11px] font-mono">
                 <div>
-                  <span className="text-slate-400 block text-[9px]">TOTAL REPAYMENT</span>
-                  <span className="font-bold text-slate-100">LKR {totalRepayment.toLocaleString()}</span>
+                  <span className="text-neutral-400 block text-[9px]">TOTAL REPAYMENT</span>
+                  <span className="font-bold text-neutral-100">LKR {totalRepayment.toLocaleString()}</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-slate-400 block text-[9px]">TOTAL INTEREST COST</span>
-                  <span className="font-bold text-amber-400">+ LKR {totalInterest.toLocaleString()}</span>
+                  <span className="text-neutral-400 block text-[9px]">TOTAL INTEREST COST</span>
+                  <span className="font-bold text-warning-400">+ LKR {totalInterest.toLocaleString()}</span>
                 </div>
               </div>
 
               {/* Progress Proportions */}
               <div className="space-y-1">
-                <div className="flex justify-between text-[9px] text-slate-400 font-mono">
+                <div className="flex justify-between text-[9px] text-neutral-400 font-mono">
                   <span>Principal: {((desiredAmount / Math.max(1, totalRepayment)) * 100).toFixed(0)}%</span>
                   <span>Interest: {((totalInterest / Math.max(1, totalRepayment)) * 100).toFixed(0)}%</span>
                 </div>
-                <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden flex">
-                  <div className="bg-blue-500 h-full" style={{ width: `${(desiredAmount / Math.max(1, totalRepayment)) * 100}%` }}></div>
-                  <div className="bg-amber-400 h-full" style={{ width: `${(totalInterest / Math.max(1, totalRepayment)) * 100}%` }}></div>
+                <div className="h-1.5 w-full bg-neutral-800 rounded-full overflow-hidden flex">
+                  <div className="bg-primary-500 h-full" style={{ width: `${(desiredAmount / Math.max(1, totalRepayment)) * 100}%` }}></div>
+                  <div className="bg-warning-400 h-full" style={{ width: `${(totalInterest / Math.max(1, totalRepayment)) * 100}%` }}></div>
                 </div>
               </div>
             </div>
 
             {/* DTI Gauge and Underwriting Criteria */}
-            <div className="border border-slate-200 rounded-2xl p-4 text-xs space-y-3.5">
+            <div className="border border-neutral-700/50 rounded-2xl p-4 text-xs space-y-3.5">
               
               {/* DTI Progress Slider */}
               <div className="space-y-1.5">
                 <div className="flex justify-between font-mono text-[10px]">
-                  <span className="font-bold text-slate-500 uppercase tracking-wider">DEBT-TO-INCOME (DTI) ratio</span>
-                  <span className={`font-bold ${parseFloat(dtiFixed) > spec.maxDti ? "text-rose-600" : "text-emerald-600"}`}>
+                  <span className="font-bold text-neutral-500 uppercase tracking-wider">DEBT-TO-INCOME (DTI) ratio</span>
+                  <span className={`font-bold ${parseFloat(dtiFixed) > spec.maxDti ? "text-error-600" : "text-success-600"}`}>
                     {dtiFixed}%
                   </span>
                 </div>
-                <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden relative border border-slate-200/50">
+                <div className="h-2 w-full bg-neutral-800/50 rounded-full overflow-hidden relative border border-neutral-700/50/50">
                   <div 
                     className={`h-full transition-all duration-300 ${
-                      parseFloat(dtiFixed) > spec.maxDti ? "bg-rose-500" : parseFloat(dtiFixed) > 40 ? "bg-amber-500" : "bg-emerald-500"
+                      parseFloat(dtiFixed) > spec.maxDti ? "bg-error-500" : parseFloat(dtiFixed) > 40 ? "bg-warning-500" : "bg-success-500"
                     }`}
                     style={{ width: `${Math.min(100, parseFloat(dtiFixed))}%` }}
                   ></div>
                   {/* Crossover threshold line */}
-                  <div className="absolute top-0 bottom-0 bg-rose-600/60 w-0.5" style={{ left: `${spec.maxDti}%` }} title={`Compliance Hold Threshold (${spec.maxDti}%)`}></div>
+                  <div className="absolute top-0 bottom-0 bg-error-600/60 w-0.5" style={{ left: `${spec.maxDti}%` }} title={`Compliance Hold Threshold (${spec.maxDti}%)`}></div>
                 </div>
-                <div className="flex justify-between text-[8px] text-slate-400 font-mono">
+                <div className="flex justify-between text-[8px] text-neutral-400 font-mono">
                   <span>0%</span>
                   <span>CBSL Policy Limit: {spec.maxDti}%</span>
                   <span>100%</span>
@@ -506,41 +506,41 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
               </div>
 
               {/* Preliminary Checklist */}
-              <div className="space-y-2 pt-2 border-t border-slate-100">
-                <span className="block text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+              <div className="space-y-2 pt-2 border-t border-neutral-700/30">
+                <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-wider">
                   PRELIMINARY UNDERWRITING MATRIX
                 </span>
                 
                 <div className="space-y-1.5 text-[11px]">
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-500">Gross Income Requirement (LKR {spec.minIncome.toLocaleString()})</span>
+                    <span className="text-neutral-500">Gross Income Requirement (LKR {spec.minIncome.toLocaleString()})</span>
                     {isIncomeSufficient ? (
-                      <span className="text-emerald-600 font-bold flex items-center gap-1">Passed <CheckCircle2 className="h-3 w-3" /></span>
+                      <span className="text-success-600 font-bold flex items-center gap-1">Passed <CheckCircle2 className="h-3 w-3" /></span>
                     ) : (
-                      <span className="text-rose-600 font-bold flex items-center gap-1">Insufficient <XCircle className="h-3 w-3" /></span>
+                      <span className="text-error-600 font-bold flex items-center gap-1">Insufficient <XCircle className="h-3 w-3" /></span>
                     )}
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-500">CBSL Policy DTI Ratio (&le; {spec.maxDti}%)</span>
+                    <span className="text-neutral-500">CBSL Policy DTI Ratio (&le; {spec.maxDti}%)</span>
                     {isDtiCompliant ? (
-                      <span className="text-emerald-600 font-bold flex items-center gap-1">Passed <CheckCircle2 className="h-3 w-3" /></span>
+                      <span className="text-success-600 font-bold flex items-center gap-1">Passed <CheckCircle2 className="h-3 w-3" /></span>
                     ) : (
-                      <span className="text-rose-600 font-bold flex items-center gap-1">Exceeded <XCircle className="h-3 w-3" /></span>
+                      <span className="text-error-600 font-bold flex items-center gap-1">Exceeded <XCircle className="h-3 w-3" /></span>
                     )}
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-500">Max Eligible Principal Capacity</span>
-                    <span className="font-mono font-bold text-slate-700">LKR {maxEligibleRounded.toLocaleString()}</span>
+                    <span className="text-neutral-500">Max Eligible Principal Capacity</span>
+                    <span className="font-mono font-bold text-neutral-200">LKR {maxEligibleRounded.toLocaleString()}</span>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-500">Request within borrow limits?</span>
+                    <span className="text-neutral-500">Request within borrow limits?</span>
                     {isWithinEligibleBorrowingCapacity ? (
-                      <span className="text-emerald-600 font-bold flex items-center gap-1">Yes <CheckCircle2 className="h-3 w-3" /></span>
+                      <span className="text-success-600 font-bold flex items-center gap-1">Yes <CheckCircle2 className="h-3 w-3" /></span>
                     ) : (
-                      <span className="text-rose-600 font-bold flex items-center gap-1">Exceeded <XCircle className="h-3 w-3" /></span>
+                      <span className="text-error-600 font-bold flex items-center gap-1">Exceeded <XCircle className="h-3 w-3" /></span>
                     )}
                   </div>
                 </div>
@@ -558,14 +558,14 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
               disabled={eligibilityStatus === "INELIGIBLE"}
               className={`w-full py-3 px-4 rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-2 transition cursor-pointer ${
                 eligibilityStatus === "INELIGIBLE" 
-                  ? "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed shadow-none" 
-                  : "bg-blue-600 hover:bg-blue-700 text-white"
+                  ? "bg-neutral-800/50 text-neutral-400 border border-neutral-700/50 cursor-not-allowed shadow-none" 
+                  : "btn-premium rounded-xl text-white"
               }`}
             >
               <span>{user ? "Proceed with Online Application" : "Register to Lock in Loan Offer"}</span>
               <ArrowRight className="h-4 w-4" />
             </button>
-            <p className="text-[10px] text-center text-slate-400 mt-2.5 font-sans leading-relaxed">
+            <p className="text-[10px] text-center text-neutral-400 mt-2.5 font-sans leading-relaxed">
               *Estimates are indicative, subject to official Credit Information Bureau (CRIB) screening, compliance checks, and formal underwriting validations.
             </p>
           </div>
@@ -573,7 +573,7 @@ export default function LoanEligibilityCalculator({ user, token, onStartDLO, onN
         </div>
 
         {/* Amortization Schedule Section */}
-        <div className="md:col-span-12 pt-4 border-t border-slate-150">
+        <div className="md:col-span-12 pt-4 border-t border-neutral-700/50">
           <LoanAmortizationSchedule 
             user={user}
             token={token}

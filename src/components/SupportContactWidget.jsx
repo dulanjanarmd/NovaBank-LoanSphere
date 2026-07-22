@@ -98,14 +98,14 @@ export default function SupportContactWidget() {
       <button
         id="floating-support-btn"
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3.5 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 flex items-center gap-2 group cursor-pointer border border-blue-500/15"
+        className="fixed bottom-4 right-4 z-50 btn-premium rounded-xl text-white p-3.5 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 flex items-center gap-2 group cursor-pointer border border-primary-500/15"
         title="Get Help & Loan Assistance"
       >
         <div className="relative">
           <MessageSquare className="h-5 w-5" />
           <span className="absolute -top-1 -right-1 flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-success-500"></span>
           </span>
         </div>
         <span className="max-w-0 overflow-hidden group-hover:max-w-32 transition-all duration-500 ease-out text-xs font-bold whitespace-nowrap tracking-tight">
@@ -116,24 +116,24 @@ export default function SupportContactWidget() {
       {/* Backdrop & Support Contact Modal */}
       {isOpen && (
         <div 
-          className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in"
+          className="fixed inset-0 z-50 overflow-y-auto bg-neutral-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in"
           onClick={() => setIsOpen(false)}
         >
           <div 
-            className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden transition-all duration-300"
+            className="relative w-full max-w-lg bg-neutral-900/50 rounded-3xl shadow-2xl border border-neutral-700/50 overflow-hidden transition-all duration-300"
             onClick={(e) => e.stopPropagation()}
             id="support-modal-container"
           >
             
             {/* Header banner */}
-            <div className="bg-slate-900 text-white p-5 sm:p-6 flex items-center justify-between border-b border-slate-800">
+            <div className="bg-neutral-900 text-white p-5 sm:p-6 flex items-center justify-between border-b border-neutral-800">
               <div className="flex items-center gap-2.5">
-                <div className="bg-blue-600/25 text-blue-400 p-2 rounded-xl border border-blue-500/25">
+                <div className="bg-primary-600/25 text-primary-400 p-2 rounded-xl border border-primary-500/25">
                   <Sparkles className="h-4.5 w-4.5" />
                 </div>
                 <div>
                   <h4 className="text-sm font-bold tracking-tight">NovaBank Assistance</h4>
-                  <p className="text-[10px] text-slate-400">Official Credit Assistance & Live Underwriting Desk</p>
+                  <p className="text-[10px] text-neutral-400">Official Credit Assistance & Live Underwriting Desk</p>
                 </div>
               </div>
               <button 
@@ -141,7 +141,7 @@ export default function SupportContactWidget() {
                   setIsOpen(false);
                   setTicketSubmitted(false);
                 }}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition cursor-pointer"
+                className="text-neutral-400 hover:text-white p-1 rounded-xl hover:bg-neutral-800 transition cursor-pointer"
                 id="support-modal-close-btn"
               >
                 <X className="h-4 w-4" />
@@ -149,49 +149,49 @@ export default function SupportContactWidget() {
             </div>
 
             {/* Modal Body */}
-            <div className="p-5 sm:p-6 space-y-6 text-xs text-slate-700">
+            <div className="p-5 sm:p-6 space-y-6 text-xs text-neutral-200">
               
               {/* Hotlines and Emails Grid */}
               <div className="space-y-3">
-                <h5 className="font-mono font-bold text-[10px] text-slate-400 uppercase tracking-wider">
+                <h5 className="font-mono font-bold text-[10px] text-neutral-400 uppercase tracking-wider">
                   Contact Channels
                 </h5>
 
                 <div className="grid sm:grid-cols-2 gap-3">
                   
                   {/* Phone Hotline Option */}
-                  <div className="bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl space-y-2 flex flex-col justify-between">
+                  <div className="bg-neutral-900/30 border border-neutral-700/50/80 p-3.5 rounded-2xl space-y-2 flex flex-col justify-between">
                     <div className="flex items-start gap-2.5">
-                      <span className="bg-blue-100 text-blue-800 p-1.5 rounded-lg inline-block">
+                      <span className="bg-primary-100 text-primary-800 p-1.5 rounded-xl inline-block">
                         <Phone className="h-4 w-4" />
                       </span>
                       <div>
-                        <p className="font-bold text-slate-800">Loan Hotline</p>
-                        <p className="text-[10px] text-slate-500 font-mono">+94 11 234 5678</p>
+                        <p className="font-bold text-neutral-50">Loan Hotline</p>
+                        <p className="text-[10px] text-neutral-500 font-mono">+94 11 234 5678</p>
                       </div>
                     </div>
                     <a 
                       href="tel:+94112345678" 
-                      className="text-[10px] font-bold text-blue-600 hover:underline inline-flex items-center gap-1 self-start mt-2"
+                      className="text-[10px] font-bold text-primary-600 hover:underline inline-flex items-center gap-1 self-start mt-2 transition-all duration-200"
                     >
                       Dial Directly <ChevronRight className="h-3 w-3" />
                     </a>
                   </div>
 
                   {/* Email Support Option */}
-                  <div className="bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl space-y-2 flex flex-col justify-between">
+                  <div className="bg-neutral-900/30 border border-neutral-700/50/80 p-3.5 rounded-2xl space-y-2 flex flex-col justify-between">
                     <div className="flex items-start gap-2.5">
-                      <span className="bg-emerald-100 text-emerald-800 p-1.5 rounded-lg inline-block">
+                      <span className="bg-success-100 text-success-800 p-1.5 rounded-xl inline-block">
                         <Mail className="h-4 w-4" />
                       </span>
                       <div>
-                        <p className="font-bold text-slate-800">Email Support</p>
-                        <p className="text-[10px] text-slate-500 font-mono">loansupport@novabank.lk</p>
+                        <p className="font-bold text-neutral-50">Email Support</p>
+                        <p className="text-[10px] text-neutral-500 font-mono">loansupport@novabank.lk</p>
                       </div>
                     </div>
                     <a 
                       href="mailto:loansupport@novabank.lk" 
-                      className="text-[10px] font-bold text-emerald-600 hover:underline inline-flex items-center gap-1 self-start mt-2"
+                      className="text-[10px] font-bold text-success-600 hover:underline inline-flex items-center gap-1 self-start mt-2 transition-all duration-200"
                     >
                       Draft Email <ChevronRight className="h-3 w-3" />
                     </a>
@@ -201,33 +201,33 @@ export default function SupportContactWidget() {
               </div>
 
               {/* Operating Hours Banner */}
-              <div className="bg-blue-50/50 border border-blue-100/80 rounded-2xl p-4 flex gap-3">
-                <span className="bg-blue-100 text-blue-800 p-1.5 rounded-lg self-start">
+              <div className="bg-primary-900/20/50 border border-primary-100/80 rounded-2xl p-4 flex gap-3">
+                <span className="bg-primary-100 text-primary-800 p-1.5 rounded-xl self-start">
                   <Clock className="h-4.5 w-4.5" />
                 </span>
                 <div className="space-y-1">
-                  <p className="font-bold text-slate-800">Live Chat & Telephone Service Hours</p>
-                  <p className="text-slate-600 leading-normal">
+                  <p className="font-bold text-neutral-50">Live Chat & Telephone Service Hours</p>
+                  <p className="text-neutral-300 leading-normal">
                     Our dedicated credit officers and loan desk underwriters are online to help you:
                   </p>
                   <div className="grid grid-cols-2 gap-x-4 pt-1 text-[11px] font-mono">
                     <div>
-                      <span className="text-slate-400 text-[9px] block">WEEKDAYS</span>
-                      <span className="font-bold text-slate-700">8:00 AM - 8:00 PM</span>
+                      <span className="text-neutral-400 text-[9px] block">WEEKDAYS</span>
+                      <span className="font-bold text-neutral-200">8:00 AM - 8:00 PM</span>
                     </div>
                     <div>
-                      <span className="text-slate-400 text-[9px] block">WEEKENDS</span>
-                      <span className="font-bold text-slate-700">9:00 AM - 5:00 PM</span>
+                      <span className="text-neutral-400 text-[9px] block">WEEKENDS</span>
+                      <span className="font-bold text-neutral-200">9:00 AM - 5:00 PM</span>
                     </div>
                   </div>
-                  <p className="text-[9px] text-slate-400 italic pt-1">*All hours are indicated in Sri Lankan Standard Time (UTC+05:30).</p>
+                  <p className="text-[9px] text-neutral-400 italic pt-1">*All hours are indicated in Sri Lankan Standard Time (UTC+05:30).</p>
                 </div>
               </div>
 
               {/* Dynamic Customer Support FAQs Section */}
-              <div className="border-t border-slate-100 pt-5 space-y-4" id="faq-interactive-section">
+              <div className="border-t border-neutral-700/30 pt-5 space-y-4" id="faq-interactive-section">
                 <div className="flex items-center justify-between">
-                  <h5 className="font-mono font-bold text-[10px] text-slate-400 uppercase tracking-wider">
+                  <h5 className="font-mono font-bold text-[10px] text-neutral-400 uppercase tracking-wider">
                     Frequently Asked Questions
                   </h5>
                   <span className="text-[9px] font-mono text-teal-600 font-bold bg-teal-50 px-2 py-0.5 rounded border border-teal-100">
@@ -239,11 +239,11 @@ export default function SupportContactWidget() {
                 <div className="space-y-3">
                   {/* Search box */}
                   <div className="relative">
-                    <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                    <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-neutral-400" />
                     <input
                       id="faq-search-input"
                       type="text"
-                      className="w-full pl-9 pr-3 py-1.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                      className="w-full pl-9 pr-3 py-1.5 border border-neutral-700/50 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none"
                       placeholder="Search common answers (e.g., NIC, CRIB, e-sign)..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
@@ -265,10 +265,10 @@ export default function SupportContactWidget() {
                           setSelectedCategory(cat.id);
                           setExpandedFaqId(null);
                         }}
-                        className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer border ${
+                        className={`px-2.5 py-1 rounded-xl text-[10px] font-bold transition-all cursor-pointer border ${
                           selectedCategory === cat.id
-                            ? "bg-teal-600 text-white border-teal-600 shadow-sm"
-                            : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+                            ? "bg-teal-600 text-white border-teal-600 shadow-md shadow-primary/5"
+                            : "bg-neutral-900/30 text-neutral-300 border-neutral-700/50 hover:bg-neutral-800/50"
                         }`}
                       >
                         {cat.label}
@@ -285,23 +285,23 @@ export default function SupportContactWidget() {
                       return (
                         <div
                           key={faq.id}
-                          className="border border-slate-150 rounded-xl overflow-hidden bg-slate-50/50 hover:bg-slate-50 transition-colors"
+                          className="border border-neutral-700/50 rounded-xl overflow-hidden bg-neutral-900/30/50 hover:bg-neutral-900/30 transition-colors"
                         >
                           <button
                             type="button"
                             onClick={() => setExpandedFaqId(isExpanded ? null : faq.id)}
-                            className="w-full px-3.5 py-2.5 text-left flex items-center justify-between gap-3 text-[11px] font-bold text-slate-700 hover:text-slate-900 focus:outline-none"
+                            className="w-full px-3.5 py-2.5 text-left flex items-center justify-between gap-3 text-[11px] font-bold text-neutral-200 hover:text-neutral-900 focus:outline-none transition-all duration-200"
                           >
                             <span>{faq.question}</span>
                             {isExpanded ? (
-                              <ChevronUp className="h-3.5 w-3.5 text-slate-500 flex-shrink-0" />
+                              <ChevronUp className="h-3.5 w-3.5 text-neutral-500 flex-shrink-0" />
                             ) : (
-                              <ChevronDown className="h-3.5 w-3.5 text-slate-500 flex-shrink-0" />
+                              <ChevronDown className="h-3.5 w-3.5 text-neutral-500 flex-shrink-0" />
                             )}
                           </button>
 
                           {isExpanded && (
-                            <div className="px-3.5 pb-3 pt-0.5 text-[11px] text-slate-500 border-t border-slate-100 bg-white leading-relaxed animate-fade-in">
+                            <div className="px-3.5 pb-3 pt-0.5 text-[11px] text-neutral-500 border-t border-neutral-700/30 bg-neutral-900/50 leading-relaxed animate-fade-in">
                               {faq.answer}
                             </div>
                           )}
@@ -309,8 +309,8 @@ export default function SupportContactWidget() {
                       );
                     })
                   ) : (
-                    <div className="py-6 text-center text-slate-400 bg-slate-50 border border-slate-200/50 rounded-xl">
-                      <HelpCircle className="h-5 w-5 mx-auto text-slate-300 mb-1" />
+                    <div className="py-6 text-center text-neutral-400 bg-neutral-900/30 border border-neutral-700/50/50 rounded-xl">
+                      <HelpCircle className="h-5 w-5 mx-auto text-neutral-300 mb-1" />
                       <p className="font-bold">No matches found</p>
                       <p className="text-[10px]">Try searching for other keywords.</p>
                     </div>
@@ -319,29 +319,29 @@ export default function SupportContactWidget() {
               </div>
 
               {/* Instant Callback Form */}
-              <div className="border-t border-slate-100 pt-5 space-y-4">
+              <div className="border-t border-neutral-700/30 pt-5 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h5 className="font-mono font-bold text-[10px] text-slate-400 uppercase tracking-wider">
+                  <h5 className="font-mono font-bold text-[10px] text-neutral-400 uppercase tracking-wider">
                     Leave a Message / Request Callback
                   </h5>
-                  <span className="text-[9px] font-mono text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 flex items-center gap-1">
+                  <span className="text-[9px] font-mono text-success-600 font-bold bg-success-900/20 px-2 py-0.5 rounded border border-success-100 flex items-center gap-1">
                     <ShieldCheck className="h-3 w-3" /> SLA: &lt; 15 Mins
                   </span>
                 </div>
 
                 {ticketSubmitted ? (
-                  <div className="bg-emerald-50/50 border border-emerald-100 p-5 rounded-2xl text-center space-y-2 animate-fade-in">
-                    <div className="mx-auto bg-emerald-100 text-emerald-800 p-2.5 rounded-full w-fit">
+                  <div className="bg-success-900/20/50 border border-success-100 p-5 rounded-2xl text-center space-y-2 animate-fade-in">
+                    <div className="mx-auto bg-success-100 text-success-800 p-2.5 rounded-full w-fit">
                       <CheckCircle2 className="h-5 w-5" />
                     </div>
-                    <h6 className="font-bold text-slate-800">Support Ticket Created Successfully</h6>
-                    <p className="text-[11px] text-slate-600 max-w-sm mx-auto leading-relaxed">
+                    <h6 className="font-bold text-neutral-50">Support Ticket Created Successfully</h6>
+                    <p className="text-[11px] text-neutral-300 max-w-sm mx-auto leading-relaxed">
                       A loan specialist has received your callback request. We will contact you at your provided telephone number shortly.
                     </p>
                     <button
                       type="button"
                       onClick={() => setTicketSubmitted(false)}
-                      className="text-[10px] font-bold text-blue-600 hover:underline mt-2 inline-block cursor-pointer"
+                      className="text-[10px] font-bold text-primary-600 hover:underline mt-2 inline-block cursor-pointer transition-all duration-200"
                     >
                       Submit Another Query
                     </button>
@@ -353,13 +353,13 @@ export default function SupportContactWidget() {
                       
                       {/* Name input */}
                       <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-slate-500 uppercase">Your Full Name</label>
+                        <label className="text-[9px] font-bold text-neutral-500 uppercase">Your Full Name</label>
                         <div className="relative">
-                          <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                          <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-neutral-400" />
                           <input
                             type="text"
                             required
-                            className="w-full pl-9 pr-3 py-1.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            className="w-full pl-9 pr-3 py-1.5 border border-neutral-700/50 rounded-xl focus:ring-2 focus:ring-primary-500 focus:outline-none"
                             placeholder="Kamal Bandara"
                             value={ticketName}
                             onChange={(e) => setTicketName(e.target.value)}
@@ -369,13 +369,13 @@ export default function SupportContactWidget() {
 
                       {/* Phone input */}
                       <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-slate-500 uppercase">Callback Phone Number</label>
+                        <label className="text-[9px] font-bold text-neutral-500 uppercase">Callback Phone Number</label>
                         <div className="relative">
-                          <Phone className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                          <Phone className="absolute left-3 top-2.5 h-3.5 w-3.5 text-neutral-400" />
                           <input
                             type="text"
                             required
-                            className="w-full pl-9 pr-3 py-1.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none font-mono"
+                            className="w-full pl-9 pr-3 py-1.5 border border-neutral-700/50 rounded-xl focus:ring-2 focus:ring-primary-500 focus:outline-none font-mono"
                             placeholder="+94 77 123 4567"
                             value={ticketPhone}
                             onChange={(e) => setTicketPhone(e.target.value)}
@@ -387,11 +387,11 @@ export default function SupportContactWidget() {
 
                     {/* Message input */}
                     <div className="space-y-1">
-                      <label className="text-[9px] font-bold text-slate-500 uppercase">How can we assist you?</label>
+                      <label className="text-[9px] font-bold text-neutral-500 uppercase">How can we assist you?</label>
                       <textarea
                         required
                         rows="2"
-                        className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="w-full px-3 py-2 border border-neutral-700/50 rounded-xl focus:ring-2 focus:ring-primary-500 focus:outline-none"
                         placeholder="E.g. I need help estimating the collateral requirements for an SME Growth Engine Loan."
                         value={ticketMessage}
                         onChange={(e) => setTicketMessage(e.target.value)}
@@ -401,7 +401,7 @@ export default function SupportContactWidget() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-2 px-4 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition flex items-center justify-center gap-1.5 shadow cursor-pointer disabled:opacity-50"
+                      className="w-full py-3 px-6 rounded-xl text-xs font-bold text-white btn-premium rounded-xl transition flex items-center justify-center gap-1.5 shadow cursor-pointer disabled:opacity-50"
                     >
                       {isSubmitting ? (
                         <span>Transmitting Support Ticket...</span>
@@ -421,8 +421,8 @@ export default function SupportContactWidget() {
             </div>
 
             {/* Footer lock note */}
-            <div className="bg-slate-50 p-4 border-t border-slate-100 flex items-center justify-center gap-1 text-[9px] font-mono text-slate-400">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+            <div className="bg-neutral-900/30 p-4 border-t border-neutral-700/30 flex items-center justify-center gap-1 text-[9px] font-mono text-neutral-400">
+              <ShieldCheck className="h-3.5 w-3.5 text-success-600" />
               <span>Complies with CBSL digital security protocols and ISO/IEC 27001 standard.</span>
             </div>
 

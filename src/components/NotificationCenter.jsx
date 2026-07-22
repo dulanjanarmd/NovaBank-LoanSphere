@@ -114,9 +114,9 @@ export default function NotificationCenter({ customerApplications, customerAccou
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
       // Flash animation helper
-      element.classList.add("ring-4", "ring-amber-400");
+      element.classList.add("ring-4", "ring-warning-400");
       setTimeout(() => {
-        element.classList.remove("ring-4", "ring-amber-400");
+        element.classList.remove("ring-4", "ring-warning-400");
       }, 2000);
     }
   };
@@ -127,14 +127,14 @@ export default function NotificationCenter({ customerApplications, customerAccou
       {/* Bell Button Trigger */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all cursor-pointer focus:outline-none"
+        className="relative p-2 rounded-xl text-neutral-300 hover:text-neutral-900 hover:bg-neutral-800/50 transition-all cursor-pointer focus:outline-none"
         title="View Notifications"
       >
         <Bell className="h-5 w-5" />
         {unreadCount > 0 && (
           <span className="absolute top-1 right-1 flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-error-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-error-500"></span>
           </span>
         )}
       </button>
@@ -148,10 +148,10 @@ export default function NotificationCenter({ customerApplications, customerAccou
             onClick={() => setIsOpen(false)}
           ></div>
 
-          <div className="absolute right-0 mt-2.5 w-80 sm:w-96 bg-white border border-slate-200 shadow-2xl rounded-2xl overflow-hidden z-50 animate-fade-in font-sans text-xs">
+          <div className="absolute right-0 mt-2.5 w-80 sm:w-96 glass-panel rounded-2xl shadow-2xl rounded-2xl overflow-hidden z-50 animate-fade-in font-sans text-xs">
             
             {/* Panel Header */}
-            <div className="bg-slate-900 text-white p-4 flex items-center justify-between border-b border-slate-800">
+            <div className="bg-neutral-900 text-white p-4 flex items-center justify-between border-b border-neutral-800">
               <div className="flex items-center gap-2">
                 <Bell className="h-4 w-4 text-teal-400" />
                 <span className="font-extrabold uppercase tracking-wider text-[10px]">
@@ -162,7 +162,7 @@ export default function NotificationCenter({ customerApplications, customerAccou
               {unreadCount > 0 && (
                 <button
                   onClick={handleClearAll}
-                  className="text-[9px] font-mono text-slate-400 hover:text-rose-400 transition cursor-pointer flex items-center gap-1"
+                  className="text-[9px] font-mono text-neutral-400 hover:text-error-400 transition cursor-pointer flex items-center gap-1"
                 >
                   <Trash2 className="h-3 w-3" />
                   <span>Dismiss All</span>
@@ -171,26 +171,26 @@ export default function NotificationCenter({ customerApplications, customerAccou
             </div>
 
             {/* Notifications Body List */}
-            <div className="max-h-[360px] overflow-y-auto divide-y divide-slate-100">
+            <div className="max-h-[360px] overflow-y-auto divide-y divide-neutral-100">
               {systemNotifications.length > 0 ? (
                 systemNotifications.map((notif) => {
                   const Icon = notif.icon;
                   return (
                     <div 
                       key={notif.id} 
-                      className={`p-4 hover:bg-slate-50 transition-colors duration-150 flex gap-3.5 items-start ${
-                        notif.type === "warning" ? "bg-amber-50/20" : ""
+                      className={`p-4 hover:bg-neutral-900/30 transition-colors duration-150 flex gap-3.5 items-start ${
+                        notif.type === "warning" ? "bg-warning-900/20/20" : ""
                       }`}
                     >
                       {/* Icon with colored container */}
                       <div className={`h-8 w-8 rounded-xl flex items-center justify-center flex-shrink-0 border ${
                         notif.type === "success" 
-                          ? "bg-emerald-50 text-emerald-600 border-emerald-100" 
+                          ? "bg-success-900/20 text-success-600 border-success-100" 
                           : notif.type === "warning"
-                          ? "bg-amber-50 text-amber-600 border-amber-100"
+                          ? "bg-warning-900/20 text-warning-600 border-warning-100"
                           : notif.type === "error"
-                          ? "bg-rose-50 text-rose-600 border-rose-100"
-                          : "bg-blue-50 text-blue-600 border-blue-100"
+                          ? "bg-error-900/20 text-error-600 border-error-100"
+                          : "bg-primary-900/20 text-primary-600 border-primary-100"
                       }`}>
                         <Icon className="h-4 w-4" />
                       </div>
@@ -198,14 +198,14 @@ export default function NotificationCenter({ customerApplications, customerAccou
                       {/* Content block */}
                       <div className="space-y-1 flex-1">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="font-extrabold text-slate-800 tracking-tight leading-tight">
+                          <span className="font-extrabold text-neutral-50 tracking-tight leading-tight">
                             {notif.title}
                           </span>
-                          <span className="text-[9px] text-slate-400 font-mono flex-shrink-0">
+                          <span className="text-[9px] text-neutral-400 font-mono flex-shrink-0">
                             {notif.time}
                           </span>
                         </div>
-                        <p className="text-[11px] text-slate-500 leading-normal">
+                        <p className="text-[11px] text-neutral-500 leading-normal">
                           {notif.desc}
                         </p>
 
@@ -214,7 +214,7 @@ export default function NotificationCenter({ customerApplications, customerAccou
                           <div className="pt-1.5">
                             <button
                               onClick={() => triggerScrollToElement(notif.actionId)}
-                              className="inline-flex items-center gap-1 text-[10px] text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200/50 px-2 py-1 rounded-md font-bold transition-all cursor-pointer"
+                              className="inline-flex items-center gap-1 text-[10px] text-warning-700 bg-warning-900/20 hover:bg-warning-100 border border-warning-200/50 px-2 py-1 rounded-lg font-bold transition-all cursor-pointer"
                             >
                               <span>Complete Step</span>
                               <span>&rarr;</span>
@@ -226,12 +226,12 @@ export default function NotificationCenter({ customerApplications, customerAccou
                   );
                 })
               ) : (
-                <div className="py-12 px-4 text-center text-slate-400">
-                  <div className="bg-slate-50 text-slate-400 p-2.5 rounded-full inline-block border border-slate-100 mb-2">
+                <div className="py-12 px-4 text-center text-neutral-400">
+                  <div className="bg-neutral-900/30 text-neutral-400 p-2.5 rounded-full inline-block border border-neutral-700/30 mb-2">
                     <Check className="h-5 w-5" />
                   </div>
                   <p className="font-bold">All clear!</p>
-                  <p className="text-[10px] text-slate-400 max-w-[200px] mx-auto mt-1">
+                  <p className="text-[10px] text-neutral-400 max-w-[200px] mx-auto mt-1">
                     No active loan revisions or account provisioning flags pending your review.
                   </p>
                 </div>
@@ -239,7 +239,7 @@ export default function NotificationCenter({ customerApplications, customerAccou
             </div>
 
             {/* Panel Footer */}
-            <div className="bg-slate-50 p-2.5 border-t border-slate-200 text-center text-[9px] font-mono text-slate-400">
+            <div className="bg-neutral-900/30 p-2.5 border-t border-neutral-700/50 text-center text-[9px] font-mono text-neutral-400">
               <span>NovaBank-LoanSphere Digital Notification System</span>
             </div>
 
