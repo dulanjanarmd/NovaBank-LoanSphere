@@ -195,6 +195,17 @@ CREATE TABLE audit_logs (
     details TEXT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- 14. NOTIFICATIONS TABLE (Customer notifications)
+CREATE TABLE notifications (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    customer_id BIGINT,
+    title VARCHAR(200) NOT NULL,
+    body TEXT NOT NULL,
+    type VARCHAR(20) NOT NULL,
+    read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 -- ====================================================================
 -- SEED DATA FOR DEMONSTRATION & TESTING
