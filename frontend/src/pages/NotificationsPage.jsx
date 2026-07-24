@@ -1,16 +1,65 @@
 import { Link } from 'react-router-dom'
 import { Bell, CheckCircle, AlertCircle, Info, Check, Trash2, Settings } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import CustomerHeader from '../components/CustomerHeader'
-import { notificationTemplates, formatDateTime } from '../data/mockData'
+import { api } from '../services/api'
+
+function formatDateTime(dateStr) {
+  return new Date(dateStr).toLocaleString('en-GB', { 
+    day: '2-digit', 
+    month: 'short', 
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
 
 export default function NotificationsPage() {
-  const [notifications, setNotifications] = useState(notificationTemplates)
+  const [notifications, setNotifications] = useState([])
   const [filter, setFilter] = useState('all')
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const userData = JSON.parse(localStorage.getItem('user'))
+        if (userData?.customerId) {
+          const response = await api.getNotifications(userData.customerId)
+          setNotifications(response.data || [])
+        }
+      } catch (err) {
+        console.error('Failed to fetch notifications:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchNotifications()
+  }, [])
 
   const filtered = filter === 'all' ? notifications : notifications.filter((n) => n.type === filter)
-  const markRead = (id) => setNotifications((n) => n.map((x) => (x.id === id ? { ...x, read: true } : x)))
-  const markAllRead = () => setNotifications((n) => n.map((x) => ({ ...x, read: true })))
+  
+  const markRead = async (id) => {
+    try {
+      await api.markAsRead(id)
+      setNotifications((n) => n.map((x) => (x.id === id ? { ...x, read: true } : x)))
+    } catch (err) {
+      console.error('Failed to mark as read:', err)
+    }
+  }
+  
+  const markAllRead = async () => {
+    try {
+      const userData = JSON.parse(localStorage.getItem('user'))
+      if (userData?.customerId) {
+        await api.markAllAsRead(userData.customerId)
+        setNotifications((n) => n.map((x) => ({ ...x, read: true })))
+      }
+    } catch (err) {
+      console.error('Failed to mark all as read:', err)
+    }
+  }
+  
   const remove = (id) => setNotifications((n) => n.filter((x) => x.id !== id))
 
   const config = {
@@ -41,36 +90,42 @@ export default function NotificationsPage() {
           </div>
         </div>
 
-        <div className="card divide-y divide-ink-50">
-          {filtered.length === 0 ? (
-            <div className="py-16 text-center">
-              <Bell className="mx-auto h-10 w-10 text-ink-300" />
-              <p className="mt-3 text-sm text-ink-500">No notifications to show.</p>
-            </div>
-          ) : (
-            filtered.map((n) => {
-              const c = config[n.type] || config.info
-              const Icon = c.icon
-              return (
-                <div key={n.id} className={`flex gap-3 p-4 transition-colors ${n.read ? '' : c.bg}`}>
-                  <Icon className={`h-5 w-5 flex-shrink-0 ${c.color}`} />
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="text-sm font-semibold text-navy-800">{n.title}</div>
-                      <div className="flex items-center gap-1">
-                        {!n.read && <span className="h-2 w-2 rounded-full bg-accent-500" />}
-                        <button onClick={() => remove(n.id)} className="p-1 text-ink-300 hover:text-danger-500"><Trash2 className="h-3.5 w-3.5" /></button>
+        {loading ? (
+          <div className="card flex items-center justify-center py-12">
+            <div className="text-ink-500">Loading...</div>
+          </div>
+        ) : (
+          <div className="card divide-y divide-ink-50">
+            {filtered.length === 0 ? (
+              <div className="py-16 text-center">
+                <Bell className="mx-auto h-10 w-10 text-ink-300" />
+                <p className="mt-3 text-sm text-ink-500">No notifications to show.</p>
+              </div>
+            ) : (
+              filtered.map((n) => {
+                const c = config[n.type] || config.info
+                const Icon = c.icon
+                return (
+                  <div key={n.id} className={`flex gap-3 p-4 transition-colors ${n.read ? '' : c.bg}`}>
+                    <Icon className={`h-5 w-5 flex-shrink-0 ${c.color}`} />
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="text-sm font-semibold text-navy-800">{n.title}</div>
+                        <div className="flex items-center gap-1">
+                          {!n.read && <span className="h-2 w-2 rounded-full bg-accent-500" />}
+                          <button onClick={() => remove(n.id)} className="p-1 text-ink-300 hover:text-danger-500"><Trash2 className="h-3.5 w-3.5" /></button>
+                        </div>
                       </div>
+                      <div className="mt-0.5 text-sm text-ink-600">{n.body}</div>
+                      <div className="mt-1.5 text-[11px] text-ink-400">{formatDateTime(n.createdAt)}</div>
+                      {!n.read && <button onClick={() => markRead(n.id)} className="mt-2 text-xs font-semibold text-accent-600 hover:text-accent-700">Mark as read</button>}
                     </div>
-                    <div className="mt-0.5 text-sm text-ink-600">{n.body}</div>
-                    <div className="mt-1.5 text-[11px] text-ink-400">{formatDateTime(n.time)}</div>
-                    {!n.read && <button onClick={() => markRead(n.id)} className="mt-2 text-xs font-semibold text-accent-600 hover:text-accent-700">Mark as read</button>}
                   </div>
-                </div>
-              )
-            })
-          )}
-        </div>
+                )
+              })
+            )}
+          </div>
+        )}
 
         <div className="mt-4 flex items-center justify-center gap-2 text-xs text-ink-500">
           <Settings className="h-3.5 w-3.5" /> <Link to="#" className="hover:text-navy-700">Manage notification preferences</Link>

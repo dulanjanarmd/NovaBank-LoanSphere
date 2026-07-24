@@ -1,13 +1,55 @@
 import { Link } from 'react-router-dom'
-import { Wallet, TrendingUp, Clock, ArrowUpRight, ArrowDownRight, Plus, FileText, CreditCard, Bell, CheckCircle, AlertCircle } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Wallet, TrendingUp, Clock, ArrowUpRight, Plus, FileText, CreditCard, Bell, CheckCircle, AlertCircle } from 'lucide-react'
 import CustomerHeader from '../components/CustomerHeader'
 import StatusBadge from '../components/StatusBadge'
-import { customerAccounts, applications, formatLKR, formatDate, notificationTemplates } from '../data/mockData'
+import { api } from '../services/api'
+
+function formatLKR(amount) {
+  return 'LKR ' + new Intl.NumberFormat('en-LK').format(amount)
+}
+
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+}
 
 export default function CustomerDashboard() {
-  const totalBalance = customerAccounts.reduce((s, a) => s + a.balance, 0)
-  const activeLoans = applications.filter((a) => a.status === 'approved')
-  const pendingApps = applications.filter((a) => a.status !== 'approved' && a.status !== 'rejected')
+  const [loading, setLoading] = useState(true)
+  const [accounts, setAccounts] = useState([])
+  const [applications, setApplications] = useState([])
+  const [notifications, setNotifications] = useState([])
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = JSON.parse(localStorage.getItem('user'))
+        setUser(userData)
+
+        if (userData?.customerId) {
+          const [accountsRes, appsRes, notifRes] = await Promise.all([
+            api.getCustomerAccounts(userData.customerId),
+            api.getCustomerApplications(userData.customerId),
+            api.getNotifications(userData.customerId)
+          ])
+
+          setAccounts(accountsRes.data || [])
+          setApplications(appsRes.data || [])
+          setNotifications(notifRes.data || [])
+        }
+      } catch (err) {
+        console.error('Failed to fetch dashboard data:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  const totalBalance = accounts.reduce((s, a) => s + (a.balance || 0), 0)
+  const activeLoans = applications.filter((a) => a.status === 'APPROVED' || a.status === 'DISBURSED')
+  const pendingApps = applications.filter((a) => a.status === 'SUBMITTED' || a.status === 'UNDER_REVIEW')
 
   return (
     <div className="min-h-screen bg-ink-50">
@@ -16,7 +58,7 @@ export default function CustomerDashboard() {
         {/* Welcome */}
         <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-navy-800">Good afternoon, Kavindya</h1>
+            <h1 className="text-2xl font-bold text-navy-800">Good afternoon, {user?.fullName || 'Customer'}</h1>
             <p className="text-sm text-ink-500">Here's a snapshot of your accounts and applications.</p>
           </div>
           <div className="flex gap-2">
@@ -25,6 +67,12 @@ export default function CustomerDashboard() {
           </div>
         </div>
 
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="text-ink-500">Loading...</div>
+          </div>
+        ) : (
+          <>
         {/* KPI cards */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="card p-5">
@@ -69,21 +117,23 @@ export default function CustomerDashboard() {
               <button className="text-sm font-medium text-accent-600 hover:text-accent-700">View all</button>
             </div>
             <div className="divide-y divide-ink-50">
-              {customerAccounts.map((acc) => (
-                <div key={acc.id} className="flex items-center justify-between p-5 transition-colors hover:bg-navy-50/30">
+              {accounts.length > 0 ? accounts.map((acc) => (
+                <div key={acc.accountId} className="flex items-center justify-between p-5 transition-colors hover:bg-navy-50/30">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-navy-700 text-white"><Wallet className="h-5 w-5" /></div>
                     <div>
-                      <div className="text-sm font-semibold text-navy-800">{acc.type}</div>
-                      <div className="text-xs text-ink-500">{acc.id} · {acc.branch}</div>
+                      <div className="text-sm font-semibold text-navy-800">{acc.productName}</div>
+                      <div className="text-xs text-ink-500">{acc.accountNumber}</div>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-bold text-navy-800">{formatLKR(acc.balance)}</div>
-                    <div className="text-xs text-ink-500">Opened {formatDate(acc.opened)}</div>
+                    <div className="text-sm font-bold text-navy-800">{formatLKR(0)}</div>
+                    <div className="text-xs text-ink-500">Opened {formatDate(acc.createdAt)}</div>
                   </div>
                 </div>
-              ))}
+              )) : (
+                <div className="p-5 text-center text-ink-500">No accounts yet</div>
+              )}
             </div>
           </div>
 
@@ -94,7 +144,7 @@ export default function CustomerDashboard() {
               <Link to="/portal/notifications" className="text-sm font-medium text-accent-600 hover:text-accent-700">View all</Link>
             </div>
             <div className="divide-y divide-ink-50">
-              {notificationTemplates.slice(0, 3).map((n) => {
+              {notifications.length > 0 ? notifications.slice(0, 3).map((n) => {
                 const Icon = n.type === 'success' ? CheckCircle : n.type === 'warning' ? AlertCircle : Bell
                 const color = n.type === 'success' ? 'text-success-600' : n.type === 'warning' ? 'text-warning-600' : 'text-accent-600'
                 return (
@@ -103,11 +153,13 @@ export default function CustomerDashboard() {
                     <div>
                       <div className="text-sm font-semibold text-navy-800">{n.title}</div>
                       <div className="mt-0.5 text-xs text-ink-500">{n.body}</div>
-                      <div className="mt-1 text-[11px] text-ink-400">{formatDate(n.time)}</div>
+                      <div className="mt-1 text-[11px] text-ink-400">{formatDate(n.createdAt)}</div>
                     </div>
                   </div>
                 )
-              })}
+              }) : (
+                <div className="p-5 text-center text-ink-500">No notifications</div>
+              )}
             </div>
           </div>
         </div>
@@ -119,26 +171,30 @@ export default function CustomerDashboard() {
             <Link to="/portal/applications" className="text-sm font-medium text-accent-600 hover:text-accent-700">View all</Link>
           </div>
           <div className="divide-y divide-ink-50">
-            {applications.map((app) => (
-              <Link key={app.id} to={`/portal/applications/${app.id}`} className="flex items-center justify-between p-5 transition-colors hover:bg-navy-50/30">
+            {applications.length > 0 ? applications.map((app) => (
+              <Link key={app.applicationId} to={`/portal/applications/${app.applicationId}`} className="flex items-center justify-between p-5 transition-colors hover:bg-navy-50/30">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent-50 text-accent-600"><CreditCard className="h-5 w-5" /></div>
                   <div>
-                    <div className="text-sm font-semibold text-navy-800">{app.type}</div>
-                    <div className="text-xs text-ink-500">{app.id} · Submitted {formatDate(app.submittedAt)}</div>
+                    <div className="text-sm font-semibold text-navy-800">{app.loanType}</div>
+                    <div className="text-xs text-ink-500">{app.applicationRef} · Submitted {formatDate(app.submittedAt)}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-right">
-                    <div className="text-sm font-bold text-navy-800">{formatLKR(app.amount)}</div>
-                    <div className="text-xs text-ink-500">{app.tenure} months · {app.rate}%</div>
+                    <div className="text-sm font-bold text-navy-800">{formatLKR(app.requestedAmount)}</div>
+                    <div className="text-xs text-ink-500">{app.tenureMonths} months</div>
                   </div>
                   <StatusBadge status={app.status} />
                 </div>
               </Link>
-            ))}
+            )) : (
+              <div className="p-5 text-center text-ink-500">No applications yet</div>
+            )}
           </div>
         </div>
+          </>
+        )}
       </main>
     </div>
   )
