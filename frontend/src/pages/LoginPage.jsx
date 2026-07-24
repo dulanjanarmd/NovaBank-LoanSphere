@@ -2,14 +2,65 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Mail, Lock, User, Phone, Building2, ArrowRight, ShieldCheck, CheckCircle } from 'lucide-react'
 import Logo, { TrustBar } from '../components/Logo'
+import { api } from '../services/api'
 
 export default function LoginPage() {
   const [mode, setMode] = useState('login')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    navigate('/portal/dashboard')
+    setLoading(true)
+    setError('')
+
+    const formData = new FormData(e.target)
+    
+    try {
+      if (mode === 'login') {
+        const email = formData.get('email')
+        const password = formData.get('password')
+        
+        // For customer login, use email as username
+        const response = await api.login(email, password)
+        
+        if (response.success) {
+          localStorage.setItem('token', response.data.token)
+          localStorage.setItem('user', JSON.stringify(response.data.user))
+          navigate('/portal/dashboard')
+        } else {
+          setError(response.message || 'Login failed')
+        }
+      } else {
+        // Registration
+        const registerData = {
+          nicNumber: formData.get('nic'),
+          fullName: `${formData.get('firstName')} ${formData.get('lastName')}`,
+          email: formData.get('email'),
+          mobileNumber: formData.get('mobile'),
+          address: formData.get('address') || 'Sri Lanka',
+          occupation: formData.get('occupation') || 'Other',
+          sourceOfFunds: formData.get('sourceOfFunds') || 'Salary',
+          monthlyTurnover: parseFloat(formData.get('monthlyTurnover')) || 0,
+        }
+        
+        const response = await api.register(registerData)
+        
+        if (response.success) {
+          setMode('login')
+          setError('')
+          // Auto-fill login form
+          e.target.querySelector('input[type="email"]').value = registerData.email
+        } else {
+          setError(response.message || 'Registration failed')
+        }
+      }
+    } catch (err) {
+      setError(err.message || 'An error occurred. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -43,46 +94,81 @@ export default function LoginPage() {
             <h1 className="text-2xl font-bold text-navy-800">{mode === 'login' ? 'Welcome back' : 'Create your account'}</h1>
             <p className="mt-1 text-sm text-ink-500">{mode === 'login' ? 'Sign in to manage your loans and accounts.' : 'Join NovaBank to apply for loans online.'}</p>
 
+            {error && (
+              <div className="mt-4 rounded-lg bg-danger-50 p-3 text-sm text-danger-700">
+                {error}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="mt-6 space-y-4">
               {mode === 'register' && (
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="label">First name</label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-3 h-4 w-4 text-ink-400" />
-                      <input className="input pl-9" placeholder="Kavindya" required />
+                <>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="label">First name</label>
+                      <div className="relative">
+                        <User className="absolute left-3 top-3 h-4 w-4 text-ink-400" />
+                        <input name="firstName" className="input pl-9" placeholder="Kavindya" required />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="label">Last name</label>
+                      <div className="relative">
+                        <User className="absolute left-3 top-3 h-4 w-4 text-ink-400" />
+                        <input name="lastName" className="input pl-9" placeholder="Perera" required />
+                      </div>
                     </div>
                   </div>
                   <div>
-                    <label className="label">Last name</label>
+                    <label className="label">NIC Number</label>
                     <div className="relative">
                       <User className="absolute left-3 top-3 h-4 w-4 text-ink-400" />
-                      <input className="input pl-9" placeholder="Perera" required />
+                      <input name="nic" className="input pl-9" placeholder="199234509123" required />
                     </div>
                   </div>
-                </div>
+                  <div>
+                    <label className="label">Mobile number</label>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-3 h-4 w-4 text-ink-400" />
+                      <input name="mobile" className="input pl-9" placeholder="+94 77 123 4567" required />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="label">Address</label>
+                    <input name="address" className="input" placeholder="No. 45, Flower Road, Colombo 07" required />
+                  </div>
+                  <div>
+                    <label className="label">Occupation</label>
+                    <input name="occupation" className="input" placeholder="Software Engineer" required />
+                  </div>
+                  <div>
+                    <label className="label">Source of Funds</label>
+                    <select name="sourceOfFunds" className="input" required>
+                      <option value="">Select source</option>
+                      <option value="Salary">Salary</option>
+                      <option value="Business Revenue">Business Revenue</option>
+                      <option value="Investment">Investment</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="label">Monthly Turnover (LKR)</label>
+                    <input name="monthlyTurnover" type="number" className="input" placeholder="250000" required />
+                  </div>
+                </>
               )}
               <div>
                 <label className="label">Email address</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-4 w-4 text-ink-400" />
-                  <input type="email" className="input pl-9" placeholder="you@example.lk" required />
+                  <input name="email" type="email" className="input pl-9" placeholder="you@example.lk" required />
                 </div>
               </div>
-              {mode === 'register' && (
-                <div>
-                  <label className="label">Mobile number</label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-3 h-4 w-4 text-ink-400" />
-                    <input className="input pl-9" placeholder="+94 77 123 4567" required />
-                  </div>
-                </div>
-              )}
               <div>
                 <label className="label">Password</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-ink-400" />
-                  <input type="password" className="input pl-9" placeholder="••••••••" required />
+                  <input name="password" type="password" className="input pl-9" placeholder="••••••••" required />
                 </div>
               </div>
               {mode === 'login' && (
@@ -91,9 +177,9 @@ export default function LoginPage() {
                   <a href="#" className="font-medium text-accent-600 hover:text-accent-700">Forgot password?</a>
                 </div>
               )}
-              <button type="submit" className="btn-primary w-full">
-                {mode === 'login' ? 'Sign In' : 'Create Account'}
-                <ArrowRight className="h-4 w-4" />
+              <button type="submit" className="btn-primary w-full" disabled={loading}>
+                {loading ? 'Processing...' : (mode === 'login' ? 'Sign In' : 'Create Account')}
+                {!loading && <ArrowRight className="h-4 w-4" />}
               </button>
             </form>
 
