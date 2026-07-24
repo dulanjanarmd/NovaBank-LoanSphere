@@ -4,57 +4,73 @@ import { Search, Filter, Eye, CheckCircle, Clock, AlertTriangle, TrendingUp, Use
 import StaffShell from '../components/StaffShell'
 import StatusBadge from '../components/StatusBadge'
 import DataTable from '../components/DataTable'
-import { staffQueue, formatLKR, formatDate } from '../data/mockData'
+import { api } from '../services/api'
+
+function formatLKR(amount) {
+  return 'LKR ' + new Intl.NumberFormat('en-LK').format(amount)
+}
+
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+}
 
 export default function StaffDashboard() {
   const [searchParams] = useSearchParams()
   const [role, setRole] = useState(searchParams.get('role') || 'officer')
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('all')
+  const [applications, setApplications] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const r = searchParams.get('role')
     if (r) setRole(r)
   }, [searchParams])
 
-  // Role-specific queue filtering
-  const roleStatusMap = {
-    officer: ['pending_docs', 'under_review'],
-    compliance: ['compliance'],
-    manager: ['manager_approval'],
-    admin: ['pending_docs', 'under_review', 'compliance', 'manager_approval', 'approved'],
-  }
-  const allowedStatuses = roleStatusMap[role] || []
-  const queue = staffQueue.filter((q) => {
-    const matchRole = allowedStatuses.includes(q.status)
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        const response = await api.getStaffApplications(null, role)
+        setApplications(response.data || [])
+      } catch (err) {
+        console.error('Failed to fetch staff applications:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchApplications()
+  }, [role])
+
+  const queue = applications.filter((q) => {
     const matchFilter = filter === 'all' || q.status === filter
-    const matchSearch = q.id.toLowerCase().includes(search.toLowerCase()) || q.applicant.toLowerCase().includes(search.toLowerCase())
-    return matchRole && matchFilter && matchSearch
+    const matchSearch = q.applicationRef?.toLowerCase().includes(search.toLowerCase()) || q.loanType?.toLowerCase().includes(search.toLowerCase())
+    return matchFilter && matchSearch
   })
 
   const stats = {
     officer: [
       { label: 'My Queue', value: queue.length, icon: FileText, color: 'navy' },
-      { label: 'Pending Docs', value: staffQueue.filter((q) => q.status === 'pending_docs').length, icon: AlertTriangle, color: 'warning' },
-      { label: 'Under Review', value: staffQueue.filter((q) => q.status === 'under_review').length, icon: Clock, color: 'accent' },
-      { label: 'Approved (mo)', value: staffQueue.filter((q) => q.status === 'approved').length, icon: CheckCircle, color: 'success' },
+      { label: 'Under Review', value: applications.filter((q) => q.status === 'UNDER_REVIEW').length, icon: Clock, color: 'accent' },
+      { label: 'Approved', value: applications.filter((q) => q.status === 'APPROVED').length, icon: CheckCircle, color: 'success' },
+      { label: 'Rejected', value: applications.filter((q) => q.status === 'REJECTED').length, icon: AlertTriangle, color: 'danger' },
     ],
     compliance: [
-      { label: 'Compliance Queue', value: staffQueue.filter((q) => q.status === 'compliance').length, icon: ShieldCheck, color: 'navy' },
-      { label: 'High Risk', value: staffQueue.filter((q) => q.risk === 'high').length, icon: AlertTriangle, color: 'danger' },
-      { label: 'Medium Risk', value: staffQueue.filter((q) => q.risk === 'medium').length, icon: Clock, color: 'warning' },
-      { label: 'Total Pipeline', value: staffQueue.length, icon: TrendingUp, color: 'accent' },
+      { label: 'Compliance Queue', value: queue.length, icon: ShieldCheck, color: 'navy' },
+      { label: 'Under Review', value: applications.filter((q) => q.status === 'UNDER_REVIEW').length, icon: Clock, color: 'accent' },
+      { label: 'Approved', value: applications.filter((q) => q.status === 'APPROVED').length, icon: CheckCircle, color: 'success' },
+      { label: 'Total Pipeline', value: applications.length, icon: TrendingUp, color: 'teal' },
     ],
     manager: [
-      { label: 'Awaiting Approval', value: staffQueue.filter((q) => q.status === 'manager_approval').length, icon: CheckSquare, color: 'navy' },
-      { label: 'Total Value', value: formatLKR(staffQueue.filter((q) => q.status === 'manager_approval').reduce((s, q) => s + q.amount, 0)), icon: TrendingUp, color: 'accent' },
-      { label: 'Approved (mo)', value: staffQueue.filter((q) => q.status === 'approved').length, icon: CheckCircle, color: 'success' },
+      { label: 'Awaiting Approval', value: applications.filter((q) => q.status === 'UNDER_REVIEW').length, icon: CheckSquare, color: 'navy' },
+      { label: 'Total Value', value: formatLKR(applications.reduce((s, q) => s + (q.requestedAmount || 0), 0)), icon: TrendingUp, color: 'accent' },
+      { label: 'Approved', value: applications.filter((q) => q.status === 'APPROVED').length, icon: CheckCircle, color: 'success' },
       { label: 'Avg. Approval', value: '73.8%', icon: Users, color: 'teal' },
     ],
     admin: [
-      { label: 'Total Applications', value: staffQueue.length, icon: FileText, color: 'navy' },
-      { label: 'In Pipeline', value: staffQueue.filter((q) => !['approved', 'rejected'].includes(q.status)).length, icon: Clock, color: 'accent' },
-      { label: 'Approved', value: staffQueue.filter((q) => q.status === 'approved').length, icon: CheckCircle, color: 'success' },
+      { label: 'Total Applications', value: applications.length, icon: FileText, color: 'navy' },
+      { label: 'In Pipeline', value: applications.filter((q) => !['APPROVED', 'REJECTED'].includes(q.status)).length, icon: Clock, color: 'accent' },
+      { label: 'Approved', value: applications.filter((q) => q.status === 'APPROVED').length, icon: CheckCircle, color: 'success' },
       { label: 'Active Products', value: '5', icon: TrendingUp, color: 'teal' },
     ],
   }
@@ -70,21 +86,24 @@ export default function StaffDashboard() {
   }
 
   const columns = [
-    { key: 'id', label: 'Reference', sortable: true, render: (r) => <Link to="/staff/application" className="font-semibold text-accent-600 hover:text-accent-700">{r.id}</Link> },
-    { key: 'applicant', label: 'Applicant', sortable: true, render: (r) => <span className="font-medium text-navy-800">{r.applicant}</span> },
-    { key: 'product', label: 'Product', sortable: true },
-    { key: 'amount', label: 'Amount', sortable: true, align: 'right', render: (r) => <span className="font-semibold text-navy-800">{formatLKR(r.amount)}</span> },
-    { key: 'risk', label: 'Risk', render: (r) => <RiskBadge risk={r.risk} /> },
-    { key: 'branch', label: 'Branch' },
+    { key: 'applicationRef', label: 'Reference', sortable: true, render: (r) => <Link to={`/staff/application/${r.applicationId}`} className="font-semibold text-accent-600 hover:text-accent-700">{r.applicationRef}</Link> },
+    { key: 'loanType', label: 'Product', sortable: true },
+    { key: 'requestedAmount', label: 'Amount', sortable: true, align: 'right', render: (r) => <span className="font-semibold text-navy-800">{formatLKR(r.requestedAmount)}</span> },
     { key: 'submittedAt', label: 'Submitted', sortable: true, render: (r) => formatDate(r.submittedAt) },
     { key: 'status', label: 'Status', render: (r) => <StatusBadge status={r.status} /> },
-    { key: 'actions', label: '', render: () => <Link to="/staff/application" className="btn-ghost px-2.5 py-1.5 text-xs"><Eye className="h-3.5 w-3.5" /> Review</Link> },
+    { key: 'actions', label: '', render: (r) => <Link to={`/staff/application/${r.applicationId}`} className="btn-ghost px-2.5 py-1.5 text-xs"><Eye className="h-3.5 w-3.5" /> Review</Link> },
   ]
 
-  const filters = [...new Set(staffQueue.filter((q) => allowedStatuses.includes(q.status)).map((q) => q.status))]
+  const filters = [...new Set(applications.map((q) => q.status))]
 
   return (
     <StaffShell role={role} setRole={setRole} active={role === 'admin' ? 'Dashboard' : role === 'compliance' ? 'Compliance Queue' : role === 'manager' ? 'Approval Queue' : 'Work Queue'}>
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="text-ink-500">Loading...</div>
+        </div>
+      ) : (
+        <>
       {/* Stats */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {currentStats.map((s) => {
@@ -106,7 +125,7 @@ export default function StaffDashboard() {
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-3 h-4 w-4 text-ink-400" />
-            <input className="input pl-9" placeholder="Search by reference or applicant..." value={search} onChange={(e) => setSearch(e.target.value)} />
+            <input className="input pl-9" placeholder="Search by reference or product..." value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
           <div className="flex items-center gap-2 overflow-x-auto">
             <Filter className="h-4 w-4 text-ink-400" />
@@ -121,6 +140,8 @@ export default function StaffDashboard() {
       <div className="mt-4 card">
         <DataTable columns={columns} rows={queue} emptyMessage="No applications in your queue" />
       </div>
+        </>
+      )}
     </StaffShell>
   )
 }

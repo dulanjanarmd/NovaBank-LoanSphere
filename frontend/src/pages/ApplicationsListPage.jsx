@@ -1,27 +1,54 @@
 import { Link } from 'react-router-dom'
 import { Plus, CreditCard, Search, Filter } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import CustomerHeader from '../components/CustomerHeader'
 import StatusBadge from '../components/StatusBadge'
 import DataTable from '../components/DataTable'
-import { applications, formatLKR, formatDate } from '../data/mockData'
+import { api } from '../services/api'
+
+function formatLKR(amount) {
+  return 'LKR ' + new Intl.NumberFormat('en-LK').format(amount)
+}
+
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+}
 
 export default function ApplicationsListPage() {
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
+  const [applications, setApplications] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        const userData = JSON.parse(localStorage.getItem('user'))
+        if (userData?.customerId) {
+          const response = await api.getCustomerApplications(userData.customerId)
+          setApplications(response.data || [])
+        }
+      } catch (err) {
+        console.error('Failed to fetch applications:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchApplications()
+  }, [])
 
   const filtered = applications.filter((a) => {
     const matchFilter = filter === 'all' || a.status === filter
-    const matchSearch = a.id.toLowerCase().includes(search.toLowerCase()) || a.type.toLowerCase().includes(search.toLowerCase())
+    const matchSearch = a.applicationRef?.toLowerCase().includes(search.toLowerCase()) || a.loanType?.toLowerCase().includes(search.toLowerCase())
     return matchFilter && matchSearch
   })
 
   const columns = [
-    { key: 'id', label: 'Reference', sortable: true, render: (r) => <Link to={`/portal/applications/${r.id}`} className="font-semibold text-accent-600 hover:text-accent-700">{r.id}</Link> },
-    { key: 'type', label: 'Product', sortable: true },
-    { key: 'amount', label: 'Amount', sortable: true, align: 'right', render: (r) => <span className="font-semibold text-navy-800">{formatLKR(r.amount)}</span> },
-    { key: 'tenure', label: 'Tenure', render: (r) => `${r.tenure} mo` },
-    { key: 'rate', label: 'Rate', render: (r) => `${r.rate}%` },
+    { key: 'applicationRef', label: 'Reference', sortable: true, render: (r) => <Link to={`/portal/applications/${r.applicationId}`} className="font-semibold text-accent-600 hover:text-accent-700">{r.applicationRef}</Link> },
+    { key: 'loanType', label: 'Product', sortable: true },
+    { key: 'requestedAmount', label: 'Amount', sortable: true, align: 'right', render: (r) => <span className="font-semibold text-navy-800">{formatLKR(r.requestedAmount)}</span> },
+    { key: 'tenureMonths', label: 'Tenure', render: (r) => `${r.tenureMonths} mo` },
     { key: 'submittedAt', label: 'Submitted', sortable: true, render: (r) => formatDate(r.submittedAt) },
     { key: 'status', label: 'Status', render: (r) => <StatusBadge status={r.status} /> },
   ]
@@ -57,9 +84,15 @@ export default function ApplicationsListPage() {
           </div>
         </div>
 
-        <div className="card mt-4">
-          <DataTable columns={columns} rows={filtered} />
-        </div>
+        {loading ? (
+          <div className="card mt-4 flex items-center justify-center py-12">
+            <div className="text-ink-500">Loading applications...</div>
+          </div>
+        ) : (
+          <div className="card mt-4">
+            <DataTable columns={columns} rows={filtered} emptyMessage="No applications found" />
+          </div>
+        )}
       </main>
     </div>
   )

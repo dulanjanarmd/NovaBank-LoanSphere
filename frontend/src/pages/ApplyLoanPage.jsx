@@ -2,7 +2,11 @@ import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Check, CreditCard, Calculator, FileText, PenTool, Sparkles } from 'lucide-react'
 import CustomerHeader from '../components/CustomerHeader'
-import { loanProducts, branchList, formatLKR } from '../data/mockData'
+import { api } from '../services/api'
+
+function formatLKR(amount) {
+  return 'LKR ' + new Intl.NumberFormat('en-LK').format(amount)
+}
 
 const steps = [
   { id: 1, label: 'Loan Product', icon: Sparkles },
@@ -10,6 +14,21 @@ const steps = [
   { id: 3, label: 'Personal Info', icon: FileText },
   { id: 4, label: 'Review & e-Sign', icon: PenTool },
   { id: 5, label: 'Confirmation', icon: Check },
+]
+
+const loanProducts = [
+  { id: 'personal', name: 'Personal Loan', purpose: 'For personal expenses', rate: 15, minAmount: 50000, maxAmount: 3000000, maxTenure: 60 },
+  { id: 'home', name: 'Home Loan', purpose: 'For purchasing or building a home', rate: 12, minAmount: 1000000, maxAmount: 50000000, maxTenure: 360 },
+  { id: 'vehicle', name: 'Vehicle Loan', purpose: 'For purchasing a vehicle', rate: 14, minAmount: 200000, maxAmount: 10000000, maxTenure: 84 },
+  { id: 'education', name: 'Education Loan', purpose: 'For higher education expenses', rate: 10, minAmount: 100000, maxAmount: 5000000, maxTenure: 120 },
+]
+
+const branchList = [
+  { code: 'COL', name: 'Colombo Fort' },
+  { code: 'KDY', name: 'Kandy' },
+  { code: 'GAL', name: 'Galle' },
+  { code: 'MAT', name: 'Matara' },
+  { code: 'JAF', name: 'Jaffna' },
 ]
 
 function calcEMI(principal, annualRate, tenureMonths) {
@@ -20,6 +39,9 @@ function calcEMI(principal, annualRate, tenureMonths) {
 
 export default function ApplyLoanPage() {
   const [step, setStep] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [submittedApplication, setSubmittedApplication] = useState(null)
   const [data, setData] = useState({
     product: '', amount: 1000000, tenure: 60, branch: '',
     firstName: '', lastName: '', nic: '', mobile: '', email: '', income: '',
@@ -44,6 +66,34 @@ export default function ApplyLoanPage() {
 
   const next = () => setStep((s) => Math.min(s + 1, 5))
   const back = () => setStep((s) => Math.max(s - 1, 1))
+
+  const handleSubmit = async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const userData = JSON.parse(localStorage.getItem('user'))
+      const loanRequest = {
+        customerId: userData?.customerId,
+        loanProductId: selectedProduct?.id,
+        loanType: selectedProduct?.id?.toUpperCase(),
+        requestedAmount: Number(data.amount),
+        tenureMonths: Number(data.tenure),
+        purpose: data.purpose,
+      }
+      
+      const response = await api.submitLoanApplication(loanRequest)
+      if (response.success) {
+        setSubmittedApplication(response.data)
+        next()
+      } else {
+        setError(response.message || 'Failed to submit application')
+      }
+    } catch (err) {
+      setError(err.message || 'An error occurred. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-ink-50">
@@ -80,6 +130,12 @@ export default function ApplyLoanPage() {
 
         <div className="mt-6 grid gap-6 lg:grid-cols-3">
           <div className="card lg:col-span-2 p-6 sm:p-8">
+            {error && (
+              <div className="mb-4 rounded-lg bg-danger-50 p-3 text-sm text-danger-700">
+                {error}
+              </div>
+            )}
+
             {step === 1 && (
               <div>
                 <h2 className="text-lg font-bold text-navy-800">Select a loan product</h2>
@@ -175,7 +231,7 @@ export default function ApplyLoanPage() {
                 <h2 className="mt-4 text-2xl font-bold text-navy-800">Loan application submitted!</h2>
                 <p className="mx-auto mt-2 max-w-md text-sm text-ink-500">Your application is now under review. You'll receive updates at each stage via SMS and email.</p>
                 <div className="mx-auto mt-6 max-w-sm rounded-xl bg-ink-50 p-4 text-left text-sm">
-                  <div className="flex justify-between py-1"><span className="text-ink-500">Reference</span><span className="font-bold text-navy-800">LN-2024-{Math.floor(1000 + Math.random() * 9000)}</span></div>
+                  <div className="flex justify-between py-1"><span className="text-ink-500">Reference</span><span className="font-bold text-navy-800">{submittedApplication?.applicationRef}</span></div>
                   <div className="flex justify-between py-1"><span className="text-ink-500">Product</span><span className="font-semibold text-ink-700">{selectedProduct?.name}</span></div>
                   <div className="flex justify-between py-1"><span className="text-ink-500">Amount</span><span className="font-semibold text-ink-700">{formatLKR(data.amount)}</span></div>
                   <div className="flex justify-between py-1"><span className="text-ink-500">Monthly EMI</span><span className="font-semibold text-ink-700">{formatLKR(emi)}</span></div>
@@ -191,7 +247,7 @@ export default function ApplyLoanPage() {
               <div className="mt-8 flex items-center justify-between border-t border-ink-100 pt-6">
                 <button onClick={back} disabled={step === 1} className="btn-outline disabled:opacity-40"><ArrowLeft className="h-4 w-4" /> Back</button>
                 {step === 4 ? (
-                  <button onClick={next} disabled={!canNext()} className="btn-primary disabled:opacity-40">Submit Application <Check className="h-4 w-4" /></button>
+                  <button onClick={handleSubmit} disabled={loading || !canNext()} className="btn-primary disabled:opacity-40">{loading ? 'Submitting...' : 'Submit Application'} <Check className="h-4 w-4" /></button>
                 ) : (
                   <button onClick={next} disabled={!canNext()} className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed">Continue <ArrowRight className="h-4 w-4" /></button>
                 )}

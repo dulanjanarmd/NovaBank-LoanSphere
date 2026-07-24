@@ -1,8 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Check, User, MapPin, FileCheck, Sparkles } from 'lucide-react'
 import CustomerHeader from '../components/CustomerHeader'
-import { accountTypes, branchList, formatLKR } from '../data/mockData'
+import { api } from '../services/api'
+
+function formatLKR(amount) {
+  return 'LKR ' + new Intl.NumberFormat('en-LK').format(amount)
+}
 
 const steps = [
   { id: 1, label: 'Account Type', icon: Sparkles },
@@ -12,9 +16,34 @@ const steps = [
   { id: 5, label: 'Confirmation', icon: Check },
 ]
 
+const branchList = [
+  { code: 'COL', name: 'Colombo Fort' },
+  { code: 'KDY', name: 'Kandy' },
+  { code: 'GAL', name: 'Galle' },
+  { code: 'MAT', name: 'Matara' },
+  { code: 'JAF', name: 'Jaffna' },
+]
+
 export default function OpenAccountPage() {
   const [step, setStep] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const [accountProducts, setAccountProducts] = useState([])
   const [data, setData] = useState({ accountType: '', branch: '', firstName: '', lastName: '', nic: '', dob: '', gender: '', mobile: '', email: '', address: '', city: '', district: '', employment: '', employer: '', monthlyIncome: '' })
+  const [error, setError] = useState('')
+  const [submittedAccount, setSubmittedAccount] = useState(null)
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await api.getAccountProducts()
+        setAccountProducts(response.data || [])
+      } catch (err) {
+        console.error('Failed to fetch account products:', err)
+      }
+    }
+    fetchProducts()
+  }, [])
+
   const update = (k, v) => setData((d) => ({ ...d, [k]: v }))
   const canNext = () => {
     if (step === 1) return data.accountType && data.branch
@@ -26,7 +55,32 @@ export default function OpenAccountPage() {
   const next = () => setStep((s) => Math.min(s + 1, 5))
   const back = () => setStep((s) => Math.max(s - 1, 1))
 
-  const selectedAccount = accountTypes.find((a) => a.id === data.accountType)
+  const handleSubmit = async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const userData = JSON.parse(localStorage.getItem('user'))
+      const accountRequest = {
+        customerId: userData?.customerId,
+        productName: accountProducts.find(p => p.id === data.accountType)?.name || data.accountType,
+        branch: branchList.find(b => b.code === data.branch)?.name || data.branch,
+      }
+      
+      const response = await api.openAccount(accountRequest)
+      if (response.success) {
+        setSubmittedAccount(response.data)
+        next()
+      } else {
+        setError(response.message || 'Failed to submit application')
+      }
+    } catch (err) {
+      setError(err.message || 'An error occurred. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const selectedAccount = accountProducts.find((a) => a.id === data.accountType)
 
   return (
     <div className="min-h-screen bg-ink-50">
@@ -63,21 +117,25 @@ export default function OpenAccountPage() {
 
         {/* Step content */}
         <div className="card mt-6 p-6 sm:p-8">
+          {error && (
+            <div className="mb-4 rounded-lg bg-danger-50 p-3 text-sm text-danger-700">
+              {error}
+            </div>
+          )}
+
           {step === 1 && (
             <div>
               <h2 className="text-lg font-bold text-navy-800">Choose your account type</h2>
               <p className="text-sm text-ink-500">Select the account that fits your needs.</p>
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                {accountTypes.map((a) => (
-                  <button key={a.id} onClick={() => update('accountType', a.id)} className={`rounded-xl border-2 p-5 text-left transition-all ${data.accountType === a.id ? 'border-accent-500 bg-accent-50' : 'border-ink-100 hover:border-navy-200'}`}>
+                {accountProducts.map((a) => (
+                  <button key={a.productName} onClick={() => update('accountType', a.productName)} className={`rounded-xl border-2 p-5 text-left transition-all ${data.accountType === a.productName ? 'border-accent-500 bg-accent-50' : 'border-ink-100 hover:border-navy-200'}`}>
                     <div className="flex items-center justify-between">
-                      <div className="font-bold text-navy-800">{a.name}</div>
-                      {data.accountType === a.id && <Check className="h-5 w-5 text-accent-600" />}
+                      <div className="font-bold text-navy-800">{a.productName}</div>
+                      {data.accountType === a.productName && <Check className="h-5 w-5 text-accent-600" />}
                     </div>
                     <div className="mt-2 space-y-1 text-sm text-ink-500">
-                      <div>Min deposit: <span className="font-semibold text-ink-700">{formatLKR(a.minDeposit)}</span></div>
-                      <div>Interest: <span className="font-semibold text-ink-700">{a.rate}</span></div>
-                      <div>Monthly fee: <span className="font-semibold text-ink-700">{a.fee}</span></div>
+                      <div>Status: <span className="font-semibold text-ink-700">{a.status}</span></div>
                     </div>
                   </button>
                 ))}
@@ -128,7 +186,7 @@ export default function OpenAccountPage() {
               <h2 className="text-lg font-bold text-navy-800">Review your application</h2>
               <p className="text-sm text-ink-500">Please confirm the details below before submitting.</p>
               <div className="mt-5 space-y-4">
-                <ReviewSection title="Account" items={[['Type', selectedAccount?.name], ['Branch', branchList.find((b) => b.code === data.branch)?.name], ['Min deposit', selectedAccount && formatLKR(selectedAccount.minDeposit)]]} />
+                <ReviewSection title="Account" items={[['Type', selectedAccount?.productName], ['Branch', branchList.find((b) => b.code === data.branch)?.name]]} />
                 <ReviewSection title="Personal" items={[['Name', `${data.firstName} ${data.lastName}`], ['NIC', data.nic], ['DOB', data.dob], ['Mobile', data.mobile], ['Email', data.email]]} />
                 <ReviewSection title="Address & Employment" items={[['Address', `${data.address}, ${data.city}`], ['Employment', data.employment], ['Employer', data.employer], ['Income', data.monthlyIncome && formatLKR(data.monthlyIncome)]]} />
                 <label className="flex items-start gap-2.5 rounded-lg bg-ink-50 p-4 text-sm text-ink-600">
@@ -145,13 +203,13 @@ export default function OpenAccountPage() {
               <h2 className="mt-4 text-2xl font-bold text-navy-800">Application submitted!</h2>
               <p className="mx-auto mt-2 max-w-md text-sm text-ink-500">Your account opening request has been received. We'll process it within 2 business days and notify you by SMS and email.</p>
               <div className="mx-auto mt-6 max-w-sm rounded-xl bg-ink-50 p-4 text-left text-sm">
-                <div className="flex justify-between py-1"><span className="text-ink-500">Reference</span><span className="font-bold text-navy-800">ACC-2024-0457</span></div>
-                <div className="flex justify-between py-1"><span className="text-ink-500">Account type</span><span className="font-semibold text-ink-700">{selectedAccount?.name}</span></div>
+                <div className="flex justify-between py-1"><span className="text-ink-500">Account Number</span><span className="font-bold text-navy-800">{submittedAccount?.accountNumber}</span></div>
+                <div className="flex justify-between py-1"><span className="text-ink-500">Account type</span><span className="font-semibold text-ink-700">{submittedAccount?.productName}</span></div>
                 <div className="flex justify-between py-1"><span className="text-ink-500">Branch</span><span className="font-semibold text-ink-700">{branchList.find((b) => b.code === data.branch)?.name}</span></div>
               </div>
               <div className="mt-6 flex justify-center gap-3">
                 <Link to="/portal/dashboard" className="btn-primary">Go to Dashboard</Link>
-                <button onClick={() => { setStep(1); setData({}) }} className="btn-outline">Open Another</button>
+                <button onClick={() => { setStep(1); setData({}); setSubmittedAccount(null) }} className="btn-outline">Open Another</button>
               </div>
             </div>
           )}
@@ -160,7 +218,7 @@ export default function OpenAccountPage() {
             <div className="mt-8 flex items-center justify-between border-t border-ink-100 pt-6">
               <button onClick={back} disabled={step === 1} className="btn-outline disabled:opacity-40"><ArrowLeft className="h-4 w-4" /> Back</button>
               {step === 4 ? (
-                <button onClick={next} className="btn-primary">Submit Application <Check className="h-4 w-4" /></button>
+                <button onClick={handleSubmit} disabled={loading} className="btn-primary disabled:opacity-40">{loading ? 'Submitting...' : 'Submit Application'} <Check className="h-4 w-4" /></button>
               ) : (
                 <button onClick={next} disabled={!canNext()} className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed">Continue <ArrowRight className="h-4 w-4" /></button>
               )}
