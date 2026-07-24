@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
-import { Building2, ShieldCheck, Globe2 } from 'lucide-react'
+import { ShieldCheck, Globe2 } from 'lucide-react'
 
 export default function Logo({ compact = false, light = false }) {
   return (
     <Link to="/" className="flex items-center gap-2.5 group">
-      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-navy-700 text-white shadow-sm transition-transform group-hover:scale-105">
-        <Building2 className="h-5 w-5" />
+      <div className="flex h-9 w-9 items-center justify-center rounded-lg overflow-hidden shadow-sm transition-transform group-hover:scale-105">
+        <img src="/novabank_logo.jpg" alt="NovaBank Logo" className="h-full w-full object-cover" />
       </div>
       {!compact && (
         <div className="leading-tight">

@@ -48,10 +48,9 @@ export default function LoginPage() {
         const response = await api.register(registerData)
         
         if (response.success) {
-          setMode('login')
-          setError('')
-          // Auto-fill login form
-          e.target.querySelector('input[type="email"]').value = registerData.email
+          localStorage.setItem('token', response.token)
+          localStorage.setItem('user', JSON.stringify(response.user))
+          navigate('/portal/dashboard')
         } else {
           setError(response.message || 'Registration failed')
         }
