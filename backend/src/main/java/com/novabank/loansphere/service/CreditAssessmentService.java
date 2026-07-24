@@ -51,7 +51,7 @@ public class CreditAssessmentService {
         String cribReference = "CRIB-LN-" + (10000 + random.nextInt(90000));
 
         CreditAssessment assessment = new CreditAssessment();
-        assessment.setApplication(application);
+        assessment.setLoanApplication(application);
         assessment.setInternalScore(score);
         assessment.setCribReference(cribReference);
         assessment.setDtiRatio(dtiRatio);
@@ -62,7 +62,7 @@ public class CreditAssessmentService {
     }
 
     public CreditAssessment getAssessmentByApplicationId(Long applicationId) {
-        return assessmentRepository.findByApplicationApplicationId(applicationId)
+        return assessmentRepository.findByLoanApplicationApplicationId(applicationId)
                 .orElseThrow(() -> new RuntimeException("Credit assessment not found"));
     }
 }

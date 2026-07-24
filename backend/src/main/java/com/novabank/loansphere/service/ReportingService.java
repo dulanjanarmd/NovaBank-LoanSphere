@@ -65,7 +65,7 @@ public class ReportingService {
         List<LoanApplication> allApplications = applicationRepository.findAll();
         
         // Get last 6 months data
-        Map<String, BigDecimal> monthlyData = new HashMap<>();
+        Map<String, Object> monthlyData = new HashMap<>();
         YearMonth currentMonth = YearMonth.now();
         
         for (int i = 5; i >= 0; i--) {
