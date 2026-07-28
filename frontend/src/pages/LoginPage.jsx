@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+﻿import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Mail, Lock, User, Phone, Building2, ArrowRight, ShieldCheck, CheckCircle } from 'lucide-react'
 import Logo, { TrustBar } from '../components/Logo'
@@ -22,18 +22,16 @@ export default function LoginPage() {
         const email = formData.get('email')
         const password = formData.get('password')
         
-        // For customer login, use email as username
         const response = await api.login(email, password)
         
         if (response.success) {
-          localStorage.setItem('token', response.data.token)
-          localStorage.setItem('user', JSON.stringify(response.data.user))
-          navigate('/portal/dashboard')
+          localStorage.setItem('token', response.token)
+          localStorage.setItem('user', JSON.stringify(response.user))
+          navigate('/portal/profile')
         } else {
           setError(response.message || 'Login failed')
         }
       } else {
-        // Registration
         const registerData = {
           nicNumber: formData.get('nic'),
           fullName: `${formData.get('firstName')} ${formData.get('lastName')}`,
@@ -50,7 +48,7 @@ export default function LoginPage() {
         if (response.success) {
           localStorage.setItem('token', response.token)
           localStorage.setItem('user', JSON.stringify(response.user))
-          navigate('/portal/dashboard')
+          navigate('/portal/profile')
         } else {
           setError(response.message || 'Registration failed')
         }
@@ -64,13 +62,12 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen">
-      {/* Left brand panel */}
       <div className="relative hidden w-1/2 flex-col justify-between bg-gradient-to-br from-navy-800 via-navy-700 to-accent-700 p-10 text-white lg:flex">
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 30% 20%, white 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
         <div className="relative"><Logo light /></div>
         <div className="relative">
           <h2 className="text-3xl font-bold leading-tight">Welcome to NovaBank LoanSphere.</h2>
-          <p className="mt-3 max-w-md text-navy-100">Open accounts, apply for loans and track every step — all in one secure place.</p>
+          <p className="mt-3 max-w-md text-navy-100">Open accounts, apply for loans and track every step - all in one secure place.</p>
           <div className="mt-8 space-y-3">
             {['Bank-grade 256-bit encryption', 'Two-factor authentication', 'CBSL-regulated & ISO 27001 certified'].map((t) => (
               <div key={t} className="flex items-center gap-2.5 text-sm text-navy-100"><CheckCircle className="h-5 w-5 text-success-400" /> {t}</div>
@@ -80,7 +77,6 @@ export default function LoginPage() {
         <div className="relative"><TrustBar /></div>
       </div>
 
-      {/* Right form panel */}
       <div className="flex w-full flex-col items-center justify-center bg-ink-50 p-6 lg:w-1/2">
         <div className="w-full max-w-md">
           <div className="mb-6 lg:hidden"><Logo /></div>
@@ -167,7 +163,7 @@ export default function LoginPage() {
                 <label className="label">Password</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-ink-400" />
-                  <input name="password" type="password" className="input pl-9" placeholder="••••••••" required />
+                  <input name="password" type="password" className="input pl-9" placeholder="********" required />
                 </div>
               </div>
               {mode === 'login' && (

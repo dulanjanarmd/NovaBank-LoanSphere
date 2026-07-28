@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8080/api/v1'
+﻿const API_BASE_URL = 'http://localhost:8080/api/v1'
 
 class ApiService {
   async request(endpoint, options = {}) {
@@ -24,7 +24,6 @@ class ApiService {
     return response.json()
   }
 
-  // Auth endpoints
   async login(username, password) {
     return this.request('/auth/login', {
       method: 'POST',
@@ -39,7 +38,10 @@ class ApiService {
     })
   }
 
-  // Account endpoints
+  async getMyProfile() {
+    return this.request('/auth/me')
+  }
+
   async openAccount(data) {
     return this.request('/accounts/open', {
       method: 'POST',
@@ -55,7 +57,6 @@ class ApiService {
     return this.request('/accounts/products')
   }
 
-  // Loan endpoints
   async submitLoanApplication(data) {
     return this.request('/loans/apply', {
       method: 'POST',
@@ -71,7 +72,6 @@ class ApiService {
     return this.request(`/loans/${applicationId}`)
   }
 
-  // Document endpoints
   async uploadDocument(data) {
     return this.request('/documents/upload', {
       method: 'POST',
@@ -89,7 +89,6 @@ class ApiService {
     })
   }
 
-  // Staff endpoints
   async getStaffApplications(status, role) {
     const params = new URLSearchParams()
     if (status) params.append('status', status)
@@ -108,7 +107,6 @@ class ApiService {
     })
   }
 
-  // Credit assessment endpoints
   async performCreditAssessment(applicationId) {
     return this.request(`/credit-assessment/application/${applicationId}`, {
       method: 'POST',
@@ -119,7 +117,6 @@ class ApiService {
     return this.request(`/credit-assessment/application/${applicationId}`)
   }
 
-  // Reporting endpoints
   async getKPIs() {
     return this.request('/reports/kpi')
   }
@@ -136,7 +133,6 @@ class ApiService {
     return this.request('/reports/product-mix')
   }
 
-  // Notification endpoints
   async getNotifications(customerId) {
     return this.request(`/notifications/customer/${customerId}`)
   }

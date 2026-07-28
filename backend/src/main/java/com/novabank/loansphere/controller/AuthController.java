@@ -3,6 +3,7 @@ package com.novabank.loansphere.controller;
 import com.novabank.loansphere.model.Customer;
 import com.novabank.loansphere.service.AuthService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import lombok.Data;
@@ -42,12 +43,23 @@ public class AuthController {
             customer.setOccupation(request.getOccupation());
             customer.setSourceOfFunds(request.getSourceOfFunds());
             customer.setMonthlyTurnover(java.math.BigDecimal.valueOf(request.getMonthlyTurnover()));
-            customer.setDateOfBirth(java.time.LocalDate.now().minusYears(20)); // Dummy DOB
+            customer.setDateOfBirth(java.time.LocalDate.now().minusYears(20));
 
             Map<String, Object> response = authService.registerCustomer(customer);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("success", false, "message", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentProfile(Authentication authentication) {
+        try {
+            String username = authentication.getName();
+            Map<String, Object> response = authService.getCurrentProfile(username);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body(Map.of("success", false, "message", e.getMessage()));
         }
     }
 }

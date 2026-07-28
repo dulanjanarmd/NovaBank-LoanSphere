@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
-import { Home, FileText, CreditCard, Bell, LogOut, User, Settings, Menu, X } from 'lucide-react'
+﻿import { Link } from 'react-router-dom'
+import { Home, FileText, CreditCard, Bell, LogOut, UserCircle, Settings, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import Logo from './Logo'
 import { TrustBar } from './Logo'
@@ -8,6 +8,7 @@ export default function CustomerHeader({ active }) {
   const [open, setOpen] = useState(false)
   const navItems = [
     { to: '/portal/dashboard', label: 'Dashboard', icon: Home },
+    { to: '/portal/profile', label: 'Profile', icon: UserCircle },
     { to: '/portal/applications', label: 'My Applications', icon: FileText },
     { to: '/portal/apply', label: 'Apply for Loan', icon: CreditCard },
     { to: '/portal/notifications', label: 'Notifications', icon: Bell },
