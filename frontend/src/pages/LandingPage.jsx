@@ -6,7 +6,7 @@ import { loanProducts, formatLKR } from '../data/mockData'
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100">
       {/* Header */}
       <header className="sticky top-0 z-40 ios-glass">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">

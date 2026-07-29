@@ -42,7 +42,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-ink-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
         <div className="flex items-center gap-2 text-ink-500">
           <Loader2 className="h-5 w-5 animate-spin" />
           <span>Loading profile...</span>
@@ -53,14 +53,14 @@ export default function ProfilePage() {
 
   if (error && !profile) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-ink-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
         <div className="text-danger-600">{error}</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-ink-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <CustomerHeader active="Profile" />
       <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
         <Link to="/portal/dashboard" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-ink-500 hover:text-navy-700">

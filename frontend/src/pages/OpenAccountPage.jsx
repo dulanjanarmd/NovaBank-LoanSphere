@@ -84,7 +84,7 @@ export default function OpenAccountPage() {
   const selectedAccount = accountProducts.find((a) => a.id === data.accountType)
 
   return (
-    <div className="min-h-screen bg-ink-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <CustomerHeader />
       <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
         <Link to="/portal/dashboard" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-ink-500 hover:text-navy-700">
