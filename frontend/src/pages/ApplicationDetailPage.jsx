@@ -1,13 +1,67 @@
 import { Link, useParams } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import { ArrowLeft, FileText, CheckCircle, Clock, XCircle, Upload, Download, AlertCircle, User, Building2, CreditCard } from 'lucide-react'
 import CustomerHeader from '../components/CustomerHeader'
 import StatusBadge from '../components/StatusBadge'
 import Stepper from '../components/Stepper'
 import { applications, applicationStages, formatLKR, formatDate, formatDateTime } from '../data/mockData'
+import { api } from '../services/api'
 
 export default function ApplicationDetailPage() {
   const { id } = useParams()
-  const app = applications.find((a) => a.id === id)
+  const [app, setApp] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchApp = async () => {
+      try {
+        // Try API first (numeric ID)
+        if (id && !isNaN(id)) {
+          const res = await api.getApplicationDetail(Number(id))
+          if (res?.data) {
+            setApp(normalizeApiApp(res.data))
+            setLoading(false)
+            return
+          }
+        }
+      } catch (_) { /* offline */ }
+      // Fallback to mock by string id
+      const found = applications.find((a) => a.id === id)
+      setApp(found || null)
+      setLoading(false)
+    }
+    fetchApp()
+  }, [id])
+
+  function normalizeApiApp(a) {
+    return {
+      id: a.applicationRef || id,
+      type: a.loanType?.replace(/_/g, ' '),
+      amount: a.requestedAmount, tenure: a.tenureMonths, rate: a.interestRate || 14.5,
+      status: a.status?.toLowerCase(), stage: stageFromStatus(a.status),
+      applicant: a.customerName || 'Customer', branch: a.branch || '—',
+      officer: a.assignedOfficer || '—', monthlyIncome: a.monthlyIncome || 0,
+      submittedAt: a.submittedAt, documents: a.documents || [],
+    }
+  }
+  function stageFromStatus(s) {
+    const map = { SUBMITTED: 1, UNDER_REVIEW: 2, COMPLIANCE: 3, MANAGER_APPROVAL: 4, APPROVED: 5, DISBURSED: 5 }
+    return map[s] || 1
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+        <CustomerHeader />
+        <main className="flex items-center justify-center py-20">
+          <div className="text-center">
+            <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-2 border-accent-500 border-t-transparent" />
+            <div className="text-sm text-ink-500">Loading application...</div>
+          </div>
+        </main>
+      </div>
+    )
+  }
 
   if (!app) {
     return (
@@ -22,9 +76,9 @@ export default function ApplicationDetailPage() {
     )
   }
 
-  const uploadedDocs = app.documents.filter((d) => d.uploaded).length
-  const verifiedDocs = app.documents.filter((d) => d.verified).length
-  const totalDocs = app.documents.length
+  const uploadedDocs = (app.documents || []).filter((d) => d.uploaded).length
+  const verifiedDocs = (app.documents || []).filter((d) => d.verified).length
+  const totalDocs = (app.documents || []).length
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
