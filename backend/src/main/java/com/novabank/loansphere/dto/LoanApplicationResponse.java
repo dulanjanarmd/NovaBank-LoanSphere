@@ -12,7 +12,24 @@ public class LoanApplicationResponse {
     private String productName;
     private BigDecimal requestedAmount;
     private Integer tenureMonths;
+    private BigDecimal interestRate;
     private String status;
     private LocalDateTime submittedAt;
     private LocalDateTime createdAt;
+
+    // Customer info
+    private String customerName;
+    private String customerNic;
+    private String customerMobile;
+
+    // Credit assessment
+    private Integer internalScore;
+    private String cribReference;
+    private BigDecimal dtiRatio;
+    private BigDecimal ltvRatio;
+    private String decisionBand;
+
+    // Branch / officer
+    private String branch;
+    private String assignedOfficer;
 }
