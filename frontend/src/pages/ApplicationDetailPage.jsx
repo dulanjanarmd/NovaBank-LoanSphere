@@ -51,7 +51,7 @@ export default function ApplicationDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
         <CustomerHeader />
         <main className="flex items-center justify-center py-20">
           <div className="text-center">
@@ -65,7 +65,7 @@ export default function ApplicationDetailPage() {
 
   if (!app) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
         <CustomerHeader />
         <main className="mx-auto max-w-4xl px-4 py-16 text-center">
           <AlertCircle className="mx-auto h-12 w-12 text-ink-300" />

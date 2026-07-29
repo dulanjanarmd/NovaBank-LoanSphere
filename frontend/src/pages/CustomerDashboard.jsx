@@ -91,7 +91,7 @@ export default function CustomerDashboard() {
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
       <CustomerHeader active="Dashboard" />
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
         {/* Welcome */}
