@@ -84,7 +84,7 @@ export default function OpenAccountPage() {
   const selectedAccount = accountProducts.find((a) => a.id === data.accountType)
 
   return (
-    <div className="min-h-screen bg-transparent">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <CustomerHeader />
       <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
         <Link to="/portal/dashboard" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-ink-500 hover:text-navy-700">
@@ -104,7 +104,7 @@ export default function OpenAccountPage() {
               return (
                 <div key={s.id} className="flex flex-1 items-center last:flex-none">
                   <div className="flex flex-col items-center gap-2">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all ${isComplete ? 'border-success-500 bg-success-500 text-white' : isCurrent ? 'border-accent-500 bg-accent-50 text-accent-700 ring-4 ring-accent-100' : 'border-ink-200 ios-glass text-ink-400'}`}>
+                    <div className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all ${isComplete ? 'border-success-500 bg-success-500 text-white' : isCurrent ? 'border-accent-500 bg-accent-50 text-accent-700 ring-4 ring-accent-100' : 'border-ink-200 bg-white text-ink-400'}`}>
                       {isComplete ? <Check className="h-5 w-5" /> : <Icon className="h-4.5 w-4.5" />}
                     </div>
                     <div className={`text-[11px] font-semibold ${isCurrent || isComplete ? 'text-navy-800' : 'text-ink-400'}`}>{s.label}</div>

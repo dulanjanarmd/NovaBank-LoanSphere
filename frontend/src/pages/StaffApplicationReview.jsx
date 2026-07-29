@@ -168,7 +168,7 @@ export default function StaffApplicationReview() {
 function Info({ icon: Icon, label, value }) {
   return (
     <div className="flex items-center gap-3 rounded-lg bg-ink-50 p-3">
-      <div className="flex h-9 w-9 items-center justify-center rounded-lg ios-glass text-navy-700 shadow-sm"><Icon className="h-4.5 w-4.5" /></div>
+      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-navy-700 shadow-sm"><Icon className="h-4.5 w-4.5" /></div>
       <div><div className="text-xs text-ink-500">{label}</div><div className="text-sm font-semibold text-navy-800">{value}</div></div>
     </div>
   )

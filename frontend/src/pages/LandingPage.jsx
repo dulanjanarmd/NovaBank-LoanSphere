@@ -6,7 +6,7 @@ import { loanProducts, formatLKR } from '../data/mockData'
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-transparent">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100">
       {/* Header */}
       <header className="sticky top-0 z-40 ios-glass">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
@@ -25,11 +25,11 @@ export default function LandingPage() {
       </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-transparent">
+      <section className="relative overflow-hidden bg-gradient-to-br from-navy-800 via-navy-700 to-accent-700">
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 20% 30%, white 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
         <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:py-24">
           <div className="flex flex-col justify-center text-white">
-            <div className="mb-4 inline-flex w-fit items-center gap-2 rounded-full ios-glass/10 px-3 py-1.5 text-xs font-semibold backdrop-blur">
+            <div className="mb-4 inline-flex w-fit items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold backdrop-blur">
               <span className="flex h-2 w-2 rounded-full bg-success-400" /> Now accepting online loan applications
             </div>
             <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
@@ -43,7 +43,7 @@ export default function LandingPage() {
                 Apply for a Loan
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
-              <Link to="/login" className="btn border border-white/30 ios-glass/10 text-white backdrop-blur hover:ios-glass/20">
+              <Link to="/login" className="btn border border-white/30 bg-white/10 text-white backdrop-blur hover:bg-white/20">
                 Open an Account
               </Link>
             </div>
@@ -61,7 +61,7 @@ export default function LandingPage() {
       </section>
 
       {/* Stats bar */}
-      <section className="border-b border-ink-100 ios-glass">
+      <section className="border-b border-ink-100 bg-white">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 py-10 sm:px-6 md:grid-cols-4">
           {[
             { icon: Users, value: '1.2M+', label: 'Customers served' },
@@ -113,7 +113,7 @@ export default function LandingPage() {
       </section>
 
       {/* Why us */}
-      <section id="why" className="ios-glass py-16">
+      <section id="why" className="bg-white py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-10 text-center">
             <h2 className="text-3xl font-bold text-navy-800">Why customers choose NovaBank</h2>
@@ -151,7 +151,7 @@ export default function LandingPage() {
               { name: 'Saman B.', city: 'Galle', text: 'As a small business owner, the business loan helped me expand. The staff were responsive and professional.' },
               { name: 'Dilani K.', city: 'Kandy', text: 'The gold loan process was so quick. I applied in the morning and had the cash by afternoon.' },
             ].map((t) => (
-              <div key={t.name} className="rounded-2xl ios-glass/5 p-6 backdrop-blur">
+              <div key={t.name} className="rounded-2xl bg-white/5 p-6 backdrop-blur">
                 <Quote className="h-7 w-7 text-accent-400" />
                 <p className="mt-3 text-sm leading-relaxed text-navy-100">{t.text}</p>
                 <div className="mt-4 flex items-center gap-3 border-t border-white/10 pt-4">
@@ -188,14 +188,14 @@ export default function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="ios-glass py-16">
+      <section className="bg-white py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <div className="rounded-2xl bg-gradient-to-br from-navy-700 to-accent-600 p-10 text-center text-white shadow-cardHover">
             <h2 className="text-3xl font-bold">Ready to get started?</h2>
             <p className="mx-auto mt-2 max-w-md text-navy-100">Open an account or apply for a loan in minutes. No paperwork, no branch visit required.</p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Link to="/login" className="btn ios-glass text-navy-800 hover:bg-navy-50">Open an Account</Link>
-              <Link to="/portal/apply" className="btn border border-white/30 ios-glass/10 text-white hover:ios-glass/20">Apply for a Loan</Link>
+              <Link to="/login" className="btn bg-white text-navy-800 hover:bg-navy-50">Open an Account</Link>
+              <Link to="/portal/apply" className="btn border border-white/30 bg-white/10 text-white hover:bg-white/20">Apply for a Loan</Link>
             </div>
           </div>
         </div>

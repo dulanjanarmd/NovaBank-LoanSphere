@@ -8,7 +8,7 @@ export default function StaffLoginPage() {
   const [role, setRole] = useState('officer')
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-transparent p-6">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-navy-800 via-navy-700 to-accent-700 p-6">
       <div className="w-full max-w-md">
         <div className="mb-6 text-center"><Logo light /></div>
         <div className="rounded-2xl ios-liquid-modal p-8 shadow-2xl">

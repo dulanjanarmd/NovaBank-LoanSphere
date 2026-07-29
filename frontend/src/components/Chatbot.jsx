@@ -179,13 +179,13 @@ export default function Chatbot() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsMinimized(!isMinimized)}
-              className="rounded-lg p-1.5 text-white/80 hover:ios-glass/10 hover:text-white transition-colors"
+              className="rounded-lg p-1.5 text-white/80 hover:bg-white/10 hover:text-white transition-colors"
             >
               {isMinimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
             </button>
             <button
               onClick={() => setIsOpen(false)}
-              className="rounded-lg p-1.5 text-white/80 hover:ios-glass/10 hover:text-white transition-colors"
+              className="rounded-lg p-1.5 text-white/80 hover:bg-white/10 hover:text-white transition-colors"
             >
               <X className="h-4 w-4" />
             </button>
@@ -195,7 +195,7 @@ export default function Chatbot() {
         {!isMinimized && (
           <>
             {/* Language Selector */}
-            <div className="flex gap-2 border-b border-white/10 ios-glass/5 px-4 py-2 backdrop-blur-sm">
+            <div className="flex gap-2 border-b border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
               {Object.entries(t.languages).map(([code, name]) => (
                 <button
                   key={code}
@@ -203,7 +203,7 @@ export default function Chatbot() {
                   className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                     language === code
                       ? 'bg-accent-500 text-white'
-                      : 'text-navy-600 hover:ios-glass/20'
+                      : 'text-navy-600 hover:bg-white/20'
                   }`}
                 >
                   {name}
@@ -212,7 +212,7 @@ export default function Chatbot() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto ios-glass/30 p-4 backdrop-blur-sm">
+            <div className="flex-1 overflow-y-auto bg-white/30 p-4 backdrop-blur-sm">
               {messages.map((msg, index) => (
                 <div
                   key={index}
@@ -233,7 +233,7 @@ export default function Chatbot() {
             </div>
 
             {/* Quick Actions */}
-            <div className="flex gap-2 border-t border-white/10 ios-glass/5 px-4 py-2 backdrop-blur-sm overflow-x-auto">
+            <div className="flex gap-2 border-t border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm overflow-x-auto">
               {Object.entries(t.quickActions).map(([key, label]) => (
                 <button
                   key={key}
@@ -246,7 +246,7 @@ export default function Chatbot() {
             </div>
 
             {/* Input */}
-            <div className="flex gap-2 border-t border-white/10 ios-glass/5 px-4 py-3 backdrop-blur-sm">
+            <div className="flex gap-2 border-t border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
               <input
                 type="text"
                 value={inputValue}

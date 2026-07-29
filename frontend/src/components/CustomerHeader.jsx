@@ -55,7 +55,7 @@ export default function CustomerHeader({ active }) {
         </div>
       </div>
       {open && (
-        <nav className="border-t border-ink-100 ios-glass px-4 py-2 lg:hidden">
+        <nav className="border-t border-ink-100 bg-white px-4 py-2 lg:hidden">
           {navItems.map((item) => {
             const Icon = item.icon
             return (

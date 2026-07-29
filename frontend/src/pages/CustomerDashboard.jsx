@@ -53,7 +53,7 @@ export default function CustomerDashboard() {
   const pendingApps = applications.filter((a) => a.status === 'SUBMITTED' || a.status === 'UNDER_REVIEW')
 
   return (
-    <div className="min-h-screen bg-transparent">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <CustomerHeader active="Dashboard" />
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
         {/* Welcome */}

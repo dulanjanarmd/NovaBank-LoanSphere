@@ -18,7 +18,7 @@ export default function StaffReportsPage() {
           <p className="text-sm text-ink-500">Loan portfolio performance and branch insights.</p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 rounded-lg border border-ink-200 ios-glass p-1">
+          <div className="flex items-center gap-1 rounded-lg border border-ink-200 bg-white p-1">
             {['1m', '3m', '6m', '1y'].map((r) => (
               <button key={r} onClick={() => setRange(r)} className={`rounded-md px-3 py-1.5 text-xs font-semibold ${range === r ? 'bg-navy-700 text-white' : 'text-ink-600'}`}>{r}</button>
             ))}

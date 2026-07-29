@@ -32,7 +32,7 @@ export default function StaffShell({ role, setRole, children, active }) {
   const currentRole = staffRoles.find((r) => r.id === role)
 
   return (
-    <div className="flex min-h-screen bg-transparent">
+    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Sidebar */}
       <aside className={`fixed inset-y-0 left-0 z-40 w-64 transform ios-glass border-r border-ink-100 transition-transform lg:static lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex h-16 items-center justify-between border-b border-ink-100/50 px-5">
