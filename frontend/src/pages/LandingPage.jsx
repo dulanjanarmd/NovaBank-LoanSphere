@@ -48,39 +48,13 @@ export default function LandingPage() {
             </div>
             <div className="mt-8"><TrustBar /></div>
           </div>
-          {/* Hero card */}
+          {/* Hero logo */}
           <div className="flex items-center justify-center">
-            <div className="w-full max-w-md rotate-1 rounded-2xl bg-white p-6 shadow-2xl transition-transform hover:rotate-0">
-              <div className="flex items-center justify-between">
-                <Logo />
-                <div className="text-[10px] font-semibold uppercase tracking-wider text-ink-400">Digital Loan</div>
-              </div>
-              <div className="mt-5 rounded-xl bg-gradient-to-br from-navy-700 to-accent-600 p-5 text-white">
-                <div className="text-xs font-medium text-navy-100">Approved amount</div>
-                <div className="mt-1 text-3xl font-bold">Rs. 4,200,000</div>
-                <div className="mt-4 flex justify-between text-xs">
-                  <div><div className="text-navy-100">EMI</div><div className="font-semibold">Rs. 92,180</div></div>
-                  <div><div className="text-navy-100">Tenure</div><div className="font-semibold">60 months</div></div>
-                  <div><div className="text-navy-100">Rate</div><div className="font-semibold">11.0% p.a.</div></div>
-                </div>
-              </div>
-              <div className="mt-4 space-y-2.5">
-                {['Submitted online in 8 minutes', 'Approved by Galle branch', 'Funds released to account'].map((s, i) => (
-                  <div key={s} className="flex items-center gap-2.5 text-sm text-ink-700">
-                    <CheckCircle className="h-4.5 w-4.5 text-success-500" /> {s}
-                  </div>
-                ))}
-              </div>
-              <div className="mt-5 flex items-center justify-between border-t border-ink-100 pt-4">
-                <div className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-700 text-xs font-bold text-white">RF</div>
-                  <span className="text-xs font-medium text-ink-700">Ruwan F., Galle</span>
-                </div>
-                <div className="flex items-center gap-0.5 text-warning-500">
-                  {[1,2,3,4,5].map((i) => <Star key={i} className="h-3.5 w-3.5 fill-current" />)}
-                </div>
-              </div>
-            </div>
+            <img 
+              src="/novabank_logo.jpg" 
+              alt="NovaBank Logo" 
+              className="w-full max-w-md rounded-2xl shadow-2xl animate-float animate-pulse-glow animate-fade-in" 
+            />
           </div>
         </div>
       </section>
