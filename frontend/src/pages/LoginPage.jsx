@@ -62,7 +62,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen">
-      <div className="relative hidden w-1/2 flex-col justify-between bg-gradient-to-br from-navy-800 via-navy-700 to-accent-700 p-10 text-white lg:flex">
+      <div className="relative hidden w-1/2 flex-col justify-between bg-transparent p-10 text-white lg:flex">
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 30% 20%, white 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
         <div className="relative"><Logo light /></div>
         <div className="relative">
@@ -82,8 +82,8 @@ export default function LoginPage() {
           <div className="mb-6 lg:hidden"><Logo /></div>
           <div className="card p-8">
             <div className="mb-6 flex rounded-lg bg-ink-100 p-1">
-              <button onClick={() => setMode('login')} className={`flex-1 rounded-md py-2 text-sm font-semibold transition-colors ${mode === 'login' ? 'bg-white text-navy-800 shadow-sm' : 'text-ink-500'}`}>Sign In</button>
-              <button onClick={() => setMode('register')} className={`flex-1 rounded-md py-2 text-sm font-semibold transition-colors ${mode === 'register' ? 'bg-white text-navy-800 shadow-sm' : 'text-ink-500'}`}>Register</button>
+              <button onClick={() => setMode('login')} className={`flex-1 rounded-md py-2 text-sm font-semibold transition-colors ${mode === 'login' ? 'ios-glass text-navy-800 shadow-sm' : 'text-ink-500'}`}>Sign In</button>
+              <button onClick={() => setMode('register')} className={`flex-1 rounded-md py-2 text-sm font-semibold transition-colors ${mode === 'register' ? 'ios-glass text-navy-800 shadow-sm' : 'text-ink-500'}`}>Register</button>
             </div>
 
             <h1 className="text-2xl font-bold text-navy-800">{mode === 'login' ? 'Welcome back' : 'Create your account'}</h1>

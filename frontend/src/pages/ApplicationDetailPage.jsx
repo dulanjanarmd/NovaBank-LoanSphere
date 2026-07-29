@@ -11,7 +11,7 @@ export default function ApplicationDetailPage() {
 
   if (!app) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <div className="min-h-screen bg-transparent">
         <CustomerHeader />
         <main className="mx-auto max-w-4xl px-4 py-16 text-center">
           <AlertCircle className="mx-auto h-12 w-12 text-ink-300" />
@@ -27,7 +27,7 @@ export default function ApplicationDetailPage() {
   const totalDocs = app.documents.length
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen bg-transparent">
       <CustomerHeader active="My Applications" />
       <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
         <Link to="/portal/applications" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-ink-500 hover:text-navy-700">
@@ -143,7 +143,7 @@ export default function ApplicationDetailPage() {
 function Detail({ icon: Icon, label, value }) {
   return (
     <div className="flex items-center gap-3 rounded-lg bg-ink-50 p-3">
-      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-navy-700 shadow-sm"><Icon className="h-4.5 w-4.5" /></div>
+      <div className="flex h-9 w-9 items-center justify-center rounded-lg ios-glass text-navy-700 shadow-sm"><Icon className="h-4.5 w-4.5" /></div>
       <div><div className="text-xs text-ink-500">{label}</div><div className="text-sm font-semibold text-navy-800">{value}</div></div>
     </div>
   )
