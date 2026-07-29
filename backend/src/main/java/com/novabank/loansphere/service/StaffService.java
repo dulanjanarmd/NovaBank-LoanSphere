@@ -22,6 +22,7 @@ public class StaffService {
     private final CustomerRepository customerRepository;
     private final LoanProductRepository productRepository;
     private final CreditAssessmentRepository creditAssessmentRepository;
+    private final NotificationService notificationService;
 
     public List<LoanApplicationResponse> getApplicationsByStatus(String status) {
         List<LoanApplication> applications;
@@ -47,7 +48,10 @@ public class StaffService {
                 .orElseThrow(() -> new RuntimeException("Application not found"));
 
         // Maker-checker: prevent self-approval if already processed by same person
-        // (simplified: just check role sequence)
+        Optional<WorkflowApproval> lastApproval = approvalRepository.findFirstByApplicationApplicationIdOrderByApprovalIdDesc(request.getApplicationId());
+        if (lastApproval.isPresent() && lastApproval.get().getApprover().equals(approverName)) {
+            throw new RuntimeException("Maker-checker violation: You cannot approve an application you recently processed.");
+        }
 
         // Create workflow approval record
         WorkflowApproval approval = new WorkflowApproval();
@@ -83,6 +87,14 @@ public class StaffService {
 
         application.setUpdatedAt(LocalDateTime.now());
         LoanApplication updatedApplication = applicationRepository.save(application);
+        
+        // Trigger notification
+        if (application.getCustomer() != null) {
+            String title = "Loan Application Update";
+            String body = "Your loan application " + application.getApplicationRef() + " status is now: " + application.getStatus().replace("_", " ");
+            notificationService.createNotification(application.getCustomer().getCustomerId(), title, body, "LOAN_UPDATE");
+        }
+        
         return mapToResponse(updatedApplication);
     }
 
@@ -98,6 +110,14 @@ public class StaffService {
         application.setStatus("DISBURSED");
         application.setUpdatedAt(LocalDateTime.now());
         LoanApplication updated = applicationRepository.save(application);
+        
+        // Trigger notification
+        if (application.getCustomer() != null) {
+            String title = "Loan Disbursed";
+            String body = "Your loan application " + application.getApplicationRef() + " has been successfully disbursed to account " + accountNumber + ".";
+            notificationService.createNotification(application.getCustomer().getCustomerId(), title, body, "DISBURSEMENT");
+        }
+        
         return mapToResponse(updated);
     }
 

@@ -10,4 +10,5 @@ import java.util.List;
 public interface WorkflowApprovalRepository extends JpaRepository<WorkflowApproval, Long> {
     List<WorkflowApproval> findByApplicationApplicationId(Long applicationId);
     List<WorkflowApproval> findByRole(String role);
+    Optional<WorkflowApproval> findFirstByApplicationApplicationIdOrderByApprovalIdDesc(Long applicationId);
 }

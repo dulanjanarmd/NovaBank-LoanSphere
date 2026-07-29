@@ -24,6 +24,7 @@ public class LoanService {
     private final LoanProductRepository productRepository;
     private final CustomerRepository customerRepository;
     private final CreditAssessmentRepository assessmentRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public LoanApplication submitApplication(Long customerId, Long productId, String loanType, BigDecimal amount, int tenureMonths) {
@@ -50,6 +51,13 @@ public class LoanService {
 
         // Auto-run credit assessment simulation
         runCreditAssessment(savedApp);
+        
+        // Trigger notification
+        if (customer != null) {
+            String title = "Loan Application Submitted";
+            String body = "Your loan application " + savedApp.getApplicationRef() + " has been successfully submitted and is under review.";
+            notificationService.createNotification(customer.getCustomerId(), title, body, "LOAN_UPDATE");
+        }
         
         return savedApp;
     }
