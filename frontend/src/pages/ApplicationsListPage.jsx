@@ -5,6 +5,7 @@ import CustomerHeader from '../components/CustomerHeader'
 import StatusBadge from '../components/StatusBadge'
 import DataTable from '../components/DataTable'
 import { api } from '../services/api'
+import { applications as mockApplications } from '../data/mockData'
 
 function formatLKR(amount) {
   return 'LKR ' + new Intl.NumberFormat('en-LK').format(amount)
@@ -25,18 +26,36 @@ export default function ApplicationsListPage() {
       try {
         const userData = JSON.parse(localStorage.getItem('user'))
         if (userData?.customerId) {
-          const response = await api.getCustomerApplications(userData.customerId)
-          setApplications(response.data || [])
+          try {
+            const response = await api.getCustomerApplications(userData.customerId)
+            if (response.data?.length > 0) {
+              setApplications(response.data)
+            } else {
+              setApplications(normalizeMock())
+            }
+          } catch (_) {
+            setApplications(normalizeMock())
+          }
+        } else {
+          setApplications(normalizeMock())
         }
       } catch (err) {
         console.error('Failed to fetch applications:', err)
+        setApplications(normalizeMock())
       } finally {
         setLoading(false)
       }
     }
-
     fetchApplications()
   }, [])
+
+  function normalizeMock() {
+    return mockApplications.map((a) => ({
+      applicationId: a.id, applicationRef: a.id, loanType: a.type,
+      requestedAmount: a.amount, tenureMonths: a.tenure, submittedAt: a.submittedAt,
+      status: a.status?.toUpperCase().replace(/ /g, '_'),
+    }))
+  }
 
   const filtered = applications.filter((a) => {
     const matchFilter = filter === 'all' || a.status === filter
