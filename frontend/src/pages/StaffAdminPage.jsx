@@ -1,19 +1,16 @@
 import { useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
 import { Plus, Edit, Trash2, ToggleLeft, ToggleRight, Save } from 'lucide-react'
 import StaffShell from '../components/StaffShell'
 import { loanProductsAdmin, formatLKR } from '../data/mockData'
 
 export default function StaffAdminPage() {
-  const [searchParams] = useSearchParams()
-  const [role, setRole] = useState(searchParams.get('role') || 'admin')
   const [products, setProducts] = useState(loanProductsAdmin)
   const [editing, setEditing] = useState(null)
 
   const toggleActive = (id) => setProducts((p) => p.map((x) => (x.id === id ? { ...x, active: !x.active } : x)))
 
   return (
-    <StaffShell role={role} setRole={setRole} active="Product & Rates">
+    <StaffShell active="Product & Rates">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-navy-800">Product & Rate Management</h1>
