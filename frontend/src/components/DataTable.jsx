@@ -55,7 +55,7 @@ export default function DataTable({ columns, rows, emptyMessage = 'No records fo
             </tr>
           ) : (
             sortedRows.map((row, idx) => (
-              <tr key={row.id || idx} className="border-b border-ink-50/50 ios-liquid-dropdown-item transition-colors">
+              <tr key={row.id || idx} className="border-b border-ink-50/50 hover:bg-ink-50 transition-colors">
                 {columns.map((col) => (
                   <td key={col.key} className={`px-4 py-3 text-ink-700 ${col.align === 'right' ? 'text-right' : ''}`}>
                     {col.render ? col.render(row) : row[col.key]}

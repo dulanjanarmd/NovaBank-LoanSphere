@@ -89,12 +89,12 @@ export default function StaffShell({ role, setRole, children, active }) {
               <ChevronDown className="h-4 w-4" />
             </button>
             {roleMenu && (
-              <div className="absolute right-0 top-full mt-1 w-64 rounded-xl ios-liquid-dropdown p-1.5">
+              <div className="absolute right-0 top-full mt-1 w-64 rounded-xl bg-white shadow-lg border border-ink-100 p-1.5">
                 <div className="px-2 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-ink-400">Switch role</div>
                 {staffRoles.map((r) => (
                   <button
                     key={r.id}
-                    className={`ios-liquid-dropdown-item flex w-full items-start gap-2 rounded-lg px-2 py-2 text-left text-sm ${role === r.id ? 'bg-accent-100' : ''}`}
+                    className={`hover:bg-ink-50 flex w-full items-start gap-2 rounded-lg px-2 py-2 text-left text-sm ${role === r.id ? 'bg-accent-100' : ''}`}
                     onClick={() => { setRole(r.id); setRoleMenu(false) }}
                   >
                     <div>

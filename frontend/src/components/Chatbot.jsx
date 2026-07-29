@@ -151,7 +151,7 @@ export default function Chatbot() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full ios-liquid-btn-primary shadow-lg transition-transform hover:scale-110"
+        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-accent-500 text-white shadow-lg transition-transform hover:scale-110 hover:bg-accent-600"
         title="Chat with us"
       >
         <MessageCircle className="h-6 w-6 text-white" />
@@ -161,7 +161,7 @@ export default function Chatbot() {
 
   return (
     <div className={`fixed bottom-6 right-6 z-50 w-full max-w-sm transition-all ${isMinimized ? 'h-14' : 'h-[500px]'}`}>
-      <div className="flex h-full flex-col rounded-2xl ios-liquid-modal overflow-hidden shadow-2xl">
+      <div className="flex h-full flex-col rounded-2xl bg-white border border-ink-100 overflow-hidden shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-white/20 bg-navy-700/50 px-4 py-3 backdrop-blur-md">
           <div className="flex items-center gap-3">
@@ -222,7 +222,7 @@ export default function Chatbot() {
                     className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm ${
                       msg.role === 'user'
                         ? 'bg-accent-500 text-white'
-                        : 'ios-liquid-card text-navy-800'
+                        : 'bg-white shadow-sm border border-ink-100 text-navy-800'
                     }`}
                   >
                     {msg.text}
@@ -238,7 +238,7 @@ export default function Chatbot() {
                 <button
                   key={key}
                   onClick={() => handleQuickAction(key)}
-                  className="whitespace-nowrap rounded-lg ios-liquid-dropdown-item px-3 py-1.5 text-xs font-medium text-navy-700 hover:bg-accent-500/20 transition-colors"
+                  className="whitespace-nowrap rounded-lg hover:bg-ink-50 px-3 py-1.5 text-xs font-medium text-navy-700 transition-colors"
                 >
                   {label}
                 </button>
@@ -253,12 +253,12 @@ export default function Chatbot() {
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder={t.placeholder}
-                className="flex-1 rounded-lg ios-liquid-input px-4 py-2 text-sm text-navy-800 placeholder-navy-400 focus:outline-none"
+                className="flex-1 rounded-lg bg-white border border-ink-200 px-4 py-2 text-sm text-navy-800 placeholder-navy-400 focus:outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
               />
               <button
                 onClick={handleSend}
                 disabled={!inputValue.trim()}
-                className="rounded-lg ios-liquid-btn-primary px-4 py-2 text-sm font-medium text-white disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                className="rounded-lg bg-accent-500 hover:bg-accent-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
                 <Send className="h-4 w-4" />
               </button>

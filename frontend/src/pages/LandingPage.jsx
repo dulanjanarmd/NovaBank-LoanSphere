@@ -8,9 +8,19 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100">
       {/* Header */}
-      <header className="sticky top-0 z-40 ios-glass">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-          <Logo />
+      <div className="sticky top-4 z-40 mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-[1600px]">
+        <header className="bg-white rounded-2xl border border-ink-100 shadow-sm">
+          <div className="mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Link to="/" className="flex items-center group">
+            <div className="leading-tight">
+              <div className="text-xl font-bold tracking-tight text-navy-800">
+                NovaBank
+              </div>
+              <div className="text-[11px] font-medium text-navy-800">
+                LoanSphere
+              </div>
+            </div>
+          </Link>
           <nav className="hidden items-center gap-6 md:flex">
             <a href="#products" className="text-sm font-medium text-ink-600 hover:text-navy-700">Loans</a>
             <a href="#why" className="text-sm font-medium text-ink-600 hover:text-navy-700">Why NovaBank</a>
@@ -21,14 +31,17 @@ export default function LandingPage() {
             <Link to="/login" className="btn-ghost">Sign In</Link>
             <Link to="/login" className="btn-primary">Open Account</Link>
           </div>
-        </div>
-      </header>
+          </div>
+        </header>
+      </div>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-navy-800 via-navy-700 to-accent-700">
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 20% 30%, white 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
-        <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:py-24">
-          <div className="flex flex-col justify-center text-white">
+      <section className="bg-white pt-8 pb-12">
+        <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-[1600px]">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy-800 via-navy-700 to-accent-700 shadow-2xl">
+            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 20% 30%, white 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+            <div className="relative grid gap-10 px-8 py-12 sm:px-12 lg:grid-cols-2 lg:py-20">
+              <div className="flex flex-col justify-center text-white">
             <div className="mb-4 inline-flex w-fit items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold backdrop-blur">
               <span className="flex h-2 w-2 rounded-full bg-success-400" /> Now accepting online loan applications
             </div>
@@ -57,6 +70,8 @@ export default function LandingPage() {
               className="w-full max-w-md rounded-2xl shadow-2xl animate-float animate-pulse-glow animate-fade-in" 
             />
           </div>
+          </div>
+        </div>
         </div>
       </section>
 
@@ -139,8 +154,10 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="bg-navy-800 py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+      <section id="testimonials" className="bg-white py-12">
+        <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-[1600px]">
+          <div className="rounded-3xl bg-navy-800 py-16 px-4 sm:px-6 lg:px-8 shadow-2xl">
+            <div className="mx-auto max-w-7xl">
           <div className="mb-10 text-center">
             <h2 className="text-3xl font-bold text-white">Trusted by thousands across the island</h2>
             <p className="mt-2 text-navy-200">Real stories from real customers.</p>
@@ -161,7 +178,9 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
-        </div>
+              </div>
+            </div>
+          </div>
       </section>
 
       {/* FAQ */}
