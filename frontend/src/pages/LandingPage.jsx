@@ -6,7 +6,7 @@ import { loanProducts, formatLKR } from '../data/mockData'
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100">
+    <div className="min-h-screen bg-white">
       {/* Header */}
       <div className="sticky top-4 z-40 mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-[1600px]">
         <header className="bg-white rounded-2xl border border-ink-100 shadow-sm">
@@ -230,21 +230,21 @@ export default function LandingPage() {
               <div className="mt-4"><TrustBar /></div>
             </div>
             {[
-              { title: 'Products', links: ['Personal Loan', 'Housing Loan', 'Auto Loan', 'Savings Account'] },
-              { title: 'Company', links: ['About us', 'Branches', 'Careers', 'Newsroom'] },
-              { title: 'Support', links: ['Help center', 'Contact us', 'Security', 'Complaints'] },
+              { title: 'Products', links: [{ n: 'Personal Loan', p: '/portal/apply' }, { n: 'Housing Loan', p: '/portal/apply' }, { n: 'Auto Loan', p: '/portal/apply' }, { n: 'Savings Account', p: '/portal/open-account' }] },
+              { title: 'Company', links: [{ n: 'About us', p: '/login' }, { n: 'Branches', p: '/login' }, { n: 'Careers', p: '/login' }, { n: 'Newsroom', p: '/login' }] },
+              { title: 'Support', links: [{ n: 'Help center', p: '/login' }, { n: 'Contact us', p: '/login' }, { n: 'Security', p: '/login' }, { n: 'Complaints', p: '/login' }] },
             ].map((col) => (
               <div key={col.title}>
                 <div className="mb-3 text-sm font-semibold text-navy-800">{col.title}</div>
                 <ul className="space-y-2">
-                  {col.links.map((l) => <li key={l}><a href="#" className="text-sm text-ink-500 hover:text-navy-700">{l}</a></li>)}
+                  {col.links.map((l) => <li key={l.n}><Link to={l.p} className="text-sm text-ink-500 hover:text-navy-700">{l.n}</Link></li>)}
                 </ul>
               </div>
             ))}
           </div>
           <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-ink-200 pt-6 text-xs text-ink-500 sm:flex-row">
             <div>© 2024 NovaBank PLC. Regulated by the Central Bank of Sri Lanka.</div>
-            <div className="flex gap-4"><a href="#" className="hover:text-navy-700">Privacy</a><a href="#" className="hover:text-navy-700">Terms</a><a href="#" className="hover:text-navy-700">Cookies</a></div>
+            <div className="flex gap-4"><Link to="/login" className="hover:text-navy-700">Privacy</Link><Link to="/login" className="hover:text-navy-700">Terms</Link><Link to="/login" className="hover:text-navy-700">Cookies</Link></div>
           </div>
         </div>
       </footer>

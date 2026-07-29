@@ -1,4 +1,4 @@
-﻿import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Mail, Lock, User, Phone, Building2, ArrowRight, ShieldCheck, CheckCircle } from 'lucide-react'
 import Logo, { TrustBar } from '../components/Logo'
@@ -64,14 +64,16 @@ export default function LoginPage() {
     <div className="flex min-h-screen">
       <div className="relative hidden w-1/2 flex-col justify-between bg-gradient-to-br from-navy-800 via-navy-700 to-accent-700 p-10 text-white lg:flex">
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 30% 20%, white 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
-        <div className="relative"><Logo light /></div>
-        <div className="relative">
-          <h2 className="text-3xl font-bold leading-tight">Welcome to NovaBank LoanSphere.</h2>
-          <p className="mt-3 max-w-md text-navy-100">Open accounts, apply for loans and track every step - all in one secure place.</p>
-          <div className="mt-8 space-y-3">
-            {['Bank-grade 256-bit encryption', 'Two-factor authentication', 'CBSL-regulated & ISO 27001 certified'].map((t) => (
-              <div key={t} className="flex items-center gap-2.5 text-sm text-navy-100"><CheckCircle className="h-5 w-5 text-success-400" /> {t}</div>
-            ))}
+        <div>
+          <div className="relative mb-24"><Logo light /></div>
+          <div className="relative">
+            <h2 className="text-3xl font-bold leading-tight">Welcome to NovaBank LoanSphere.</h2>
+            <p className="mt-3 max-w-md text-navy-100">Open accounts, apply for loans and track every step - all in one secure place.</p>
+            <div className="mt-8 space-y-3">
+              {['Bank-grade 256-bit encryption', 'Two-factor authentication', 'CBSL-regulated & ISO 27001 certified'].map((t) => (
+                <div key={t} className="flex items-center gap-2.5 text-sm text-navy-100"><CheckCircle className="h-5 w-5 text-success-400" /> {t}</div>
+              ))}
+            </div>
           </div>
         </div>
         <div className="relative"><TrustBar /></div>
