@@ -5,6 +5,7 @@ import com.novabank.loansphere.dto.ApprovalRequest;
 import com.novabank.loansphere.dto.LoanApplicationResponse;
 import com.novabank.loansphere.service.StaffService;
 import lombok.RequiredArgsConstructor;
+import lombok.Data;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -60,4 +61,24 @@ public class StaffController {
             return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
         }
     }
+
+    @PostMapping("/applications/{applicationId}/disburse")
+    public ResponseEntity<ApiResponse<LoanApplicationResponse>> processDisbursement(
+            @PathVariable Long applicationId,
+            @RequestBody DisbursementRequest request,
+            Authentication authentication) {
+        try {
+            String officerName = authentication.getName();
+            LoanApplicationResponse response = staffService.disburse(applicationId, request.getAccountNumber(), officerName);
+            return ResponseEntity.ok(ApiResponse.success("Application disbursed successfully", response));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
+        }
+    }
 }
+
+@Data
+class DisbursementRequest {
+    private String accountNumber;
+}
+

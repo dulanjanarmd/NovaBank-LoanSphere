@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { Wallet, TrendingUp, Clock, ArrowUpRight, Plus, FileText, CreditCard, Bell, CheckCircle, AlertCircle } from 'lucide-react'
+import { Wallet, TrendingUp, Clock, ArrowUpRight, Plus, FileText, CreditCard, Bell, CheckCircle, AlertCircle, Volume2, VolumeX } from 'lucide-react'
 import CustomerHeader from '../components/CustomerHeader'
 import StatusBadge from '../components/StatusBadge'
 import Chatbot from '../components/Chatbot'
@@ -21,6 +21,7 @@ export default function CustomerDashboard() {
   const [applications, setApplications] = useState([])
   const [notifications, setNotifications] = useState([])
   const [user, setUser] = useState(null)
+  const [voiceEnabled, setVoiceEnabled] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,6 +66,53 @@ export default function CustomerDashboard() {
     fetchData()
   }, [])
 
+  // Voice welcome message
+  useEffect(() => {
+    if (!loading && voiceEnabled && user) {
+      const hour = new Date().getHours()
+      const timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
+      const welcomeMessage = `${timeGreeting} and welcome to NovaBank, ${user.fullName || 'Customer'}. Your dashboard is now ready.`
+      
+      // Check if browser supports speech synthesis
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(welcomeMessage)
+        utterance.rate = 0.9 // Slightly slower for better clarity
+        utterance.pitch = 1
+        utterance.volume = 1
+        
+        // Try to use a natural English voice
+        const voices = window.speechSynthesis.getVoices()
+        const englishVoice = voices.find(voice => voice.lang.startsWith('en'))
+        if (englishVoice) {
+          utterance.voice = englishVoice
+        }
+        
+        // Small delay to ensure page is fully loaded
+        setTimeout(() => {
+          window.speechSynthesis.speak(utterance)
+        }, 500)
+      }
+    }
+  }, [loading, voiceEnabled, user])
+
+  const toggleVoice = () => {
+    setVoiceEnabled(!voiceEnabled)
+    if (!voiceEnabled) {
+      // If enabling, trigger welcome message again
+      const hour = new Date().getHours()
+      const timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
+      const welcomeMessage = `${timeGreeting} and welcome to NovaBank, ${user?.fullName || 'Customer'}. Your dashboard is now ready.`
+      
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(welcomeMessage)
+        utterance.rate = 0.9
+        utterance.pitch = 1
+        utterance.volume = 1
+        window.speechSynthesis.speak(utterance)
+      }
+    }
+  }
+
   function normalizeMockAccounts() {
     return customerAccounts.map((a) => ({
       accountId: a.id, productName: a.type, accountNumber: a.id, balance: a.balance, createdAt: a.opened
@@ -91,7 +139,7 @@ export default function CustomerDashboard() {
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-slate-100 to-gray-100">
       <CustomerHeader active="Dashboard" />
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
         {/* Welcome */}
@@ -101,6 +149,14 @@ export default function CustomerDashboard() {
             <p className="text-sm text-ink-500">Here's a snapshot of your accounts and applications.</p>
           </div>
           <div className="flex gap-2">
+            <button 
+              onClick={toggleVoice}
+              className={`btn-outline ${voiceEnabled ? 'bg-accent-50 text-accent-700 border-accent-300' : ''}`}
+              title={voiceEnabled ? 'Disable voice assistant' : 'Enable voice assistant'}
+            >
+              {voiceEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+              {voiceEnabled ? 'Voice On' : 'Voice Off'}
+            </button>
             <Link to="/portal/open-account" className="btn-outline"><Plus className="h-4 w-4" /> Open Account</Link>
             <Link to="/portal/apply" className="btn-primary"><CreditCard className="h-4 w-4" /> Apply for Loan</Link>
           </div>

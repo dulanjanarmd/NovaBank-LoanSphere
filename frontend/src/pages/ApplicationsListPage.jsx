@@ -75,7 +75,7 @@ export default function ApplicationsListPage() {
   const filters = ['all', 'pending_docs', 'under_review', 'compliance', 'manager_approval', 'approved']
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-slate-100 to-gray-100">
       <CustomerHeader active="My Applications" />
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
