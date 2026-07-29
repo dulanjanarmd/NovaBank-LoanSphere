@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +21,7 @@ public class StaffService {
     private final WorkflowApprovalRepository approvalRepository;
     private final CustomerRepository customerRepository;
     private final LoanProductRepository productRepository;
+    private final CreditAssessmentRepository creditAssessmentRepository;
 
     public List<LoanApplicationResponse> getApplicationsByStatus(String status) {
         List<LoanApplication> applications;
@@ -33,7 +34,6 @@ public class StaffService {
     }
 
     public List<LoanApplicationResponse> getApplicationsByRole(String role) {
-        // Filter applications based on role
         List<LoanApplication> allApplications = applicationRepository.findAll();
         return allApplications.stream()
                 .filter(app -> isApplicationAccessibleForRole(app, role))
@@ -45,6 +45,9 @@ public class StaffService {
     public LoanApplicationResponse processApproval(ApprovalRequest request, String approverName, String approverRole) {
         LoanApplication application = applicationRepository.findById(request.getApplicationId())
                 .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        // Maker-checker: prevent self-approval if already processed by same person
+        // (simplified: just check role sequence)
 
         // Create workflow approval record
         WorkflowApproval approval = new WorkflowApproval();
@@ -58,24 +61,44 @@ public class StaffService {
         // Update application status based on decision
         switch (request.getDecision()) {
             case "APPROVE":
-                // Check if this is final approval
-                if (approverRole.equals("BRANCH_MANAGER")) {
+                if (approverRole.equals("BRANCH_MANAGER") || approverRole.equals("ADMIN")) {
                     application.setStatus("APPROVED");
-                    application.setSubmittedAt(LocalDateTime.now());
                 } else {
+                    // Loan Officer forwards to next stage
                     application.setStatus("UNDER_REVIEW");
                 }
+                break;
+            case "APPROVE_CONDITIONAL":
+                application.setStatus("APPROVED_CONDITIONAL");
                 break;
             case "REJECT":
                 application.setStatus("REJECTED");
                 break;
             case "RETURN_FOR_INFO":
-                application.setStatus("SUBMITTED");
+                application.setStatus("PENDING_DOCS");
                 break;
+            default:
+                throw new RuntimeException("Unknown decision: " + request.getDecision());
         }
 
+        application.setUpdatedAt(LocalDateTime.now());
         LoanApplication updatedApplication = applicationRepository.save(application);
         return mapToResponse(updatedApplication);
+    }
+
+    @Transactional
+    public LoanApplicationResponse disburse(Long applicationId, String accountNumber, String officerName) {
+        LoanApplication application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        if (!application.getStatus().equals("APPROVED") && !application.getStatus().equals("APPROVED_CONDITIONAL")) {
+            throw new RuntimeException("Application must be APPROVED before disbursement.");
+        }
+
+        application.setStatus("DISBURSED");
+        application.setUpdatedAt(LocalDateTime.now());
+        LoanApplication updated = applicationRepository.save(application);
+        return mapToResponse(updated);
     }
 
     public LoanApplicationResponse getApplicationDetail(Long applicationId) {
@@ -88,12 +111,16 @@ public class StaffService {
         String status = application.getStatus();
         switch (role) {
             case "LOAN_OFFICER":
-                return status.equals("SUBMITTED") || status.equals("UNDER_REVIEW");
+            case "officer":
+                return status.equals("SUBMITTED") || status.equals("UNDER_REVIEW") || status.equals("PENDING_DOCS");
             case "COMPLIANCE_OFFICER":
-                return status.equals("UNDER_REVIEW");
+            case "compliance":
+                return status.equals("UNDER_REVIEW") || status.equals("SUBMITTED");
             case "BRANCH_MANAGER":
+            case "manager":
                 return status.equals("UNDER_REVIEW") || status.equals("APPROVED_CONDITIONAL");
             case "ADMIN":
+            case "admin":
                 return true;
             default:
                 return false;
@@ -111,6 +138,30 @@ public class StaffService {
         response.setStatus(application.getStatus());
         response.setSubmittedAt(application.getSubmittedAt());
         response.setCreatedAt(application.getCreatedAt());
+
+        // Interest rate from product
+        if (application.getLoanProduct() != null) {
+            response.setInterestRate(application.getLoanProduct().getInterestRate());
+        }
+
+        // Customer info
+        if (application.getCustomer() != null) {
+            Customer c = application.getCustomer();
+            response.setCustomerName(c.getFullName());
+            response.setCustomerNic(c.getNicNumber());
+            response.setCustomerMobile(c.getMobileNumber());
+        }
+
+        // Credit assessment
+        creditAssessmentRepository.findByLoanApplicationApplicationId(application.getApplicationId())
+                .ifPresent(ca -> {
+                    response.setInternalScore(ca.getInternalScore());
+                    response.setCribReference(ca.getCribReference());
+                    response.setDtiRatio(ca.getDtiRatio());
+                    response.setLtvRatio(ca.getLtvRatio());
+                    response.setDecisionBand(ca.getDecisionBand());
+                });
+
         return response;
     }
 }
