@@ -158,6 +158,7 @@ public class StaffService {
         response.setStatus(application.getStatus());
         response.setSubmittedAt(application.getSubmittedAt());
         response.setCreatedAt(application.getCreatedAt());
+        response.setSlaBreached(application.isSlaBreached());
 
         // Interest rate from product
         if (application.getLoanProduct() != null) {

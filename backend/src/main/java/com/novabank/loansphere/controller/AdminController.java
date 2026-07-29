@@ -3,6 +3,10 @@ package com.novabank.loansphere.controller;
 import com.novabank.loansphere.dto.ApiResponse;
 import com.novabank.loansphere.model.LoanProduct;
 import com.novabank.loansphere.repository.LoanProductRepository;
+import com.novabank.loansphere.model.User;
+import com.novabank.loansphere.repository.UserRepository;
+import com.novabank.loansphere.model.AuditLog;
+import com.novabank.loansphere.repository.AuditLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +20,8 @@ import java.util.List;
 public class AdminController {
 
     private final LoanProductRepository productRepository;
+    private final UserRepository userRepository;
+    private final AuditLogRepository auditLogRepository;
 
     @GetMapping("/products")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -41,5 +47,17 @@ public class AdminController {
         
         LoanProduct saved = productRepository.save(existing);
         return ResponseEntity.ok(ApiResponse.success("Product updated successfully", saved));
+    }
+
+    @GetMapping("/users")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<ApiResponse<List<User>>> getAllUsers() {
+        return ResponseEntity.ok(ApiResponse.success(userRepository.findAll()));
+    }
+
+    @GetMapping("/audit-logs")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<ApiResponse<List<AuditLog>>> getAuditLogs() {
+        return ResponseEntity.ok(ApiResponse.success(auditLogRepository.findTop100ByOrderByTimestampDesc()));
     }
 }

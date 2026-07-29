@@ -32,4 +32,14 @@ public class LoanApplicationResponse {
     // Branch / officer
     private String branch;
     private String assignedOfficer;
+
+    private boolean slaBreached;
+
+    public boolean isSlaBreached() {
+        return slaBreached;
+    }
+
+    public void setSlaBreached(boolean slaBreached) {
+        this.slaBreached = slaBreached;
+    }
 }

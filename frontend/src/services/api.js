@@ -198,6 +198,14 @@ class ApiService {
       body: JSON.stringify(productData),
     })
   }
+
+  async getAdminUsers() {
+    return this.request('/admin/users')
+  }
+
+  async getAdminAuditLogs() {
+    return this.request('/admin/audit-logs')
+  }
 }
 
 export const api = new ApiService()

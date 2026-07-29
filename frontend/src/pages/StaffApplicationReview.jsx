@@ -82,7 +82,8 @@ export default function StaffApplicationReview() {
       cribReference: a.cribReference || 'Pending',
       dtiRatio: a.dtiRatio || 0,
       ltvRatio: a.ltvRatio || 0,
-      decisionBand: a.decisionBand || 'Pending'
+      decisionBand: a.decisionBand || 'Pending',
+      slaBreached: a.slaBreached || false
     }
   }
 
@@ -285,6 +286,17 @@ export default function StaffApplicationReview() {
               </div>
             ) : (
               <>
+                {/* SLA Breach Warning */}
+                {app.slaBreached && (
+                  <div className="mb-4 flex items-start gap-3 rounded-lg border border-danger-200 bg-danger-50 p-4 text-danger-800">
+                    <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0" />
+                    <div>
+                      <h4 className="text-sm font-bold">SLA Escalation</h4>
+                      <p className="text-xs">This application has exceeded the 3-day turnaround SLA. Please prioritize processing.</p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Risk assessment */}
                 <div className="mb-4 rounded-xl bg-ink-50 p-4">
                   <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-ink-400">Risk Assessment</div>

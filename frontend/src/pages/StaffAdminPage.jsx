@@ -6,6 +6,8 @@ import { api } from '../services/api'
 
 export default function StaffAdminPage() {
   const [products, setProducts] = useState([])
+  const [users, setUsers] = useState([])
+  const [auditLogs, setAuditLogs] = useState([])
   const [editing, setEditing] = useState(null)
   const [editForm, setEditForm] = useState({})
   const [loading, setLoading] = useState(true)
@@ -13,7 +15,27 @@ export default function StaffAdminPage() {
 
   useEffect(() => {
     fetchProducts()
+    fetchUsers()
+    fetchAuditLogs()
   }, [])
+
+  const fetchUsers = async () => {
+    try {
+      const res = await api.getAdminUsers()
+      if (res.data) setUsers(res.data)
+    } catch (e) {
+      console.error('Failed to load users', e)
+    }
+  }
+
+  const fetchAuditLogs = async () => {
+    try {
+      const res = await api.getAdminAuditLogs()
+      if (res.data) setAuditLogs(res.data)
+    } catch (e) {
+      console.error('Failed to load audit logs', e)
+    }
+  }
 
   const fetchProducts = async () => {
     try {
@@ -139,28 +161,60 @@ export default function StaffAdminPage() {
       </div>
       )}
 
-      {/* User management preview */}
+      {/* User management */}
       <div className="mt-8 card p-6">
-        <h2 className="mb-4 font-bold text-navy-800">Staff Members</h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="font-bold text-navy-800">Staff Members</h2>
+          <button className="btn-outline text-xs py-1"><Plus className="h-3 w-3 mr-1" /> Add Staff</button>
+        </div>
         <div className="space-y-2">
-          {[
-            { name: 'Nimal Silva', role: 'Loan Officer', branch: 'Colombo 01', email: 'nimal.silva@novabank.lk' },
-            { name: 'Ruwan Fernando', role: 'Loan Officer', branch: 'Galle', email: 'ruwan.fernando@novabank.lk' },
-            { name: 'Tharaka Jayasuriya', role: 'Branch Manager', branch: 'Kandy', email: 'tharaka.j@novabank.lk' },
-            { name: 'Anusha Perera', role: 'Compliance Officer', branch: 'Head Office', email: 'anusha.p@novabank.lk' },
-          ].map((u) => (
-            <div key={u.email} className="flex items-center justify-between rounded-lg border border-ink-100 p-3">
+          {users.length > 0 ? users.map((u) => (
+            <div key={u.userId} className="flex items-center justify-between rounded-lg border border-ink-100 p-3">
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-500 text-sm font-bold text-white">{u.name[0]}</div>
-                <div><div className="text-sm font-semibold text-navy-800">{u.name}</div><div className="text-xs text-ink-500">{u.email}</div></div>
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-500 text-sm font-bold text-white">{u.fullName?.[0] || 'U'}</div>
+                <div><div className="text-sm font-semibold text-navy-800">{u.fullName}</div><div className="text-xs text-ink-500">{u.username}</div></div>
               </div>
               <div className="flex items-center gap-3">
-                <span className="chip bg-ink-100 text-ink-600">{u.role}</span>
+                <span className="chip bg-ink-100 text-ink-600">{u.role.replace('ROLE_', '')}</span>
                 <span className="text-xs text-ink-500">{u.branch}</span>
+                <span className={`chip ${u.active ? 'bg-success-50 text-success-700' : 'bg-danger-50 text-danger-700'}`}>{u.active ? 'Active' : 'Disabled'}</span>
                 <button className="btn-ghost p-1.5"><Edit className="h-3.5 w-3.5" /></button>
               </div>
             </div>
-          ))}
+          )) : <div className="text-sm text-ink-500">No staff members found.</div>}
+        </div>
+      </div>
+
+      {/* Audit Logs */}
+      <div className="mt-8 card p-6">
+        <h2 className="mb-4 font-bold text-navy-800">System Audit Logs</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-ink-100 text-xs font-semibold text-ink-500">
+              <tr>
+                <th className="pb-3 pr-4">Timestamp</th>
+                <th className="pb-3 pr-4">User</th>
+                <th className="pb-3 pr-4">Action</th>
+                <th className="pb-3 pr-4">Entity Ref</th>
+                <th className="pb-3">Details</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-ink-100 text-navy-800">
+              {auditLogs.length > 0 ? auditLogs.map((log) => (
+                <tr key={log.auditId} className="hover:bg-ink-50">
+                  <td className="py-3 pr-4 whitespace-nowrap text-xs text-ink-500">{new Date(log.timestamp).toLocaleString()}</td>
+                  <td className="py-3 pr-4 font-medium">{log.userId}</td>
+                  <td className="py-3 pr-4"><span className="chip bg-accent-50 text-accent-700">{log.actionType}</span></td>
+                  <td className="py-3 pr-4 font-mono text-xs text-ink-500">{log.entityReference}</td>
+                  <td className="py-3">{log.details}</td>
+                </tr>
+              )) : (
+                <tr>
+                  <td colSpan="5" className="py-4 text-center text-ink-500">No audit logs available.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </StaffShell>
