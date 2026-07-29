@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,8 @@ public class StaffService {
     private final LoanProductRepository productRepository;
     private final CreditAssessmentRepository creditAssessmentRepository;
     private final NotificationService notificationService;
+    private final CbsIntegrationService cbsIntegrationService;
+    private final SmsEmailGatewayService smsEmailGatewayService;
 
     public List<LoanApplicationResponse> getApplicationsByStatus(String status) {
         List<LoanApplication> applications;
@@ -107,15 +110,38 @@ public class StaffService {
             throw new RuntimeException("Application must be APPROVED before disbursement.");
         }
 
+        // Step 1: Verify account exists in CBS before posting
+        Map<String, Object> accountVerification = cbsIntegrationService.verifyAccount(accountNumber);
+        if (!(Boolean) accountVerification.getOrDefault("verified", false)) {
+            throw new RuntimeException("CBS account verification failed for account: " + accountNumber);
+        }
+
+        // Step 2: Post disbursement to CBS with retry logic (3 retries per SRS FR-DIS-05)
+        cbsIntegrationService.postDisbursement(
+            application.getApplicationRef(),
+            application.getRequestedAmount(),
+            accountNumber,
+            officerName
+        );
+
         application.setStatus("DISBURSED");
         application.setUpdatedAt(LocalDateTime.now());
         LoanApplication updated = applicationRepository.save(application);
         
-        // Trigger notification
+        // Trigger in-app notification
         if (application.getCustomer() != null) {
             String title = "Loan Disbursed";
             String body = "Your loan application " + application.getApplicationRef() + " has been successfully disbursed to account " + accountNumber + ".";
             notificationService.createNotification(application.getCustomer().getCustomerId(), title, body, "DISBURSEMENT");
+            
+            // Step 3: Trigger SMS + Email via gateway stub
+            smsEmailGatewayService.notifyCustomer(
+                application.getCustomer().getMobileNumber(),
+                null, // email not directly on Customer model — extend if needed
+                "LOAN_DISBURSED",
+                "Your loan of LKR " + application.getRequestedAmount() + " has been disbursed to account " + accountNumber + ".",
+                application.getApplicationRef()
+            );
         }
         
         return mapToResponse(updated);

@@ -206,6 +206,43 @@ class ApiService {
   async getAdminAuditLogs() {
     return this.request('/admin/audit-logs')
   }
+
+  // ── Integration Endpoints ─────────────────────────────────────────────────
+
+  async performKycOcr(nicNumber) {
+    return this.request('/integration/kyc/ocr', {
+      method: 'POST',
+      body: JSON.stringify({ nicNumber }),
+    })
+  }
+
+  async performLivenessCheck() {
+    return this.request('/integration/kyc/liveness', {
+      method: 'POST',
+    })
+  }
+
+  async screenWatchlist(fullName, nicNumber) {
+    return this.request('/integration/kyc/screen', {
+      method: 'POST',
+      body: JSON.stringify({ fullName, nicNumber }),
+    })
+  }
+
+  async fetchCribReport(nicNumber, customerId = 1) {
+    return this.request(`/integration/crib/report?nicNumber=${nicNumber}&customerId=${customerId}`)
+  }
+
+  async verifyCbsAccount(accountNumber) {
+    return this.request(`/integration/cbs/verify-account?accountNumber=${accountNumber}`)
+  }
+
+  async getRepaymentSchedule(principal, annualRate, tenureMonths) {
+    return this.request('/integration/cbs/repayment-schedule', {
+      method: 'POST',
+      body: JSON.stringify({ principal, annualRate, tenureMonths }),
+    })
+  }
 }
 
 export const api = new ApiService()

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class LoanService {
     private final CustomerRepository customerRepository;
     private final CreditAssessmentRepository assessmentRepository;
     private final NotificationService notificationService;
+    private final CribIntegrationService cribIntegrationService;
 
     @Transactional
     public LoanApplication submitApplication(Long customerId, Long productId, String loanType, BigDecimal amount, int tenureMonths) {
@@ -65,26 +67,38 @@ public class LoanService {
     private void runCreditAssessment(LoanApplication app) {
         CreditAssessment assessment = new CreditAssessment();
         assessment.setLoanApplication(app);
-        
-        // Mock scoring logic
-        int internalScore = 650 + (int)(Math.random() * 250); 
+
+        // --- CRIB Integration (certified stub) ---
+        String nicNumber = app.getCustomer() != null ? app.getCustomer().getNicNumber() : "000000000V";
+        Long customerId = app.getCustomer() != null ? app.getCustomer().getCustomerId() : 1L;
+        Map<String, Object> cribReport = cribIntegrationService.fetchCribReport(nicNumber, customerId);
+
+        // Set credit score from CRIB report
+        int internalScore = (Integer) cribReport.getOrDefault("creditScore", 650);
         assessment.setInternalScore(internalScore);
-        assessment.setCribReference("CRIB-REF-" + System.currentTimeMillis());
-        
-        // Mock DTI logic (Request Amount / 24) / 150000 * 100
-        BigDecimal annualDebt = app.getRequestedAmount().divide(new BigDecimal(24), 2, RoundingMode.HALF_UP);
-        BigDecimal income = new BigDecimal(150000); // hardcoded mock income
-        BigDecimal dti = annualDebt.divide(income, 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
+        assessment.setCribReference((String) cribReport.getOrDefault("referenceNumber", "CRIB-ERR-001"));
+
+        // DTI: (new EMI + existing monthly debt) / monthly income * 100
+        BigDecimal existingDebt = cribIntegrationService.calculateTotalMonthlyDebt(cribReport);
+        BigDecimal monthlyRate = app.getLoanProduct() != null
+            ? app.getLoanProduct().getInterestRate().divide(new BigDecimal(1200), 6, RoundingMode.HALF_UP)
+            : new BigDecimal("0.012");
+        BigDecimal newEmi = app.getRequestedAmount().multiply(monthlyRate)
+            .divide(BigDecimal.ONE.subtract(monthlyRate.negate().add(BigDecimal.ONE).pow(app.getTenureMonths())), 2, RoundingMode.HALF_UP);
+        BigDecimal totalDebt = existingDebt.add(newEmi);
+        BigDecimal monthlyIncome = new BigDecimal("150000"); // TODO: use customer income field when available
+        BigDecimal dti = totalDebt.divide(monthlyIncome, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
         assessment.setDtiRatio(dti);
-        
+
+        // Determine decision band
         if (internalScore > 750 && dti.compareTo(new BigDecimal(40)) < 0) {
             assessment.setDecisionBand("AUTO_APPROVE");
-        } else if (internalScore < 600) {
+        } else if (internalScore < 600 || dti.compareTo(new BigDecimal(60)) > 0) {
             assessment.setDecisionBand("AUTO_DECLINE");
         } else {
             assessment.setDecisionBand("MANUAL_REVIEW");
         }
-        
+
         assessmentRepository.save(assessment);
     }
 }
