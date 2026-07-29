@@ -5,6 +5,7 @@ import CustomerHeader from '../components/CustomerHeader'
 import StatusBadge from '../components/StatusBadge'
 import Chatbot from '../components/Chatbot'
 import { api } from '../services/api'
+import { customerAccounts, applications as mockApplications, notificationTemplates } from '../data/mockData'
 
 function formatLKR(amount) {
   return 'LKR ' + new Intl.NumberFormat('en-LK').format(amount)
@@ -28,29 +29,66 @@ export default function CustomerDashboard() {
         setUser(userData)
 
         if (userData?.customerId) {
-          const [accountsRes, appsRes, notifRes] = await Promise.all([
-            api.getCustomerAccounts(userData.customerId),
-            api.getCustomerApplications(userData.customerId),
-            api.getNotifications(userData.customerId)
-          ])
-
-          setAccounts(accountsRes.data || [])
-          setApplications(appsRes.data || [])
-          setNotifications(notifRes.data || [])
+          try {
+            const [accountsRes, appsRes, notifRes] = await Promise.all([
+              api.getCustomerAccounts(userData.customerId),
+              api.getCustomerApplications(userData.customerId),
+              api.getNotifications(userData.customerId)
+            ])
+            if (accountsRes.data?.length > 0) setAccounts(accountsRes.data)
+            else setAccounts(normalizeMockAccounts())
+            if (appsRes.data?.length > 0) setApplications(appsRes.data)
+            else setApplications(normalizeMockApps())
+            if (notifRes.data?.length > 0) setNotifications(notifRes.data)
+            else setNotifications(normalizeMockNotifs())
+          } catch (_) {
+            // Backend offline — use mock data
+            setAccounts(normalizeMockAccounts())
+            setApplications(normalizeMockApps())
+            setNotifications(normalizeMockNotifs())
+          }
+        } else {
+          // No user ID — show mock data for demo
+          setAccounts(normalizeMockAccounts())
+          setApplications(normalizeMockApps())
+          setNotifications(normalizeMockNotifs())
         }
       } catch (err) {
-        console.error('Failed to fetch dashboard data:', err)
+        console.error('Dashboard load error:', err)
+        setAccounts(normalizeMockAccounts())
+        setApplications(normalizeMockApps())
+        setNotifications(normalizeMockNotifs())
       } finally {
         setLoading(false)
       }
     }
-
     fetchData()
   }, [])
+
+  function normalizeMockAccounts() {
+    return customerAccounts.map((a) => ({
+      accountId: a.id, productName: a.type, accountNumber: a.id, balance: a.balance, createdAt: a.opened
+    }))
+  }
+  function normalizeMockApps() {
+    return mockApplications.map((a) => ({
+      applicationId: a.id, applicationRef: a.id, loanType: a.type,
+      requestedAmount: a.amount, tenureMonths: a.tenure, submittedAt: a.submittedAt,
+      status: a.status?.toUpperCase().replace(/ /g, '_'),
+    }))
+  }
+  function normalizeMockNotifs() {
+    return notificationTemplates.map((n) => ({
+      id: n.id, type: n.type, title: n.title, body: n.body, createdAt: n.time
+    }))
+  }
 
   const totalBalance = accounts.reduce((s, a) => s + (a.balance || 0), 0)
   const activeLoans = applications.filter((a) => a.status === 'APPROVED' || a.status === 'DISBURSED')
   const pendingApps = applications.filter((a) => a.status === 'SUBMITTED' || a.status === 'UNDER_REVIEW')
+
+  const hour = new Date().getHours()
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
@@ -59,7 +97,7 @@ export default function CustomerDashboard() {
         {/* Welcome */}
         <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-navy-800">Good afternoon, {user?.fullName || 'Customer'}</h1>
+            <h1 className="text-2xl font-bold text-navy-800">{greeting}, {user?.fullName || 'Customer'}</h1>
             <p className="text-sm text-ink-500">Here's a snapshot of your accounts and applications.</p>
           </div>
           <div className="flex gap-2">
