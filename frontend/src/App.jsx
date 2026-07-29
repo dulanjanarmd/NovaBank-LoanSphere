@@ -1,4 +1,4 @@
-﻿import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
 import ProfilePage from './pages/ProfilePage'
@@ -14,13 +14,16 @@ import StaffApplicationReview from './pages/StaffApplicationReview'
 import StaffAdminPage from './pages/StaffAdminPage'
 import StaffReportsPage from './pages/StaffReportsPage'
 import AuthGuard from './components/AuthGuard'
+import StaffAuthGuard from './components/StaffAuthGuard'
 
 export default function App() {
   return (
     <Routes>
+      {/* Public */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
 
+      {/* Customer Portal (requires customer auth) */}
       <Route path="/portal/profile" element={<AuthGuard><ProfilePage /></AuthGuard>} />
       <Route path="/portal/dashboard" element={<AuthGuard><CustomerDashboard /></AuthGuard>} />
       <Route path="/portal/open-account" element={<AuthGuard><OpenAccountPage /></AuthGuard>} />
@@ -29,12 +32,15 @@ export default function App() {
       <Route path="/portal/applications/:id" element={<AuthGuard><ApplicationDetailPage /></AuthGuard>} />
       <Route path="/portal/notifications" element={<AuthGuard><NotificationsPage /></AuthGuard>} />
 
+      {/* Staff Portal */}
       <Route path="/staff/login" element={<StaffLoginPage />} />
-      <Route path="/staff" element={<StaffDashboard />} />
-      <Route path="/staff/application" element={<StaffApplicationReview />} />
-      <Route path="/staff/admin" element={<StaffAdminPage />} />
-      <Route path="/staff/reports" element={<StaffReportsPage />} />
+      <Route path="/staff" element={<StaffAuthGuard><StaffDashboard /></StaffAuthGuard>} />
+      <Route path="/staff/application/:id" element={<StaffAuthGuard><StaffApplicationReview /></StaffAuthGuard>} />
+      <Route path="/staff/application" element={<StaffAuthGuard><StaffApplicationReview /></StaffAuthGuard>} />
+      <Route path="/staff/admin" element={<StaffAuthGuard><StaffAdminPage /></StaffAuthGuard>} />
+      <Route path="/staff/reports" element={<StaffAuthGuard><StaffReportsPage /></StaffAuthGuard>} />
 
+      {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
