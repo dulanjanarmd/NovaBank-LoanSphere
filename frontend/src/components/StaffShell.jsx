@@ -34,8 +34,8 @@ export default function StaffShell({ role, setRole, children, active }) {
   return (
     <div className="flex min-h-screen bg-ink-50">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-40 w-64 transform border-r border-ink-100 bg-white transition-transform lg:static lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="flex h-16 items-center justify-between border-b border-ink-100 px-5">
+      <aside className={`fixed inset-y-0 left-0 z-40 w-64 transform glass border-r border-ink-100 transition-transform lg:static lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="flex h-16 items-center justify-between border-b border-ink-100/50 px-5">
           <Logo />
           <button className="lg:hidden" onClick={() => setOpen(false)}><X className="h-5 w-5 text-ink-500" /></button>
         </div>
@@ -69,7 +69,7 @@ export default function StaffShell({ role, setRole, children, active }) {
 
       {/* Main */}
       <div className="flex flex-1 flex-col lg:pl-0">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-ink-100 bg-white/90 px-4 backdrop-blur sm:px-6">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-ink-100/50 glass px-4 sm:px-6">
           <div className="flex items-center gap-3">
             <button className="lg:hidden btn-ghost p-2" onClick={() => setOpen(true)}><Menu className="h-5 w-5" /></button>
             <div>
