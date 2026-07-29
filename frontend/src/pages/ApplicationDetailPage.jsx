@@ -11,7 +11,7 @@ export default function ApplicationDetailPage() {
 
   if (!app) {
     return (
-      <div className="min-h-screen bg-ink-50">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
         <CustomerHeader />
         <main className="mx-auto max-w-4xl px-4 py-16 text-center">
           <AlertCircle className="mx-auto h-12 w-12 text-ink-300" />
@@ -27,7 +27,7 @@ export default function ApplicationDetailPage() {
   const totalDocs = app.documents.length
 
   return (
-    <div className="min-h-screen bg-ink-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <CustomerHeader active="My Applications" />
       <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
         <Link to="/portal/applications" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-ink-500 hover:text-navy-700">

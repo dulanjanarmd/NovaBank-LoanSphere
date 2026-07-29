@@ -31,7 +31,7 @@ export default function DataTable({ columns, rows, emptyMessage = 'No records fo
     <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
         <thead>
-          <tr className="border-b border-ink-100 bg-ink-50/50">
+          <tr className="border-b border-ink-100/50 ios-glass">
             {columns.map((col) => (
               <th
                 key={col.key}
@@ -55,7 +55,7 @@ export default function DataTable({ columns, rows, emptyMessage = 'No records fo
             </tr>
           ) : (
             sortedRows.map((row, idx) => (
-              <tr key={row.id || idx} className="border-b border-ink-50 transition-colors hover:bg-navy-50/30">
+              <tr key={row.id || idx} className="border-b border-ink-50/50 ios-liquid-dropdown-item transition-colors">
                 {columns.map((col) => (
                   <td key={col.key} className={`px-4 py-3 text-ink-700 ${col.align === 'right' ? 'text-right' : ''}`}>
                     {col.render ? col.render(row) : row[col.key]}

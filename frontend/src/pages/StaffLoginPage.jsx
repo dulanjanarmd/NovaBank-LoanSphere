@@ -11,7 +11,7 @@ export default function StaffLoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-navy-800 via-navy-700 to-accent-700 p-6">
       <div className="w-full max-w-md">
         <div className="mb-6 text-center"><Logo light /></div>
-        <div className="rounded-2xl bg-white p-8 shadow-2xl">
+        <div className="rounded-2xl ios-liquid-modal p-8 shadow-2xl">
           <div className="mb-2 text-center">
             <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-navy-700 text-white"><Lock className="h-6 w-6" /></div>
             <h1 className="text-xl font-bold text-navy-800">Staff Portal Sign In</h1>

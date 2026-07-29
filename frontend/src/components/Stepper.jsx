@@ -17,8 +17,8 @@ export default function Stepper({ currentStage = 1, stages = applicationStages }
                     isComplete
                       ? 'border-success-500 bg-success-500 text-white'
                       : isCurrent
-                      ? 'border-accent-500 bg-accent-50 text-accent-700 ring-4 ring-accent-100'
-                      : 'border-ink-200 bg-white text-ink-400'
+                      ? 'border-accent-500 ios-liquid-card text-accent-700 ring-4 ring-accent-100'
+                      : 'border-ink-200 ios-liquid-card text-ink-400'
                   }`}
                 >
                   {isComplete ? <Check className="h-4 w-4" /> : stage.id}
