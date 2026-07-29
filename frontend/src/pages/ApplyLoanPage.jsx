@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, Check, CreditCard, Calculator, FileText, PenTool, Sparkles } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, CreditCard, Calculator, FileText, PenTool, Sparkles, Save } from 'lucide-react'
 import CustomerHeader from '../components/CustomerHeader'
 import Chatbot from '../components/Chatbot'
 import { api } from '../services/api'
@@ -48,8 +48,28 @@ export default function ApplyLoanPage() {
     firstName: '', lastName: '', nic: '', mobile: '', email: '', income: '',
     purpose: '', agreed: false, signed: false,
   })
+  const [draftSaved, setDraftSaved] = useState(false)
 
-  const update = (k, v) => setData((d) => ({ ...d, [k]: v }))
+  useEffect(() => {
+    const savedDraft = localStorage.getItem('loanApplicationDraft')
+    if (savedDraft) {
+      try {
+        const parsed = JSON.parse(savedDraft)
+        setData(parsed)
+      } catch (e) {}
+    }
+  }, [])
+
+  const update = (k, v) => {
+    setData((d) => ({ ...d, [k]: v }))
+    setDraftSaved(false)
+  }
+
+  const saveDraft = () => {
+    localStorage.setItem('loanApplicationDraft', JSON.stringify(data))
+    setDraftSaved(true)
+    setTimeout(() => setDraftSaved(false), 3000)
+  }
 
   const selectedProduct = loanProducts.find((p) => p.id === data.product)
   const rate = selectedProduct?.rate || 0
@@ -247,11 +267,16 @@ export default function ApplyLoanPage() {
             {step < 5 && (
               <div className="mt-8 flex items-center justify-between border-t border-ink-100 pt-6">
                 <button onClick={back} disabled={step === 1} className="btn-outline disabled:opacity-40"><ArrowLeft className="h-4 w-4" /> Back</button>
-                {step === 4 ? (
-                  <button onClick={handleSubmit} disabled={loading || !canNext()} className="btn-primary disabled:opacity-40">{loading ? 'Submitting...' : 'Submit Application'} <Check className="h-4 w-4" /></button>
-                ) : (
-                  <button onClick={next} disabled={!canNext()} className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed">Continue <ArrowRight className="h-4 w-4" /></button>
-                )}
+                <div className="flex gap-3">
+                  <button onClick={saveDraft} className="btn-ghost flex items-center gap-2">
+                    <Save className="h-4 w-4" /> {draftSaved ? 'Saved!' : 'Save as Draft'}
+                  </button>
+                  {step === 4 ? (
+                    <button onClick={handleSubmit} disabled={loading || !canNext()} className="btn-primary disabled:opacity-40">{loading ? 'Submitting...' : 'Submit Application'} <Check className="h-4 w-4" /></button>
+                  ) : (
+                    <button onClick={next} disabled={!canNext()} className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed">Continue <ArrowRight className="h-4 w-4" /></button>
+                  )}
+                </div>
               </div>
             )}
           </div>

@@ -1,13 +1,84 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Plus, Edit, Trash2, ToggleLeft, ToggleRight, Save } from 'lucide-react'
 import StaffShell from '../components/StaffShell'
 import { loanProductsAdmin, formatLKR } from '../data/mockData'
+import { api } from '../services/api'
 
 export default function StaffAdminPage() {
-  const [products, setProducts] = useState(loanProductsAdmin)
+  const [products, setProducts] = useState([])
   const [editing, setEditing] = useState(null)
+  const [editForm, setEditForm] = useState({})
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  const toggleActive = (id) => setProducts((p) => p.map((x) => (x.id === id ? { ...x, active: !x.active } : x)))
+  useEffect(() => {
+    fetchProducts()
+  }, [])
+
+  const fetchProducts = async () => {
+    try {
+      const res = await api.getAdminProducts()
+      if (res.data && res.data.length > 0) {
+        setProducts(res.data.map(mapApiProduct))
+      } else {
+        setProducts(loanProductsAdmin)
+      }
+    } catch (e) {
+      setProducts(loanProductsAdmin)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const mapApiProduct = (p) => ({
+    id: p.id,
+    name: p.name,
+    min: p.minAmount,
+    max: p.maxAmount,
+    rate: p.interestRate,
+    maxTenure: p.defaultTenure,
+    active: p.active
+  })
+
+  const toggleActive = async (id) => {
+    const p = products.find((x) => x.id === id)
+    if (!p) return
+    const updated = { ...p, active: !p.active }
+    setProducts((prev) => prev.map((x) => (x.id === id ? updated : x)))
+    try {
+      await api.updateAdminProduct(id, {
+        name: updated.name,
+        minAmount: updated.min,
+        maxAmount: updated.max,
+        interestRate: updated.rate,
+        defaultTenure: updated.maxTenure,
+        active: updated.active
+      })
+    } catch (e) {}
+  }
+
+  const startEdit = (p) => {
+    setEditing(p.id)
+    setEditForm({ ...p })
+  }
+
+  const handleSave = async (id) => {
+    try {
+      const updated = {
+        name: editForm.name,
+        minAmount: Number(editForm.min),
+        maxAmount: Number(editForm.max),
+        interestRate: Number(editForm.rate),
+        defaultTenure: Number(editForm.maxTenure),
+        active: editForm.active
+      }
+      await api.updateAdminProduct(id, updated)
+      setProducts((prev) => prev.map((x) => (x.id === id ? { ...x, ...editForm } : x)))
+      setEditing(null)
+    } catch (e) {
+      setError('Failed to save product')
+    }
+  }
 
   return (
     <StaffShell active="Product & Rates">
@@ -19,6 +90,10 @@ export default function StaffAdminPage() {
         <button className="btn-primary"><Plus className="h-4 w-4" /> Add Product</button>
       </div>
 
+      {error && <div className="mb-4 rounded-lg bg-danger-50 p-3 text-sm text-danger-700">{error}</div>}
+      {loading ? (
+        <div className="flex justify-center p-8"><div className="h-8 w-8 animate-spin rounded-full border-2 border-accent-500 border-t-transparent" /></div>
+      ) : (
       <div className="grid gap-4">
         {products.map((p) => (
           <div key={p.id} className="card p-5">
@@ -41,20 +116,20 @@ export default function StaffAdminPage() {
                 <button onClick={() => toggleActive(p.id)} className={`p-1 ${p.active ? 'text-success-600' : 'text-ink-300'}`}>
                   {p.active ? <ToggleRight className="h-7 w-7" /> : <ToggleLeft className="h-7 w-7" />}
                 </button>
-                <button onClick={() => setEditing(p.id)} className="btn-ghost p-2"><Edit className="h-4 w-4" /></button>
+                <button onClick={() => startEdit(p)} className="btn-ghost p-2"><Edit className="h-4 w-4" /></button>
                 <button className="btn-ghost p-2 text-danger-500"><Trash2 className="h-4 w-4" /></button>
               </div>
             </div>
             {editing === p.id && (
               <div className="mt-4 rounded-xl bg-ink-50 p-4">
                 <div className="grid gap-4 sm:grid-cols-4">
-                  <div><label className="label">Rate (% p.a.)</label><input className="input" defaultValue={p.rate} /></div>
-                  <div><label className="label">Min amount</label><input className="input" defaultValue={p.min} /></div>
-                  <div><label className="label">Max amount</label><input className="input" defaultValue={p.max} /></div>
-                  <div><label className="label">Max tenure (mo)</label><input className="input" defaultValue={p.maxTenure} /></div>
+                  <div><label className="label">Rate (% p.a.)</label><input className="input" type="number" step="0.1" value={editForm.rate} onChange={(e) => setEditForm({...editForm, rate: e.target.value})} /></div>
+                  <div><label className="label">Min amount</label><input className="input" type="number" value={editForm.min} onChange={(e) => setEditForm({...editForm, min: e.target.value})} /></div>
+                  <div><label className="label">Max amount</label><input className="input" type="number" value={editForm.max} onChange={(e) => setEditForm({...editForm, max: e.target.value})} /></div>
+                  <div><label className="label">Max tenure (mo)</label><input className="input" type="number" value={editForm.maxTenure} onChange={(e) => setEditForm({...editForm, maxTenure: e.target.value})} /></div>
                 </div>
                 <div className="mt-3 flex gap-2">
-                  <button onClick={() => setEditing(null)} className="btn-primary"><Save className="h-4 w-4" /> Save changes</button>
+                  <button onClick={() => handleSave(p.id)} className="btn-primary"><Save className="h-4 w-4" /> Save changes</button>
                   <button onClick={() => setEditing(null)} className="btn-outline">Cancel</button>
                 </div>
               </div>
@@ -62,6 +137,7 @@ export default function StaffAdminPage() {
           </div>
         ))}
       </div>
+      )}
 
       {/* User management preview */}
       <div className="mt-8 card p-6">

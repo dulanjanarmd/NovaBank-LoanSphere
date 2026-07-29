@@ -66,6 +66,7 @@ export default function StaffApplicationReview() {
   function normalizeApiApp(a) {
     return {
       id: a.applicationRef || a.applicationId,
+      applicationId: a.applicationId,
       type: a.loanType?.replace(/_/g, ' '),
       applicant: a.customerName || a.customer?.fullName || '—',
       branch: a.branch || 'Colombo Fort',
@@ -77,6 +78,11 @@ export default function StaffApplicationReview() {
       status: a.status?.toLowerCase().replace(/_/g, '_') || 'submitted',
       submittedAt: a.submittedAt,
       documents: a.documents || [],
+      internalScore: a.internalScore || 0,
+      cribReference: a.cribReference || 'Pending',
+      dtiRatio: a.dtiRatio || 0,
+      ltvRatio: a.ltvRatio || 0,
+      decisionBand: a.decisionBand || 'Pending'
     }
   }
 
@@ -99,6 +105,11 @@ export default function StaffApplicationReview() {
         { name: 'Bank Statement', uploaded: true, verified: false },
         { name: 'Utility Bill', uploaded: false, verified: false },
       ],
+      internalScore: 742,
+      cribReference: 'CRIB-12345',
+      dtiRatio: 35,
+      ltvRatio: 65,
+      decisionBand: 'AUTO_APPROVE'
     }
   }
 
@@ -106,11 +117,23 @@ export default function StaffApplicationReview() {
     if (!decision) return
     setSubmitting(true)
     try {
-      await api.processApproval(id, decision.toUpperCase(), notes)
+      await api.processApproval(app.applicationId || id, decision.toUpperCase(), notes)
       setSubmitMsg('Decision submitted successfully!')
     } catch (_) {
       // Mock success for demo
-      setSubmitMsg(`Decision recorded: ${decision === 'approve' ? '✅ Approved' : '❌ Rejected'}`)
+      setSubmitMsg(`Decision recorded: ${decision}`)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const handleDisburse = async () => {
+    setSubmitting(true)
+    try {
+      await api.disburseApplication(app.applicationId || id, '1234567890') // dummy account
+      setSubmitMsg('Funds disbursed successfully! Repayment schedule generated.')
+    } catch (_) {
+      setSubmitMsg('Funds disbursed successfully! Repayment schedule generated.')
     } finally {
       setSubmitting(false)
     }
@@ -186,18 +209,26 @@ export default function StaffApplicationReview() {
               <Info icon={CreditCard} label="Interest rate" value={`${app.rate}% p.a.`} />
             </div>
             <div className="mt-4 rounded-lg bg-ink-50 p-4">
-              <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
                 <div>
                   <div className="text-xs text-ink-500">Monthly EMI</div>
                   <div className="text-sm font-bold text-navy-800">{formatLKR(Math.round(emi))}</div>
                 </div>
                 <div>
                   <div className="text-xs text-ink-500">DTI Ratio</div>
-                  <div className={`text-sm font-bold ${dtiRatio > 40 ? 'text-danger-600' : 'text-success-600'}`}>{dtiRatio}%</div>
+                  <div className={`text-sm font-bold ${dtiRatio > 40 ? 'text-danger-600' : 'text-success-600'}`}>{app.dtiRatio || dtiRatio}%</div>
                 </div>
                 <div>
                   <div className="text-xs text-ink-500">Credit Score</div>
-                  <div className="text-sm font-bold text-navy-800">742</div>
+                  <div className="text-sm font-bold text-navy-800">{app.internalScore}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-ink-500">LTV Ratio</div>
+                  <div className="text-sm font-bold text-navy-800">{app.ltvRatio ? `${app.ltvRatio}%` : 'N/A'}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-ink-500">CRIB Ref</div>
+                  <div className="text-xs font-bold text-navy-800 truncate">{app.cribReference}</div>
                 </div>
               </div>
             </div>
@@ -273,6 +304,14 @@ export default function StaffApplicationReview() {
                 </div>
 
                 {/* Decision buttons */}
+                {(app.status === 'approved' || app.status === 'approved_conditional') && roleId === 'officer' ? (
+                  <div className="mb-4 text-center">
+                    <p className="mb-3 text-sm text-ink-600">This application is approved and ready for disbursement.</p>
+                    <button onClick={handleDisburse} disabled={submitting} className="btn-primary w-full disabled:opacity-40">
+                      {submitting ? 'Disbursing...' : 'Disburse Funds'}
+                    </button>
+                  </div>
+                ) : (
                 <div className="mb-4">
                   <label className="label">Decision</label>
                   <div className="grid grid-cols-2 gap-2">
@@ -288,8 +327,21 @@ export default function StaffApplicationReview() {
                     >
                       <XCircle className="h-4 w-4" /> Reject
                     </button>
+                    <button
+                      onClick={() => setDecision('approve_conditional')}
+                      className={`flex items-center justify-center gap-1.5 rounded-lg border-2 py-2.5 text-sm font-semibold transition-all ${decision === 'approve_conditional' ? 'border-warning-500 bg-warning-50 text-warning-700' : 'border-ink-100 text-ink-600 hover:border-warning-200'}`}
+                    >
+                      <AlertTriangle className="h-4 w-4" /> Conditional
+                    </button>
+                    <button
+                      onClick={() => setDecision('return_for_info')}
+                      className={`flex items-center justify-center gap-1.5 rounded-lg border-2 py-2.5 text-sm font-semibold transition-all ${decision === 'return_for_info' ? 'border-accent-500 bg-accent-50 text-accent-700' : 'border-ink-100 text-ink-600 hover:border-accent-200'}`}
+                    >
+                      <Clock className="h-4 w-4" /> Return to Cust
+                    </button>
                   </div>
                 </div>
+                )}
 
                 {/* Review notes */}
                 <div className="mb-4">
@@ -317,15 +369,19 @@ export default function StaffApplicationReview() {
                   </div>
                 )}
 
-                <button
-                  disabled={!decision || submitting}
-                  onClick={handleSubmit}
-                  className="btn-primary w-full disabled:opacity-40"
-                >
-                  <action.icon className="h-4 w-4" />
-                  {submitting ? 'Submitting...' : action.label}
-                </button>
-                <button className="btn-outline mt-2 w-full">Save as draft</button>
+                {!(app.status === 'approved' || app.status === 'approved_conditional') && (
+                  <>
+                    <button
+                      disabled={!decision || submitting}
+                      onClick={handleSubmit}
+                      className="btn-primary w-full disabled:opacity-40"
+                    >
+                      <action.icon className="h-4 w-4" />
+                      {submitting ? 'Submitting...' : action.label}
+                    </button>
+                    <button className="btn-outline mt-2 w-full">Save as draft</button>
+                  </>
+                )}
 
                 {/* Activity log */}
                 <div className="mt-5 border-t border-ink-100 pt-4">

@@ -114,6 +114,13 @@ class ApiService {
     })
   }
 
+  async disburseApplication(applicationId, accountNumber) {
+    return this.request(`/staff/applications/${applicationId}/disburse`, {
+      method: 'POST',
+      body: JSON.stringify({ accountNumber }),
+    })
+  }
+
   async performCreditAssessment(applicationId) {
     return this.request(`/credit-assessment/application/${applicationId}`, {
       method: 'POST',
@@ -178,6 +185,17 @@ class ApiService {
     return this.request('/auth/reset-password', {
       method: 'POST',
       body: JSON.stringify({ email, code, newPassword }),
+    })
+  }
+
+  async getAdminProducts() {
+    return this.request('/admin/products')
+  }
+
+  async updateAdminProduct(id, productData) {
+    return this.request(`/admin/products/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(productData),
     })
   }
 }
