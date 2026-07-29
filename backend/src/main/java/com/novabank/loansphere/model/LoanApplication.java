@@ -40,9 +40,20 @@ public class LoanApplication {
     @Column(name = "submitted_at")
     private LocalDateTime submittedAt;
 
+    @Column(name = "sla_breached", nullable = false)
+    private boolean slaBreached = false;
+
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at", insertable = false, updatable = false)
     private LocalDateTime updatedAt;
+
+    public boolean isSlaBreached() {
+        return slaBreached;
+    }
+
+    public void setSlaBreached(boolean slaBreached) {
+        this.slaBreached = slaBreached;
+    }
 }
