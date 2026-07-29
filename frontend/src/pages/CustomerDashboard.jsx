@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { Wallet, TrendingUp, Clock, ArrowUpRight, Plus, FileText, CreditCard, Bell, CheckCircle, AlertCircle } from 'lucide-react'
 import CustomerHeader from '../components/CustomerHeader'
 import StatusBadge from '../components/StatusBadge'
+import Chatbot from '../components/Chatbot'
 import { api } from '../services/api'
 
 function formatLKR(amount) {
@@ -196,6 +197,7 @@ export default function CustomerDashboard() {
           </>
         )}
       </main>
+      <Chatbot />
     </div>
   )
 }

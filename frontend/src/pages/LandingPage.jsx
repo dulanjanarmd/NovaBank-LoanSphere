@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom'
 import { ShieldCheck, Clock, Smartphone, ArrowRight, CheckCircle, Star, Users, TrendingUp, Award, Quote } from 'lucide-react'
 import Logo, { TrustBar } from '../components/Logo'
+import Chatbot from '../components/Chatbot'
 import { loanProducts, formatLKR } from '../data/mockData'
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="sticky top-0 z-40 glass">
+      <header className="sticky top-0 z-40 ios-glass">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
           <Logo />
           <nav className="hidden items-center gap-6 md:flex">
@@ -228,6 +229,7 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+      <Chatbot />
     </div>
   )
 }

@@ -14,7 +14,7 @@ export default function CustomerHeader({ active }) {
     { to: '/portal/notifications', label: 'Notifications', icon: Bell },
   ]
   return (
-    <header className="sticky top-0 z-40 glass">
+    <header className="sticky top-0 z-40 ios-glass">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-8">
           <Logo />

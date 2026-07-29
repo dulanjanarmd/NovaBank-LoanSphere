@@ -26,25 +26,33 @@
     @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
   }
   .btn-primary {
-    @apply btn liquid-btn text-navy-700 hover:text-navy-800;
+    @apply btn ios-liquid-btn-primary;
   }
   .btn-accent {
-    @apply btn liquid-btn text-accent-600 hover:text-accent-700;
+    @apply btn ios-liquid-btn-primary;
   }
   .btn-outline {
-    @apply btn liquid-btn text-navy-700 hover:text-navy-800;
+    @apply btn ios-liquid-btn text-navy-700;
   }
   .btn-ghost {
-    @apply btn liquid-btn text-navy-700 hover:text-navy-800;
+    @apply btn ios-liquid-btn text-navy-700;
   }
   .btn-danger {
-    @apply btn bg-danger-500/80 backdrop-blur-md text-white hover:bg-danger-600/90;
+    @apply btn ios-liquid-btn text-white;
+    background: rgba(239, 68, 68, 0.85) !important;
+    border-color: rgba(239, 68, 68, 0.9) !important;
+  }
+  .btn-danger:hover {
+    background: rgba(239, 68, 68, 0.95) !important;
+  }
+  .btn-danger:active {
+    background: rgba(239, 68, 68, 1) !important;
   }
   .card {
-    @apply rounded-xl liquid-card;
+    @apply rounded-xl ios-liquid-card;
   }
   .input {
-    @apply w-full rounded-lg liquid-input px-3.5 py-2.5 text-sm text-ink-800 placeholder-ink-400;
+    @apply w-full rounded-lg ios-liquid-input px-3.5 py-2.5 text-sm text-ink-800 placeholder-ink-400;
   }
   .label {
     @apply mb-1.5 block text-sm font-medium text-ink-700;
@@ -97,74 +105,267 @@
   }
   
   /* iOS Glassmorphism / Liquid Transparent Theme */
-  .glass {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+  .ios-glass {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 0.5px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   }
   
-  .glass-dark {
-    background: rgba(30, 41, 59, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+  /* Fallback for browsers without backdrop-filter support */
+  @supports not (backdrop-filter: blur(20px)) {
+    .ios-glass {
+      background: rgba(255, 255, 255, 0.95);
+    }
   }
   
-  .glass-accent {
+  .ios-glass-dark {
+    background: rgba(30, 41, 59, 0.25);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 0.5px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  }
+  
+  @supports not (backdrop-filter: blur(20px)) {
+    .ios-glass-dark {
+      background: rgba(30, 41, 59, 0.95);
+    }
+  }
+  
+  .ios-glass-accent {
     background: rgba(59, 130, 246, 0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(59, 130, 246, 0.3);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 0.5px solid rgba(59, 130, 246, 0.3);
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1);
   }
   
-  .glass-navy {
-    background: rgba(15, 23, 42, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+  @supports not (backdrop-filter: blur(20px)) {
+    .ios-glass-accent {
+      background: rgba(59, 130, 246, 0.2);
+    }
   }
   
-  .liquid-btn {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 
-      0 4px 15px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.6);
-    transition: all 0.3s ease;
+  .ios-glass-navy {
+    background: rgba(15, 23, 42, 0.25);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 0.5px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   }
   
-  .liquid-btn:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5));
-    box-shadow: 
-      0 6px 20px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    transform: translateY(-2px);
+  @supports not (backdrop-filter: blur(20px)) {
+    .ios-glass-navy {
+      background: rgba(15, 23, 42, 0.95);
+    }
   }
   
-  .liquid-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  /* iOS Liquid Button */
+  .ios-liquid-btn {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 0.5px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1);
   }
   
-  .liquid-input {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    transition: all 0.3s ease;
+  @supports not (backdrop-filter: blur(20px)) {
+    .ios-liquid-btn {
+      background: rgba(255, 255, 255, 0.95);
+    }
   }
   
-  .liquid-input:focus {
-    background: rgba(255, 255, 255, 0.8);
-    border-color: rgba(59, 130, 246, 0.5);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  .ios-liquid-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  }
+  
+  .ios-liquid-btn:active {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .ios-liquid-btn:disabled {
+    background: rgba(255, 255, 255, 0.4);
+    opacity: 0.4;
+    transform: scale(1);
+    box-shadow: none;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  /* iOS Primary Button (Blue Accent) */
+  .ios-liquid-btn-primary {
+    background: rgba(59, 130, 246, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 0.5px solid rgba(59, 130, 246, 0.9);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1);
+    color: white;
+  }
+  
+  @supports not (backdrop-filter: blur(20px)) {
+    .ios-liquid-btn-primary {
+      background: rgba(59, 130, 246, 1);
+    }
+  }
+  
+  .ios-liquid-btn-primary:hover {
+    background: rgba(59, 130, 246, 0.95);
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  }
+  
+  .ios-liquid-btn-primary:active {
+    background: rgba(59, 130, 246, 1);
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  }
+  
+  .ios-liquid-btn-primary:disabled {
+    background: rgba(59, 130, 246, 0.4);
+    opacity: 0.4;
+    transform: scale(1);
+    box-shadow: none;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  /* iOS Liquid Card */
+  .ios-liquid-card {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 0.5px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  @supports not (backdrop-filter: blur(20px)) {
+    .ios-liquid-card {
+      background: rgba(255, 255, 255, 0.95);
+    }
+  }
+  
+  .ios-liquid-card:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.01);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  }
+  
+  /* iOS Liquid Input */
+  .ios-liquid-input {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 0.5px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  @supports not (backdrop-filter: blur(20px)) {
+    .ios-liquid-input {
+      background: rgba(255, 255, 255, 0.95);
+    }
+  }
+  
+  .ios-liquid-input:focus {
+    background: rgba(255, 255, 255, 0.35);
+    border-color: rgba(59, 130, 246, 0.6);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), 0 4px 16px rgba(0, 0, 0, 0.08);
+    transform: scale(1.01);
+  }
+  
+  .ios-liquid-input:disabled {
+    background: rgba(255, 255, 255, 0.4);
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  
+  /* iOS Liquid Dropdown */
+  .ios-liquid-dropdown {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 0.5px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
+  }
+  
+  @supports not (backdrop-filter: blur(20px)) {
+    .ios-liquid-dropdown {
+      background: rgba(255, 255, 255, 0.98);
+    }
+  }
+  
+  .ios-liquid-dropdown-item {
+    background: transparent;
+    transition: all 0.15s ease;
+  }
+  
+  .ios-liquid-dropdown-item:hover {
+    background: rgba(59, 130, 246, 0.1);
+  }
+  
+  .ios-liquid-dropdown-item:active {
+    background: rgba(59, 130, 246, 0.2);
+    transform: scale(0.98);
+  }
+  
+  /* iOS Liquid Modal */
+  .ios-liquid-modal {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 0.5px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.15);
+  }
+  
+  @supports not (backdrop-filter: blur(20px)) {
+    .ios-liquid-modal {
+      background: rgba(255, 255, 255, 0.98);
+    }
+  }
+  
+  /* iOS Liquid Toggle Switch */
+  .ios-liquid-toggle {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 0.5px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  @supports not (backdrop-filter: blur(20px)) {
+    .ios-liquid-toggle {
+      background: rgba(255, 255, 255, 0.95);
+    }
+  }
+  
+  .ios-liquid-toggle.active {
+    background: rgba(59, 130, 246, 0.85);
+    border-color: rgba(59, 130, 246, 0.9);
+  }
+  
+  /* iOS Liquid Slider */
+  .ios-liquid-slider {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 0.5px solid rgba(255, 255, 255, 0.4);
+  }
+  
+  @supports not (backdrop-filter: blur(20px)) {
+    .ios-liquid-slider {
+      background: rgba(255, 255, 255, 0.95);
+    }
   }
 }

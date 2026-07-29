@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Check, User, MapPin, FileCheck, Sparkles } from 'lucide-react'
 import CustomerHeader from '../components/CustomerHeader'
+import Chatbot from '../components/Chatbot'
 import { api } from '../services/api'
 
 function formatLKR(amount) {
@@ -226,6 +227,7 @@ export default function OpenAccountPage() {
           )}
         </div>
       </main>
+      <Chatbot />
     </div>
   )
 }

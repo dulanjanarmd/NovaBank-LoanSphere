@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Check, CreditCard, Calculator, FileText, PenTool, Sparkles } from 'lucide-react'
 import CustomerHeader from '../components/CustomerHeader'
+import Chatbot from '../components/Chatbot'
 import { api } from '../services/api'
 
 function formatLKR(amount) {
@@ -277,6 +278,7 @@ export default function ApplyLoanPage() {
           )}
         </div>
       </main>
+      <Chatbot />
     </div>
   )
 }

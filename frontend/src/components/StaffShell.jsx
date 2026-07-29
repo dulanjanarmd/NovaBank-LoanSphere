@@ -34,7 +34,7 @@ export default function StaffShell({ role, setRole, children, active }) {
   return (
     <div className="flex min-h-screen bg-ink-50">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-40 w-64 transform glass border-r border-ink-100 transition-transform lg:static lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed inset-y-0 left-0 z-40 w-64 transform ios-glass border-r border-ink-100 transition-transform lg:static lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex h-16 items-center justify-between border-b border-ink-100/50 px-5">
           <Logo />
           <button className="lg:hidden" onClick={() => setOpen(false)}><X className="h-5 w-5 text-ink-500" /></button>
@@ -69,7 +69,7 @@ export default function StaffShell({ role, setRole, children, active }) {
 
       {/* Main */}
       <div className="flex flex-1 flex-col lg:pl-0">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-ink-100/50 glass px-4 sm:px-6">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-ink-100/50 ios-glass px-4 sm:px-6">
           <div className="flex items-center gap-3">
             <button className="lg:hidden btn-ghost p-2" onClick={() => setOpen(true)}><Menu className="h-5 w-5" /></button>
             <div>
@@ -89,12 +89,12 @@ export default function StaffShell({ role, setRole, children, active }) {
               <ChevronDown className="h-4 w-4" />
             </button>
             {roleMenu && (
-              <div className="absolute right-0 top-full mt-1 w-64 rounded-xl border border-ink-100 bg-white p-1.5 shadow-cardHover">
+              <div className="absolute right-0 top-full mt-1 w-64 rounded-xl ios-liquid-dropdown p-1.5">
                 <div className="px-2 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-ink-400">Switch role</div>
                 {staffRoles.map((r) => (
                   <button
                     key={r.id}
-                    className={`flex w-full items-start gap-2 rounded-lg px-2 py-2 text-left text-sm hover:bg-navy-50 ${role === r.id ? 'bg-navy-50' : ''}`}
+                    className={`ios-liquid-dropdown-item flex w-full items-start gap-2 rounded-lg px-2 py-2 text-left text-sm ${role === r.id ? 'bg-accent-100' : ''}`}
                     onClick={() => { setRole(r.id); setRoleMenu(false) }}
                   >
                     <div>
