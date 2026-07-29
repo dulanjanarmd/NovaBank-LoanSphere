@@ -1,17 +1,14 @@
 import { useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line } from 'recharts'
 import { TrendingUp, TrendingDown, Download, Calendar, Filter } from 'lucide-react'
 import StaffShell from '../components/StaffShell'
 import { monthlyDisbursements, productMix, branchPerformance, kpiCards, formatLKR } from '../data/mockData'
 
 export default function StaffReportsPage() {
-  const [searchParams] = useSearchParams()
-  const [role, setRole] = useState(searchParams.get('role') || 'compliance')
   const [range, setRange] = useState('6m')
 
   return (
-    <StaffShell role={role} setRole={setRole} active="Reports">
+    <StaffShell active="Reports">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-navy-800">Reports & Analytics</h1>
