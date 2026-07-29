@@ -159,6 +159,27 @@ class ApiService {
       method: 'PUT',
     })
   }
+
+  async forgotPassword(email) {
+    return this.request('/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    })
+  }
+
+  async verifyResetCode(email, code) {
+    return this.request('/auth/verify-reset-code', {
+      method: 'POST',
+      body: JSON.stringify({ email, code }),
+    })
+  }
+
+  async resetPassword(email, code, newPassword) {
+    return this.request('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ email, code, newPassword }),
+    })
+  }
 }
 
 export const api = new ApiService()
