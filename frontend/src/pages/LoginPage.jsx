@@ -171,7 +171,7 @@ export default function LoginPage() {
               {mode === 'login' && (
                 <div className="flex items-center justify-between text-sm">
                   <label className="flex items-center gap-2 text-ink-600"><input type="checkbox" className="rounded border-ink-300" /> Remember me</label>
-                  <a href="#" className="font-medium text-accent-600 hover:text-accent-700">Forgot password?</a>
+                  <Link to="/forgot-password" className="font-medium text-accent-600 hover:text-accent-700">Forgot password?</Link>
                 </div>
               )}
               <button type="submit" className="btn-primary w-full" disabled={loading}>

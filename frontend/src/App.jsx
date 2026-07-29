@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
+import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import ProfilePage from './pages/ProfilePage'
 import CustomerDashboard from './pages/CustomerDashboard'
 import OpenAccountPage from './pages/OpenAccountPage'
@@ -22,6 +23,7 @@ export default function App() {
       {/* Public */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
       {/* Customer Portal (requires customer auth) */}
       <Route path="/portal/profile" element={<AuthGuard><ProfilePage /></AuthGuard>} />
