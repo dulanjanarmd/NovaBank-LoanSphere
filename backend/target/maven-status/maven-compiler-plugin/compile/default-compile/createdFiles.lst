@@ -3,6 +3,7 @@ com\novabank\loansphere\controller\IntegrationController.class
 com\novabank\loansphere\repository\RepaymentScheduleItemRepository.class
 com\novabank\loansphere\dto\AccountResponse.class
 com\novabank\loansphere\controller\NotificationController.class
+com\novabank\loansphere\controller\UserRequest.class
 com\novabank\loansphere\dto\LoanApplicationResponse.class
 com\novabank\loansphere\model\AccountProduct.class
 com\novabank\loansphere\model\RepaymentScheduleItem.class
