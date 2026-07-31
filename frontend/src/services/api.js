@@ -192,6 +192,13 @@ class ApiService {
     return this.request('/admin/products')
   }
 
+  async createAdminProduct(productData) {
+    return this.request('/admin/products', {
+      method: 'POST',
+      body: JSON.stringify(productData),
+    })
+  }
+
   async updateAdminProduct(id, productData) {
     return this.request(`/admin/products/${id}`, {
       method: 'PUT',
@@ -199,8 +206,34 @@ class ApiService {
     })
   }
 
+  async deleteAdminProduct(id) {
+    return this.request(`/admin/products/${id}`, {
+      method: 'DELETE',
+    })
+  }
+
   async getAdminUsers() {
     return this.request('/admin/users')
+  }
+
+  async createAdminUser(userData) {
+    return this.request('/admin/users', {
+      method: 'POST',
+      body: JSON.stringify(userData),
+    })
+  }
+
+  async updateAdminUser(id, userData) {
+    return this.request(`/admin/users/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(userData),
+    })
+  }
+
+  async deleteAdminUser(id) {
+    return this.request(`/admin/users/${id}`, {
+      method: 'DELETE',
+    })
   }
 
   async getAdminAuditLogs() {
