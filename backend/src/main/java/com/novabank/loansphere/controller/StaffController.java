@@ -5,7 +5,6 @@ import com.novabank.loansphere.dto.ApprovalRequest;
 import com.novabank.loansphere.dto.LoanApplicationResponse;
 import com.novabank.loansphere.service.StaffService;
 import lombok.RequiredArgsConstructor;
-import lombok.Data;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -77,8 +76,10 @@ public class StaffController {
     }
 }
 
-@Data
 class DisbursementRequest {
     private String accountNumber;
+
+    public String getAccountNumber() { return accountNumber; }
+    public void setAccountNumber(String accountNumber) { this.accountNumber = accountNumber; }
 }
 
