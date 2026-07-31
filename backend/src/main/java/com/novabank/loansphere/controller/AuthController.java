@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
-import lombok.Data;
 
 import java.util.Map;
 
@@ -64,13 +63,16 @@ public class AuthController {
     }
 }
 
-@Data
 class LoginRequest {
     private String username;
     private String password;
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 }
 
-@Data
 class RegisterRequest {
     private String nicNumber;
     private String fullName;
@@ -80,4 +82,21 @@ class RegisterRequest {
     private String occupation;
     private String sourceOfFunds;
     private double monthlyTurnover;
+
+    public String getNicNumber() { return nicNumber; }
+    public void setNicNumber(String nicNumber) { this.nicNumber = nicNumber; }
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getMobileNumber() { return mobileNumber; }
+    public void setMobileNumber(String mobileNumber) { this.mobileNumber = mobileNumber; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
+    public String getOccupation() { return occupation; }
+    public void setOccupation(String occupation) { this.occupation = occupation; }
+    public String getSourceOfFunds() { return sourceOfFunds; }
+    public void setSourceOfFunds(String sourceOfFunds) { this.sourceOfFunds = sourceOfFunds; }
+    public double getMonthlyTurnover() { return monthlyTurnover; }
+    public void setMonthlyTurnover(double monthlyTurnover) { this.monthlyTurnover = monthlyTurnover; }
 }
