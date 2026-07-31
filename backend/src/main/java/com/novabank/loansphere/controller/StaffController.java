@@ -64,7 +64,7 @@ public class StaffController {
     @PostMapping("/applications/{applicationId}/disburse")
     public ResponseEntity<ApiResponse<LoanApplicationResponse>> processDisbursement(
             @PathVariable Long applicationId,
-            @RequestBody DisbursementRequest request,
+            @RequestBody StaffDisbursementRequest request,
             Authentication authentication) {
         try {
             String officerName = authentication.getName();
@@ -76,7 +76,7 @@ public class StaffController {
     }
 }
 
-class DisbursementRequest {
+class StaffDisbursementRequest {
     private String accountNumber;
 
     public String getAccountNumber() { return accountNumber; }
