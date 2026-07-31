@@ -1,12 +1,10 @@
 package com.novabank.loansphere.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notifications")
-@Data
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +20,32 @@ public class Notification {
     private String body;
 
     @Column(nullable = false, length = 20)
-    private String type; // success, warning, info
+    private String type;
 
     @Column(nullable = false)
     private boolean read = false;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    // Explicit getters/setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Long getCustomerId() { return customerId; }
+    public void setCustomerId(Long customerId) { this.customerId = customerId; }
+
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getBody() { return body; }
+    public void setBody(String body) { this.body = body; }
+
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
+
+    public boolean isRead() { return read; }
+    public void setRead(boolean read) { this.read = read; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
 }

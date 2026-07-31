@@ -1,13 +1,11 @@
 package com.novabank.loansphere.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "credit_assessments")
-@Data
 public class CreditAssessment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +33,28 @@ public class CreditAssessment {
 
     @Column(name = "assessed_at", insertable = false, updatable = false)
     private LocalDateTime assessedAt;
+
+    // Explicit getters/setters (Lombok disabled due to Java 21 annotation processing issue)
+    public Long getAssessmentId() { return assessmentId; }
+    public void setAssessmentId(Long assessmentId) { this.assessmentId = assessmentId; }
+
+    public LoanApplication getLoanApplication() { return loanApplication; }
+    public void setLoanApplication(LoanApplication loanApplication) { this.loanApplication = loanApplication; }
+
+    public Integer getInternalScore() { return internalScore; }
+    public void setInternalScore(Integer internalScore) { this.internalScore = internalScore; }
+
+    public String getCribReference() { return cribReference; }
+    public void setCribReference(String cribReference) { this.cribReference = cribReference; }
+
+    public BigDecimal getDtiRatio() { return dtiRatio; }
+    public void setDtiRatio(BigDecimal dtiRatio) { this.dtiRatio = dtiRatio; }
+
+    public BigDecimal getLtvRatio() { return ltvRatio; }
+    public void setLtvRatio(BigDecimal ltvRatio) { this.ltvRatio = ltvRatio; }
+
+    public String getDecisionBand() { return decisionBand; }
+    public void setDecisionBand(String decisionBand) { this.decisionBand = decisionBand; }
+
+    public LocalDateTime getAssessedAt() { return assessedAt; }
 }

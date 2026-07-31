@@ -1,13 +1,11 @@
 package com.novabank.loansphere.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "loan_products")
-@Data
 public class LoanProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,4 +34,31 @@ public class LoanProduct {
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    // Explicit getters/setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getLoanType() { return loanType; }
+    public void setLoanType(String loanType) { this.loanType = loanType; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public BigDecimal getMinAmount() { return minAmount; }
+    public void setMinAmount(BigDecimal minAmount) { this.minAmount = minAmount; }
+
+    public BigDecimal getMaxAmount() { return maxAmount; }
+    public void setMaxAmount(BigDecimal maxAmount) { this.maxAmount = maxAmount; }
+
+    public BigDecimal getInterestRate() { return interestRate; }
+    public void setInterestRate(BigDecimal interestRate) { this.interestRate = interestRate; }
+
+    public Integer getDefaultTenure() { return defaultTenure; }
+    public void setDefaultTenure(Integer defaultTenure) { this.defaultTenure = defaultTenure; }
+
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
 }

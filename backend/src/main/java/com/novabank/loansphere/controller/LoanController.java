@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
-import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -46,7 +45,6 @@ public class LoanController {
     @PostMapping("/{id}/disburse")
     @PreAuthorize("hasAnyRole('ROLE_BRANCH_MANAGER', 'ROLE_ADMIN')")
     public ResponseEntity<?> executeDisbursement(@PathVariable("id") Long id, @RequestBody DisbursementRequest request) {
-        // Simulating core CBS transaction call
         String reference = "CBS-DISB-" + (100000 + (int)(Math.random() * 900000));
         
         Map<String, Object> response = new HashMap<>();
@@ -63,16 +61,29 @@ public class LoanController {
     }
 }
 
-@Data
+// Inner request classes — explicit getters/setters replacing Lombok @Data
 class LoanApplicationRequest {
     private Long customerId;
     private Long loanProductId;
     private String loanType;
     private double requestedAmount;
     private int tenureMonths;
+
+    public Long getCustomerId() { return customerId; }
+    public void setCustomerId(Long customerId) { this.customerId = customerId; }
+    public Long getLoanProductId() { return loanProductId; }
+    public void setLoanProductId(Long loanProductId) { this.loanProductId = loanProductId; }
+    public String getLoanType() { return loanType; }
+    public void setLoanType(String loanType) { this.loanType = loanType; }
+    public double getRequestedAmount() { return requestedAmount; }
+    public void setRequestedAmount(double requestedAmount) { this.requestedAmount = requestedAmount; }
+    public int getTenureMonths() { return tenureMonths; }
+    public void setTenureMonths(int tenureMonths) { this.tenureMonths = tenureMonths; }
 }
 
-@Data
 class DisbursementRequest {
     private String targetAccountNumber;
+
+    public String getTargetAccountNumber() { return targetAccountNumber; }
+    public void setTargetAccountNumber(String targetAccountNumber) { this.targetAccountNumber = targetAccountNumber; }
 }
