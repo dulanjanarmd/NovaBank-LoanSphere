@@ -4,6 +4,7 @@ C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\controller\AuthController.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\controller\CreditAssessmentController.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\controller\DocumentController.java
+C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\controller\IntegrationController.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\controller\LoanController.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\controller\NotificationController.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\controller\ReportingController.java
@@ -50,10 +51,16 @@ C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\security\JwtHelper.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\security\SecurityConfig.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\AccountService.java
+C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\AuditAspect.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\AuthService.java
+C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\CbsIntegrationService.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\CreditAssessmentService.java
+C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\CribIntegrationService.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\DocumentService.java
+C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\KycIntegrationService.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\LoanService.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\NotificationService.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\ReportingService.java
+C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\SlaEscalationTask.java
+C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\SmsEmailGatewayService.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\StaffService.java
