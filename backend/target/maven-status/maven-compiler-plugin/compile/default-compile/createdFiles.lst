@@ -3,6 +3,8 @@ com\novabank\loansphere\controller\IntegrationController.class
 com\novabank\loansphere\repository\RepaymentScheduleItemRepository.class
 com\novabank\loansphere\dto\AccountResponse.class
 com\novabank\loansphere\controller\NotificationController.class
+com\novabank\loansphere\model\SystemConfig.class
+com\novabank\loansphere\repository\SystemConfigRepository.class
 com\novabank\loansphere\controller\UserRequest.class
 com\novabank\loansphere\dto\LoanApplicationResponse.class
 com\novabank\loansphere\model\AccountProduct.class
@@ -12,6 +14,7 @@ com\novabank\loansphere\dto\ApiResponse.class
 com\novabank\loansphere\repository\LoanDocumentRepository.class
 com\novabank\loansphere\repository\CreditAssessmentRepository.class
 com\novabank\loansphere\dto\LoanApplicationRequest.class
+com\novabank\loansphere\model\ApplicationCondition.class
 com\novabank\loansphere\model\Account.class
 com\novabank\loansphere\controller\RegisterRequest.class
 com\novabank\loansphere\controller\CreditAssessmentController.class
@@ -33,9 +36,9 @@ com\novabank\loansphere\repository\WorkflowApprovalRepository.class
 com\novabank\loansphere\model\Disbursement.class
 com\novabank\loansphere\security\JwtHelper.class
 com\novabank\loansphere\service\DocumentService.class
+com\novabank\loansphere\controller\FullLoanApplicationRequest.class
 com\novabank\loansphere\model\Customer.class
 com\novabank\loansphere\security\SecurityConfig.class
-com\novabank\loansphere\controller\LoanApplicationRequest.class
 com\novabank\loansphere\model\CreditAssessment.class
 com\novabank\loansphere\controller\DocumentController.class
 com\novabank\loansphere\controller\ReportingController.class
@@ -56,10 +59,12 @@ com\novabank\loansphere\service\CreditAssessmentService.class
 com\novabank\loansphere\repository\UserRepository.class
 com\novabank\loansphere\service\AccountService.class
 com\novabank\loansphere\model\User.class
+com\novabank\loansphere\service\SystemConfigService.class
 com\novabank\loansphere\security\JwtAuthenticationFilter.class
 com\novabank\loansphere\model\KYCRecord.class
 com\novabank\loansphere\model\LoanDocument.class
 com\novabank\loansphere\service\CbsIntegrationService.class
+com\novabank\loansphere\repository\ApplicationConditionRepository.class
 com\novabank\loansphere\service\SlaEscalationTask.class
 com\novabank\loansphere\controller\LoginRequest.class
 com\novabank\loansphere\repository\AccountProductRepository.class
@@ -67,6 +72,7 @@ com\novabank\loansphere\repository\AccountRepository.class
 com\novabank\loansphere\service\ReportingService.class
 com\novabank\loansphere\service\AuditAspect.class
 com\novabank\loansphere\service\StaffService.class
+com\novabank\loansphere\controller\SystemConfigController.class
 com\novabank\loansphere\repository\KYCRecordRepository.class
 com\novabank\loansphere\repository\LoanApplicationRepository.class
 com\novabank\loansphere\dto\CustomerResponse.class

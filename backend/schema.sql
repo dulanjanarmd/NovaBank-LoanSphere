@@ -204,10 +204,10 @@ CREATE TABLE repayment_schedule_items (
 -- 13. SYSTEM AUDIT_LOGS TABLE (Security logs)
 CREATE TABLE audit_logs (
     audit_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id VARCHAR(50) NOT NULL,
+    user_id VARCHAR(100),
     action_type VARCHAR(100) NOT NULL,
-    entity_reference VARCHAR(100) NOT NULL,
-    ip_address VARCHAR(45) NOT NULL,
+    entity_reference VARCHAR(200),
+    ip_address VARCHAR(45),
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     details TEXT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

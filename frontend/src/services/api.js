@@ -340,6 +340,40 @@ class ApiService {
     })
   }
 
+  // ── Reports (FR-RPT-01, FR-RPT-02) ────────────────────────────────────────
+
+  async getKpiReport(startDate, endDate) {
+    const params = new URLSearchParams()
+    if (startDate) params.append('startDate', startDate)
+    if (endDate) params.append('endDate', endDate)
+    return this.request(`/reports/kpi?${params.toString()}`)
+  }
+
+  async getOperationalReport(startDate, endDate, branch, product) {
+    const params = new URLSearchParams()
+    if (startDate) params.append('startDate', startDate)
+    if (endDate) params.append('endDate', endDate)
+    if (branch) params.append('branch', branch)
+    if (product) params.append('product', product)
+    return this.request(`/reports/operational?${params.toString()}`)
+  }
+
+  async getComplianceReport(startDate, endDate) {
+    const params = new URLSearchParams()
+    if (startDate) params.append('startDate', startDate)
+    if (endDate) params.append('endDate', endDate)
+    return this.request(`/reports/compliance?${params.toString()}`)
+  }
+
+  async exportOperationalReport(startDate, endDate, branch, product) {
+    const params = new URLSearchParams()
+    if (startDate) params.append('startDate', startDate)
+    if (endDate) params.append('endDate', endDate)
+    if (branch) params.append('branch', branch)
+    if (product) params.append('product', product)
+    return this.request(`/reports/export?${params.toString()}`)
+  }
+
   // ── Integrations ──────────────────────────────────────────────────────────
 
   async performKycOcr(nicNumber) {

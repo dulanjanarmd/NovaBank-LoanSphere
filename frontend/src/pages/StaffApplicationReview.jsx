@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, User, Building2, CreditCard, FileText, CheckCircle, XCircle, Clock, AlertTriangle, ShieldCheck, UserCheck, Send, Download, Eye } from 'lucide-react'
+import { ArrowLeft, User, Building2, CreditCard, FileText, CheckCircle, XCircle, Clock, AlertTriangle, ShieldCheck, UserCheck, Send, Download, Eye, Activity } from 'lucide-react'
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts'
 import StaffShell from '../components/StaffShell'
 import StatusBadge from '../components/StatusBadge'
 import { applications, staffQueue, formatLKR, formatDate } from '../data/mockData'
@@ -297,21 +298,38 @@ export default function StaffApplicationReview() {
                   </div>
                 )}
 
-                {/* Risk assessment */}
+                {/* AI Risk assessment (FR-ADM-03) */}
                 <div className="mb-4 rounded-xl bg-ink-50 p-4">
-                  <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-ink-400">Risk Assessment</div>
-                  <div className="flex items-center gap-2">
-                    {dtiRatio > 40
-                      ? <AlertTriangle className="h-5 w-5 text-danger-600" />
-                      : dtiRatio > 25
-                      ? <AlertTriangle className="h-5 w-5 text-warning-600" />
-                      : <CheckCircle className="h-5 w-5 text-success-600" />}
-                    <span className="text-sm font-bold text-navy-800">
-                      {dtiRatio > 40 ? 'High Risk' : dtiRatio > 25 ? 'Medium Risk' : 'Low Risk'}
-                    </span>
+                  <div className="mb-2 flex items-center justify-between">
+                    <div className="text-xs font-semibold uppercase tracking-wider text-ink-400 flex items-center gap-1.5"><Activity className="h-3.5 w-3.5" /> AI Risk Assessment</div>
+                    <div className="flex items-center gap-1.5">
+                      {dtiRatio > 40
+                        ? <AlertTriangle className="h-4 w-4 text-danger-600" />
+                        : dtiRatio > 25
+                        ? <AlertTriangle className="h-4 w-4 text-warning-600" />
+                        : <CheckCircle className="h-4 w-4 text-success-600" />}
+                      <span className="text-xs font-bold text-navy-800">
+                        {dtiRatio > 40 ? 'High Risk' : dtiRatio > 25 ? 'Medium Risk' : 'Low Risk'}
+                      </span>
+                    </div>
                   </div>
-                  <div className="mt-2 text-xs text-ink-500">
-                    DTI ratio: {dtiRatio}% · Credit score: 742 · Income verified
+                  <div className="h-48 w-full mt-2">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RadarChart cx="50%" cy="50%" outerRadius="70%" data={[
+                        { subject: 'Income', score: 85, fullMark: 100 },
+                        { subject: 'DTI Safety', score: Math.max(0, 100 - dtiRatio), fullMark: 100 },
+                        { subject: 'CRIB Score', score: app.internalScore ? Math.round(app.internalScore / 10) : 75, fullMark: 100 },
+                        { subject: 'LTV Safety', score: app.ltvRatio ? Math.max(0, 100 - app.ltvRatio) : 100, fullMark: 100 },
+                        { subject: 'Stability', score: 90, fullMark: 100 },
+                      ]}>
+                        <PolarGrid stroke="#e2e8f0" />
+                        <PolarAngleAxis dataKey="subject" tick={{ fill: '#64748b', fontSize: 10 }} />
+                        <Radar name="Score" dataKey="score" stroke="#0ea5e9" fill="#0ea5e9" fillOpacity={0.4} />
+                      </RadarChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <div className="mt-2 text-[11px] text-ink-500 text-center">
+                    DTI: {dtiRatio}% · Credit score: {app.internalScore} · Auto-Band: {app.decisionBand}
                   </div>
                 </div>
 

@@ -321,7 +321,33 @@ export default function StaffAdminPage() {
 
           {/* Audit Logs with Export */}
           <div className="card p-6">
-            <h2 className="mb-4 text-xl font-bold text-navy-800">System Audit Logs</h2>
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-navy-800">System Audit Logs</h2>
+              <button 
+                onClick={() => {
+                  const csv = [
+                    ['Timestamp', 'User', 'Action', 'Entity Reference', 'Details'].join(','),
+                    ...auditLogs.map(l => [
+                      new Date(l.timestamp).toISOString(),
+                      l.userId,
+                      l.actionType,
+                      l.entityReference,
+                      `"${(l.details || '').replace(/"/g, '""')}"`
+                    ].join(','))
+                  ].join('\n')
+                  
+                  const blob = new Blob([csv], { type: 'text/csv' })
+                  const url = window.URL.createObjectURL(blob)
+                  const a = document.createElement('a')
+                  a.href = url
+                  a.download = `Audit_Logs_${new Date().toISOString().split('T')[0]}.csv`
+                  a.click()
+                }}
+                className="btn-outline py-1.5 px-3 text-sm"
+              >
+                <Download className="h-4 w-4 mr-1" /> Export CSV
+              </button>
+            </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead className="border-b border-ink-100 text-xs font-semibold text-ink-500">

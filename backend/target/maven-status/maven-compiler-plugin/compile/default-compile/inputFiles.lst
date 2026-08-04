@@ -9,6 +9,7 @@ C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\controller\NotificationController.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\controller\ReportingController.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\controller\StaffController.java
+C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\controller\SystemConfigController.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\dto\AccountRequest.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\dto\AccountResponse.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\dto\ApiResponse.java
@@ -21,6 +22,7 @@ C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\LoansphereApplication.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\model\Account.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\model\AccountProduct.java
+C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\model\ApplicationCondition.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\model\AuditLog.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\model\CreditAssessment.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\model\Customer.java
@@ -31,10 +33,12 @@ C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\model\LoanProduct.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\model\Notification.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\model\RepaymentScheduleItem.java
+C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\model\SystemConfig.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\model\User.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\model\WorkflowApproval.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\repository\AccountProductRepository.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\repository\AccountRepository.java
+C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\repository\ApplicationConditionRepository.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\repository\AuditLogRepository.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\repository\CreditAssessmentRepository.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\repository\CustomerRepository.java
@@ -45,6 +49,7 @@ C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\repository\LoanProductRepository.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\repository\NotificationRepository.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\repository\RepaymentScheduleItemRepository.java
+C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\repository\SystemConfigRepository.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\repository\UserRepository.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\repository\WorkflowApprovalRepository.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\security\JwtAuthenticationFilter.java
@@ -64,3 +69,4 @@ C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\SlaEscalationTask.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\SmsEmailGatewayService.java
 C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\StaffService.java
+C:\Users\damin\Documents\NovaBank-LoanSphere\backend\src\main\java\com\novabank\loansphere\service\SystemConfigService.java
