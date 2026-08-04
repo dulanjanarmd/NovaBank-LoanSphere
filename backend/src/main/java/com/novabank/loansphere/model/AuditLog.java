@@ -11,16 +11,16 @@ public class AuditLog {
     @Column(name = "audit_id")
     private Long auditId;
 
-    @Column(name = "user_id", nullable = false, length = 50)
+    @Column(name = "user_id", length = 100)
     private String userId;
 
     @Column(name = "action_type", nullable = false, length = 100)
     private String actionType;
 
-    @Column(name = "entity_reference", nullable = false, length = 100)
+    @Column(name = "entity_reference", length = 200)
     private String entityReference;
 
-    @Column(name = "ip_address", nullable = false, length = 45)
+    @Column(name = "ip_address", length = 45)
     private String ipAddress;
 
     @Column(insertable = false, updatable = false)

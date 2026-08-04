@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Plus, Edit, Trash2, ToggleLeft, ToggleRight, Save, X } from 'lucide-react'
+import { Plus, Edit, Trash2, ToggleLeft, ToggleRight, Save, X, Settings, Shield, Download } from 'lucide-react'
 import StaffShell from '../components/StaffShell'
 import { loanProductsAdmin, formatLKR } from '../data/mockData'
 import { api } from '../services/api'
@@ -11,6 +11,9 @@ export default function StaffAdminPage() {
   
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [sysConfig, setSysConfig] = useState({})
+  const [configSaving, setConfigSaving] = useState(false)
+  const [configSaved, setConfigSaved] = useState(false)
 
   // Modals state
   const [showProductModal, setShowProductModal] = useState(false)
@@ -28,8 +31,19 @@ export default function StaffAdminPage() {
 
   const fetchData = async () => {
     setLoading(true)
-    await Promise.all([fetchProducts(), fetchUsers(), fetchAuditLogs()])
+    await Promise.all([fetchProducts(), fetchUsers(), fetchAuditLogs(), fetchConfig()])
     setLoading(false)
+  }
+
+  const fetchConfig = async () => {
+    try {
+      const res = await api.getSystemConfig()
+      if (res?.data) {
+        const map = {}
+        res.data.forEach(c => { map[c.configKey] = c.configValue })
+        setSysConfig(map)
+      }
+    } catch (_) {}
   }
 
   const fetchUsers = async () => {
@@ -249,7 +263,63 @@ export default function StaffAdminPage() {
             </div>
           </div>
 
-          {/* Audit Logs */}
+          {/* System Configuration (FR-ADM-03) */}
+          <div className="card p-6 mb-8">
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Settings className="h-5 w-5 text-accent-600" />
+                <h2 className="text-xl font-bold text-navy-800">System Configuration</h2>
+              </div>
+              <span className="chip bg-accent-50 text-accent-700">FR-ADM-03</span>
+            </div>
+            <p className="mb-5 text-sm text-ink-500">Admin-configurable thresholds for credit scoring, SLA, and risk management.</p>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                { key: 'AUTO_APPROVE_SCORE_MIN', label: 'Auto-Approve Min Score', hint: '0–1000 CRIB score' },
+                { key: 'AUTO_DECLINE_SCORE_MAX', label: 'Auto-Decline Max Score', hint: '0–1000 CRIB score' },
+                { key: 'DTI_THRESHOLD_PCT', label: 'Max DTI Ratio (%)', hint: 'Debt-to-income ceiling' },
+                { key: 'SLA_REVIEW_DAYS', label: 'SLA Review Days', hint: 'Business days before breach' },
+                { key: 'MAX_LOGIN_ATTEMPTS', label: 'Max Login Attempts', hint: 'Before account lockout' },
+                { key: 'LOCKOUT_MINUTES', label: 'Lockout Duration (min)', hint: 'After failed attempts' },
+                { key: 'DRAFT_EXPIRY_DAYS', label: 'Draft Expiry Days', hint: 'Before draft auto-expires' },
+                { key: 'OFFER_VALIDITY_DAYS', label: 'Offer Validity Days', hint: 'Days to sign after approval' },
+                { key: 'LIVENESS_MATCH_THRESHOLD', label: 'Liveness Match Threshold', hint: '% minimum for auto-pass' },
+              ].map(({ key, label, hint }) => (
+                <div key={key}>
+                  <label className="label">{label}</label>
+                  <p className="text-xs text-ink-400 mb-1">{hint}</p>
+                  <input
+                    id={`config-${key}`}
+                    className="input"
+                    type="number"
+                    value={sysConfig[key] || ''}
+                    onChange={e => setSysConfig(prev => ({ ...prev, [key]: e.target.value }))}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="mt-5 flex items-center gap-3">
+              <button
+                id="save-config-btn"
+                disabled={configSaving}
+                onClick={async () => {
+                  setConfigSaving(true)
+                  try {
+                    await api.bulkUpdateSystemConfig(sysConfig)
+                    setConfigSaved(true)
+                    setTimeout(() => setConfigSaved(false), 3000)
+                  } catch (e) { setError('Failed to save config: ' + e.message) }
+                  finally { setConfigSaving(false) }
+                }}
+                className="btn-primary"
+              >
+                <Save className="h-4 w-4" />
+                {configSaving ? 'Saving...' : configSaved ? '✓ Saved!' : 'Save Configuration'}
+              </button>
+            </div>
+          </div>
+
+          {/* Audit Logs with Export */}
           <div className="card p-6">
             <h2 className="mb-4 text-xl font-bold text-navy-800">System Audit Logs</h2>
             <div className="overflow-x-auto">

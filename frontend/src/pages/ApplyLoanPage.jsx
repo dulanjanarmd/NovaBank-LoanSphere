@@ -65,9 +65,25 @@ export default function ApplyLoanPage() {
     setDraftSaved(false)
   }
 
-  const saveDraft = () => {
+  const saveDraft = async () => {
+    // Save to localStorage immediately for offline support
     localStorage.setItem('loanApplicationDraft', JSON.stringify(data))
     setDraftSaved(true)
+    // Also save to backend API (FR-LOAN-05)
+    try {
+      const userData = JSON.parse(localStorage.getItem('user'))
+      if (userData?.customerId && selectedProduct) {
+        await api.saveLoanDraft({
+          customerId: userData.customerId,
+          loanProductId: selectedProduct.id === 'personal' ? 1 : selectedProduct.id === 'home' ? 2 : selectedProduct.id === 'vehicle' ? 3 : 4,
+          loanType: selectedProduct.id.toUpperCase(),
+          requestedAmount: Number(data.amount),
+          tenureMonths: Number(data.tenure),
+          purpose: data.purpose || 'Draft',
+          collateralValue: 0,
+        })
+      }
+    } catch (_) { /* API save failed — localStorage backup is fine */ }
     setTimeout(() => setDraftSaved(false), 3000)
   }
 
