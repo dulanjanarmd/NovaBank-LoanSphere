@@ -4,7 +4,7 @@ class ApiService {
   async request(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`
     const token = localStorage.getItem('token')
-    
+
     const headers = {
       'Content-Type': 'application/json',
       ...(token && { 'Authorization': `Bearer ${token}` }),
@@ -17,12 +17,20 @@ class ApiService {
     })
 
     if (!response.ok) {
-      const error = await response.json()
+      let error
+      try { error = await response.json() } catch { error = { message: 'API request failed' } }
       throw new Error(error.message || 'API request failed')
+    }
+
+    const contentType = response.headers.get('content-type')
+    if (contentType && contentType.includes('text/csv')) {
+      return response.text()
     }
 
     return response.json()
   }
+
+  // ── Auth ──────────────────────────────────────────────────────────────────
 
   async login(username, password) {
     return this.request('/auth/login', {
@@ -49,6 +57,29 @@ class ApiService {
     return this.request('/auth/me')
   }
 
+  async forgotPassword(identifier) {
+    return this.request('/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify({ email: identifier }),
+    })
+  }
+
+  async verifyResetCode(identifier, code) {
+    return this.request('/auth/verify-reset-code', {
+      method: 'POST',
+      body: JSON.stringify({ email: identifier, code }),
+    })
+  }
+
+  async resetPassword(identifier, code, newPassword) {
+    return this.request('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ email: identifier, code, newPassword }),
+    })
+  }
+
+  // ── Accounts ──────────────────────────────────────────────────────────────
+
   async openAccount(data) {
     return this.request('/accounts/open', {
       method: 'POST',
@@ -64,8 +95,17 @@ class ApiService {
     return this.request('/accounts/products')
   }
 
+  // ── Loans ─────────────────────────────────────────────────────────────────
+
   async submitLoanApplication(data) {
     return this.request('/loans/apply', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  }
+
+  async saveLoanDraft(data) {
+    return this.request('/loans/draft', {
       method: 'POST',
       body: JSON.stringify(data),
     })
@@ -78,6 +118,33 @@ class ApiService {
   async getApplicationDetail(applicationId) {
     return this.request(`/loans/${applicationId}`)
   }
+
+  async calculateEmi(principal, rate, tenure) {
+    return this.request(`/loans/emi-calculator?principal=${principal}&rate=${rate}&tenure=${tenure}`)
+  }
+
+  async signLoanAgreement(applicationId, otp) {
+    return this.request(`/loans/${applicationId}/sign`, {
+      method: 'POST',
+      body: JSON.stringify({ otp }),
+    })
+  }
+
+  async getRepaymentSchedule(applicationId) {
+    return this.request(`/loans/${applicationId}/schedule`)
+  }
+
+  async getApplicationConditions(applicationId) {
+    return this.request(`/loans/${applicationId}/conditions`)
+  }
+
+  async fulfillCondition(conditionId) {
+    return this.request(`/loans/conditions/${conditionId}/fulfill`, {
+      method: 'PUT',
+    })
+  }
+
+  // ── Documents ─────────────────────────────────────────────────────────────
 
   async uploadDocument(data) {
     return this.request('/documents/upload', {
@@ -95,6 +162,8 @@ class ApiService {
       method: 'PUT',
     })
   }
+
+  // ── Staff ─────────────────────────────────────────────────────────────────
 
   async getStaffApplications(status, role) {
     const params = new URLSearchParams()
@@ -121,6 +190,8 @@ class ApiService {
     })
   }
 
+  // ── Credit Assessment ─────────────────────────────────────────────────────
+
   async performCreditAssessment(applicationId) {
     return this.request(`/credit-assessment/application/${applicationId}`, {
       method: 'POST',
@@ -130,6 +201,8 @@ class ApiService {
   async getCreditAssessment(applicationId) {
     return this.request(`/credit-assessment/application/${applicationId}`)
   }
+
+  // ── Reports ───────────────────────────────────────────────────────────────
 
   async getKPIs() {
     return this.request('/reports/kpi')
@@ -146,6 +219,32 @@ class ApiService {
   async getProductMix() {
     return this.request('/reports/product-mix')
   }
+
+  async getOperationalReport(params = {}) {
+    const q = new URLSearchParams()
+    if (params.from) q.append('from', params.from)
+    if (params.to) q.append('to', params.to)
+    if (params.loanType) q.append('loanType', params.loanType)
+    if (params.status) q.append('status', params.status)
+    return this.request(`/reports/operational?${q}`)
+  }
+
+  async getComplianceReport() {
+    return this.request('/reports/compliance')
+  }
+
+  async getTATReport() {
+    return this.request('/reports/tat')
+  }
+
+  async exportAuditCsv(from, to) {
+    const q = new URLSearchParams()
+    if (from) q.append('from', from)
+    if (to) q.append('to', to)
+    return this.request(`/reports/export-csv?${q}`)
+  }
+
+  // ── Notifications ──────────────────────────────────────────────────────────
 
   async getNotifications(customerId) {
     return this.request(`/notifications/customer/${customerId}`)
@@ -167,26 +266,7 @@ class ApiService {
     })
   }
 
-  async forgotPassword(email) {
-    return this.request('/auth/forgot-password', {
-      method: 'POST',
-      body: JSON.stringify({ email }),
-    })
-  }
-
-  async verifyResetCode(email, code) {
-    return this.request('/auth/verify-reset-code', {
-      method: 'POST',
-      body: JSON.stringify({ email, code }),
-    })
-  }
-
-  async resetPassword(email, code, newPassword) {
-    return this.request('/auth/reset-password', {
-      method: 'POST',
-      body: JSON.stringify({ email, code, newPassword }),
-    })
-  }
+  // ── Admin ─────────────────────────────────────────────────────────────────
 
   async getAdminProducts() {
     return this.request('/admin/products')
@@ -240,7 +320,27 @@ class ApiService {
     return this.request('/admin/audit-logs')
   }
 
-  // ── Integration Endpoints ─────────────────────────────────────────────────
+  // ── System Config (FR-ADM-03) ─────────────────────────────────────────────
+
+  async getSystemConfig() {
+    return this.request('/admin/config')
+  }
+
+  async updateSystemConfig(key, value) {
+    return this.request(`/admin/config/${key}`, {
+      method: 'PUT',
+      body: JSON.stringify({ value }),
+    })
+  }
+
+  async bulkUpdateSystemConfig(updates) {
+    return this.request('/admin/config/bulk', {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    })
+  }
+
+  // ── Integrations ──────────────────────────────────────────────────────────
 
   async performKycOcr(nicNumber) {
     return this.request('/integration/kyc/ocr', {
@@ -270,7 +370,7 @@ class ApiService {
     return this.request(`/integration/cbs/verify-account?accountNumber=${accountNumber}`)
   }
 
-  async getRepaymentSchedule(principal, annualRate, tenureMonths) {
+  async getRepaymentScheduleCalc(principal, annualRate, tenureMonths) {
     return this.request('/integration/cbs/repayment-schedule', {
       method: 'POST',
       body: JSON.stringify({ principal, annualRate, tenureMonths }),
