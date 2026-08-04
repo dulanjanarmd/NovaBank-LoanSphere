@@ -1,11 +1,22 @@
-﻿import { Link } from 'react-router-dom'
-import { Home, FileText, CreditCard, Bell, LogOut, UserCircle, Settings, Menu, X } from 'lucide-react'
 import { useState } from 'react'
-import Logo from './Logo'
-import { TrustBar } from './Logo'
+import { Link, useNavigate } from 'react-router-dom'
+import { Home, FileText, CreditCard, Bell, LogOut, UserCircle, Settings, Menu, X } from 'lucide-react'
+import Logo, { TrustBar } from './Logo'
 
 export default function CustomerHeader({ active }) {
   const [open, setOpen] = useState(false)
+  const navigate = useNavigate()
+  
+  const userStr = localStorage.getItem('user')
+  const user = userStr ? JSON.parse(userStr) : null
+  const fullName = user?.fullName || 'Retail Customer'
+  const initials = fullName.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()
+  
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    navigate('/')
+  }
   const navItems = [
     { to: '/portal/dashboard', label: 'Dashboard', icon: Home },
     { to: '/portal/profile', label: 'Profile', icon: UserCircle },
@@ -38,17 +49,17 @@ export default function CustomerHeader({ active }) {
           </nav>
         </div>
         <div className="flex items-center gap-3">
-          <Link to="/staff" className="hidden items-center gap-1.5 rounded-lg border border-ink-200 px-3 py-2 text-xs font-semibold text-navy-700 hover:bg-navy-50 sm:inline-flex">
-            <Settings className="h-3.5 w-3.5" /> Staff Portal
-          </Link>
+
           <div className="hidden items-center gap-2.5 sm:flex">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-navy-700 text-sm font-bold text-white">KP</div>
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-navy-700 text-sm font-bold text-white">{initials}</div>
             <div className="leading-tight">
-              <div className="text-sm font-semibold text-navy-800">Kavindya Perera</div>
-              <div className="text-[11px] text-ink-500">Retail Customer</div>
+              <div className="text-sm font-semibold text-navy-800">{fullName}</div>
+              <div className="text-[11px] text-ink-500">{user?.role === 'CUSTOMER' ? 'Retail Customer' : 'User'}</div>
             </div>
           </div>
-          <Link to="/" className="btn-ghost p-2 text-ink-500" title="Sign out"><LogOut className="h-4.5 w-4.5" /></Link>
+          <button onClick={handleLogout} className="btn-ghost p-2 text-ink-500" title="Sign out">
+            <LogOut className="h-4.5 w-4.5" />
+          </button>
           <button className="lg:hidden btn-ghost p-2" onClick={() => setOpen(!open)}>
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>

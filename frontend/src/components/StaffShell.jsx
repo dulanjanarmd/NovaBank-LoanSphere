@@ -50,6 +50,7 @@ export default function StaffShell({ children, active }) {
   const nav = NAV_BY_ROLE[roleId] || NAV_BY_ROLE.officer
 
   const handleLogout = () => {
+    localStorage.removeItem('staffToken')
     localStorage.removeItem('staffUser')
     navigate('/staff/login')
   }

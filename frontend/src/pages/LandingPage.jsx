@@ -43,7 +43,7 @@ export default function LandingPage() {
           </nav>
           <div className="flex items-center gap-2">
             <Link to="/login" className="btn-ghost">Sign In</Link>
-            <Link to="/login" className="btn-primary">Open Account</Link>
+            <Link to="/register" className="btn-primary">Open Account</Link>
           </div>
           </div>
         </header>
@@ -70,7 +70,7 @@ export default function LandingPage() {
                 Apply for a Loan
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
-              <Link to="/login" className="btn border border-white/30 bg-white/10 text-white backdrop-blur hover:bg-white/20">
+              <Link to="/register" className="btn border border-white/30 bg-white/10 text-white backdrop-blur hover:bg-white/20">
                 Open an Account
               </Link>
             </div>

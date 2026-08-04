@@ -1,14 +1,17 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { Mail, Lock, User, Phone, Building2, ArrowRight, ShieldCheck, CheckCircle } from 'lucide-react'
 import Logo, { TrustBar } from '../components/Logo'
 import { api } from '../services/api'
 
-export default function LoginPage() {
-  const [mode, setMode] = useState('login')
+export default function LoginPage({ initialMode = 'login' }) {
+  const [mode, setMode] = useState(initialMode)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const navigate = useNavigate()
+  const location = useLocation()
+  
+  const from = location.state?.from?.pathname || '/portal/dashboard'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -27,7 +30,7 @@ export default function LoginPage() {
         if (response.success) {
           localStorage.setItem('token', response.token)
           localStorage.setItem('user', JSON.stringify(response.user))
-          navigate('/portal/profile')
+          navigate(from, { replace: true })
         } else {
           setError(response.message || 'Login failed')
         }
@@ -48,7 +51,7 @@ export default function LoginPage() {
         if (response.success) {
           localStorage.setItem('token', response.token)
           localStorage.setItem('user', JSON.stringify(response.user))
-          navigate('/portal/profile')
+          navigate(from, { replace: true })
         } else {
           setError(response.message || 'Registration failed')
         }
@@ -180,12 +183,7 @@ export default function LoginPage() {
               </button>
             </form>
 
-            <div className="my-6 flex items-center gap-3 text-xs text-ink-400">
-              <div className="h-px flex-1 bg-ink-200" /> OR <div className="h-px flex-1 bg-ink-200" />
-            </div>
-            <Link to="/staff" className="btn-outline w-full">
-              <Building2 className="h-4 w-4" /> Staff Portal Login
-            </Link>
+
 
             <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-ink-500">
               <ShieldCheck className="h-3.5 w-3.5 text-success-600" /> Protected by 256-bit encryption
