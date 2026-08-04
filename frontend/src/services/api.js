@@ -67,6 +67,13 @@ class ApiService {
     })
   }
 
+  async verifyOtp(identifier, otp) {
+    return this.request('/auth/verify-otp', {
+      method: 'POST',
+      body: JSON.stringify({ identifier, otp }),
+    })
+  }
+
   async getMyProfile() {
     return this.request('/auth/me')
   }

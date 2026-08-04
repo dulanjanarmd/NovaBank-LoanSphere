@@ -74,8 +74,11 @@ public class AuthService {
             }
         }
 
-        // 2. Try customer by mobile or NIC
-        Optional<Customer> customerOpt = customerRepository.findByMobileNumber(username);
+        // 2. Try customer by email, mobile or NIC
+        Optional<Customer> customerOpt = customerRepository.findByEmail(username);
+        if (customerOpt.isEmpty()) {
+            customerOpt = customerRepository.findByMobileNumber(username);
+        }
         if (customerOpt.isEmpty()) {
             customerOpt = customerRepository.findByNicNumber(username);
         }
@@ -88,8 +91,15 @@ public class AuthService {
                 throw new RuntimeException("Account is locked. Try again after " + customer.getLockedUntil().toLocalTime());
             }
 
-            // For MVP: customers use "password" as default (production: use hashed pw)
-            if ("password".equals(password)) {
+            // For MVP: Check against stored hash or fallback to "password" if unhashed for existing records
+            boolean passwordMatches = false;
+            if (customer.getPasswordHash() != null && !customer.getPasswordHash().isBlank()) {
+                passwordMatches = passwordEncoder.matches(password, customer.getPasswordHash());
+            } else {
+                passwordMatches = "password".equals(password);
+            }
+
+            if (passwordMatches) {
                 customer.setLoginAttempts(0);
                 customer.setLockedUntil(null);
                 customerRepository.save(customer);
@@ -117,10 +127,56 @@ public class AuthService {
         if (customerRepository.findByNicNumber(customer.getNicNumber()).isPresent()) {
             throw new RuntimeException("Customer with this NIC already exists.");
         }
+        if (customer.getPasswordHash() != null && !customer.getPasswordHash().isBlank()) {
+            customer.setPasswordHash(passwordEncoder.encode(customer.getPasswordHash()));
+        } else {
+            customer.setPasswordHash(passwordEncoder.encode("password"));
+        }
+        
+        customer.setStatus("PENDING");
+        String otp = String.format("%06d", new Random().nextInt(999999));
+        customer.setPasswordResetToken(otp);
+        customer.setResetTokenExpiresAt(LocalDateTime.now().plusMinutes(10));
+        
         Customer savedCustomer = customerRepository.save(customer);
-        logAuditEvent(savedCustomer.getNicNumber(), "CUSTOMER_REGISTERED", "Customer: " + savedCustomer.getNicNumber(), "127.0.0.1", "New customer registration");
-        String token = jwtHelper.generateToken(savedCustomer.getNicNumber(), "CUSTOMER");
-        return buildAuthResponse(token, savedCustomer.getNicNumber(), savedCustomer.getFullName(), "CUSTOMER", "Digital Branch", savedCustomer.getCustomerId());
+        logAuditEvent(savedCustomer.getNicNumber(), "CUSTOMER_REGISTERED_OTP_SENT", "Customer: " + savedCustomer.getNicNumber(), "127.0.0.1", "OTP generated for registration");
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("requiresOtp", true);
+        response.put("message", "OTP sent to your registered mobile and email. Please verify to continue.");
+        response.put("nicNumber", savedCustomer.getNicNumber());
+        response.put("email", savedCustomer.getEmail());
+        response.put("_devOtp", otp); // Expose for testing
+        return response;
+    }
+
+    @Transactional
+    public Map<String, Object> verifyRegisterOtp(String identifier, String otp) {
+        Optional<Customer> customerOpt = customerRepository.findByNicNumber(identifier);
+        if (customerOpt.isEmpty()) customerOpt = customerRepository.findByEmail(identifier);
+        if (customerOpt.isEmpty()) customerOpt = customerRepository.findByMobileNumber(identifier);
+
+        if (customerOpt.isEmpty()) {
+            throw new RuntimeException("Customer record not found.");
+        }
+
+        Customer customer = customerOpt.get();
+        if (customer.getPasswordResetToken() == null || !customer.getPasswordResetToken().equals(otp)) {
+            throw new RuntimeException("Invalid OTP code. Please try again.");
+        }
+
+        if (customer.getResetTokenExpiresAt() != null && customer.getResetTokenExpiresAt().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("OTP has expired. Please request a new registration OTP.");
+        }
+
+        customer.setPasswordResetToken(null);
+        customer.setResetTokenExpiresAt(null);
+        customerRepository.save(customer);
+
+        logAuditEvent(customer.getNicNumber(), "OTP_VERIFIED", "Customer: " + customer.getNicNumber(), "127.0.0.1", "Registration OTP verified successfully");
+        String token = jwtHelper.generateToken(customer.getNicNumber(), "CUSTOMER");
+        return buildAuthResponse(token, customer.getNicNumber(), customer.getFullName(), "CUSTOMER", "Digital Branch", customer.getCustomerId());
     }
 
     /**

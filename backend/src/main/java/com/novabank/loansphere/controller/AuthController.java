@@ -47,6 +47,9 @@ public class AuthController {
             customer.setOccupation(request.getOccupation());
             customer.setSourceOfFunds(request.getSourceOfFunds());
             customer.setMonthlyTurnover(java.math.BigDecimal.valueOf(request.getMonthlyTurnover()));
+            if (request.getPassword() != null && !request.getPassword().isBlank()) {
+                customer.setPasswordHash(request.getPassword()); // Handled by AuthService
+            }
             // Parse DOB if provided
             if (request.getDateOfBirth() != null && !request.getDateOfBirth().isBlank()) {
                 customer.setDateOfBirth(LocalDate.parse(request.getDateOfBirth()));
@@ -54,6 +57,21 @@ public class AuthController {
                 customer.setDateOfBirth(LocalDate.now().minusYears(20));
             }
             Map<String, Object> response = authService.registerCustomer(customer);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verifyOtp(@RequestBody Map<String, String> request) {
+        try {
+            String identifier = request.getOrDefault("identifier", request.getOrDefault("email", request.get("nicNumber")));
+            String otp = request.get("otp");
+            if (identifier == null || otp == null) {
+                return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Identifier and OTP are required."));
+            }
+            Map<String, Object> response = authService.verifyRegisterOtp(identifier, otp);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("success", false, "message", e.getMessage()));
@@ -146,6 +164,7 @@ class RegisterRequest {
     private String sourceOfFunds;
     private double monthlyTurnover;
     private String dateOfBirth;
+    private String password;
 
     public String getNicNumber() { return nicNumber; }
     public void setNicNumber(String nicNumber) { this.nicNumber = nicNumber; }
@@ -165,4 +184,6 @@ class RegisterRequest {
     public void setMonthlyTurnover(double monthlyTurnover) { this.monthlyTurnover = monthlyTurnover; }
     public String getDateOfBirth() { return dateOfBirth; }
     public void setDateOfBirth(String dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 }

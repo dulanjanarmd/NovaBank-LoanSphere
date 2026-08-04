@@ -56,6 +56,33 @@ public class LoanApplication {
     @Column(name = "draft_expires_at")
     private LocalDateTime draftExpiresAt;
 
+    @Column(name = "e_sign_ip", length = 45)
+    private String eSignIp;
+
+    @Column(name = "e_sign_otp", length = 10)
+    private String eSignOtp;
+
+    @Column(name = "ltv_ratio", precision = 5, scale = 2)
+    private BigDecimal ltvRatio;
+
+    @Column(name = "dti_ratio", precision = 5, scale = 2)
+    private BigDecimal dtiRatio;
+
+    @Column(name = "credit_score")
+    private Integer creditScore;
+
+    @Column(name = "property_value", precision = 15, scale = 2)
+    private BigDecimal propertyValue;
+
+    @Column(name = "vehicle_value", precision = 15, scale = 2)
+    private BigDecimal vehicleValue;
+
+    @Column(name = "business_reg_no", length = 50)
+    private String businessRegNo;
+
+    @Column(name = "loan_offer_pdf_url", length = 500)
+    private String loanOfferPdfUrl;
+
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -107,6 +134,33 @@ public class LoanApplication {
 
     public LocalDateTime getDraftExpiresAt() { return draftExpiresAt; }
     public void setDraftExpiresAt(LocalDateTime draftExpiresAt) { this.draftExpiresAt = draftExpiresAt; }
+
+    public String geteSignIp() { return eSignIp; }
+    public void seteSignIp(String eSignIp) { this.eSignIp = eSignIp; }
+
+    public String geteSignOtp() { return eSignOtp; }
+    public void seteSignOtp(String eSignOtp) { this.eSignOtp = eSignOtp; }
+
+    public BigDecimal getLtvRatio() { return ltvRatio; }
+    public void setLtvRatio(BigDecimal ltvRatio) { this.ltvRatio = ltvRatio; }
+
+    public BigDecimal getDtiRatio() { return dtiRatio; }
+    public void setDtiRatio(BigDecimal dtiRatio) { this.dtiRatio = dtiRatio; }
+
+    public Integer getCreditScore() { return creditScore; }
+    public void setCreditScore(Integer creditScore) { this.creditScore = creditScore; }
+
+    public BigDecimal getPropertyValue() { return propertyValue; }
+    public void setPropertyValue(BigDecimal propertyValue) { this.propertyValue = propertyValue; }
+
+    public BigDecimal getVehicleValue() { return vehicleValue; }
+    public void setVehicleValue(BigDecimal vehicleValue) { this.vehicleValue = vehicleValue; }
+
+    public String getBusinessRegNo() { return businessRegNo; }
+    public void setBusinessRegNo(String businessRegNo) { this.businessRegNo = businessRegNo; }
+
+    public String getLoanOfferPdfUrl() { return loanOfferPdfUrl; }
+    public void setLoanOfferPdfUrl(String loanOfferPdfUrl) { this.loanOfferPdfUrl = loanOfferPdfUrl; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
 

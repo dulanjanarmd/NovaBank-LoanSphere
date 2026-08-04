@@ -62,6 +62,16 @@ public class Customer {
 
     @Column(name = "reset_token_expires_at")
     private LocalDateTime resetTokenExpiresAt;
+    
+    @JsonIgnore
+    @Column(name = "password_hash")
+    private String passwordHash;
+    
+    @Column(name = "consent_timestamp")
+    private LocalDateTime consentTimestamp;
+    
+    @Column(name = "consent_ip", length = 45)
+    private String consentIp;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -120,6 +130,15 @@ public class Customer {
 
     public LocalDateTime getResetTokenExpiresAt() { return resetTokenExpiresAt; }
     public void setResetTokenExpiresAt(LocalDateTime resetTokenExpiresAt) { this.resetTokenExpiresAt = resetTokenExpiresAt; }
+
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+
+    public LocalDateTime getConsentTimestamp() { return consentTimestamp; }
+    public void setConsentTimestamp(LocalDateTime consentTimestamp) { this.consentTimestamp = consentTimestamp; }
+
+    public String getConsentIp() { return consentIp; }
+    public void setConsentIp(String consentIp) { this.consentIp = consentIp; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }

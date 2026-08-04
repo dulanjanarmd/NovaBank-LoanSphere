@@ -8,10 +8,15 @@ export default function LoginPage({ initialMode = 'login' }) {
   const [mode, setMode] = useState(initialMode)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [otpStep, setOtpStep] = useState(false)
+  const [otpInput, setOtpInput] = useState('')
+  const [pendingIdentifier, setPendingIdentifier] = useState('')
+  const [devOtpHint, setDevOtpHint] = useState('')
+  
   const navigate = useNavigate()
   const location = useLocation()
   
-  const from = location.state?.from?.pathname || '/portal/dashboard'
+  const from = location.state?.from?.pathname || '/portal/open-account'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -44,20 +49,45 @@ export default function LoginPage({ initialMode = 'login' }) {
           occupation: formData.get('occupation') || 'Other',
           sourceOfFunds: formData.get('sourceOfFunds') || 'Salary',
           monthlyTurnover: parseFloat(formData.get('monthlyTurnover')) || 0,
+          password: formData.get('password'),
         }
         
         const response = await api.register(registerData)
         
-        if (response.success) {
+        if (response.requiresOtp) {
+          setOtpStep(true)
+          setPendingIdentifier(registerData.nicNumber || registerData.email)
+          if (response._devOtp) setDevOtpHint(response._devOtp)
+        } else if (response.success) {
           localStorage.setItem('token', response.token)
           localStorage.setItem('user', JSON.stringify(response.user))
-          navigate(from, { replace: true })
+          navigate('/portal/open-account', { replace: true })
         } else {
           setError(response.message || 'Registration failed')
         }
       }
     } catch (err) {
       setError(err.message || 'An error occurred. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleVerifyOtpSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    try {
+      const response = await api.verifyOtp(pendingIdentifier, otpInput)
+      if (response.success) {
+        localStorage.setItem('token', response.token)
+        localStorage.setItem('user', JSON.stringify(response.user))
+        navigate('/portal/open-account', { replace: true })
+      } else {
+        setError(response.message || 'Invalid OTP verification code.')
+      }
+    } catch (err) {
+      setError(err.message || 'OTP verification failed.')
     } finally {
       setLoading(false)
     }
@@ -94,13 +124,46 @@ export default function LoginPage({ initialMode = 'login' }) {
             <h1 className="text-2xl font-bold text-navy-800">{mode === 'login' ? 'Welcome back' : 'Create your account'}</h1>
             <p className="mt-1 text-sm text-ink-500">{mode === 'login' ? 'Sign in to manage your loans and accounts.' : 'Join NovaBank to apply for loans online.'}</p>
 
-            {error && (
-              <div className="mt-4 rounded-lg bg-danger-50 p-3 text-sm text-danger-700">
-                {error}
-              </div>
-            )}
+            {otpStep ? (
+              <form onSubmit={handleVerifyOtpSubmit} className="mt-6 space-y-4">
+                <div className="rounded-xl border border-accent-200 bg-accent-50 p-4 text-sm text-accent-800">
+                  <div className="font-bold mb-1">Mobile &amp; Email Verification OTP Sent</div>
+                  <p className="text-xs text-ink-600">Enter the 6-digit authentication code sent to your registered mobile and email to complete registration.</p>
+                  {devOtpHint && (
+                    <div className="mt-2 text-xs font-mono font-bold text-accent-700 bg-white/80 p-2 rounded border border-accent-200">
+                      [Demo OTP Code]: <span className="text-sm underline tracking-widest">{devOtpHint}</span>
+                    </div>
+                  )}
+                </div>
 
-            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                <div>
+                  <label className="label">6-Digit Verification OTP</label>
+                  <input
+                    type="text"
+                    maxLength="6"
+                    className="input text-center font-mono text-xl font-bold tracking-widest"
+                    value={otpInput}
+                    onChange={(e) => setOtpInput(e.target.value)}
+                    placeholder="123456"
+                    required
+                  />
+                </div>
+
+                <button type="submit" className="btn-primary w-full" disabled={loading}>
+                  {loading ? 'Verifying OTP...' : 'Verify OTP & Complete Registration'}
+                  {!loading && <ArrowRight className="h-4 w-4" />}
+                </button>
+
+                <button
+                  type="button"
+                  className="btn-ghost w-full text-xs text-ink-500"
+                  onClick={() => setOtpStep(false)}
+                >
+                  ← Back to Registration Form
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleSubmit} className="mt-6 space-y-4">
               {mode === 'register' && (
                 <>
                   <div className="grid grid-cols-2 gap-3">
@@ -182,6 +245,7 @@ export default function LoginPage({ initialMode = 'login' }) {
                 {!loading && <ArrowRight className="h-4 w-4" />}
               </button>
             </form>
+            )}
 
 
 
