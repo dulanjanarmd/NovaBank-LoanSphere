@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS accounts;
 DROP TABLE IF EXISTS account_products;
 DROP TABLE IF EXISTS customers;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS system_config;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -34,6 +35,10 @@ CREATE TABLE users (
     role VARCHAR(30) NOT NULL, -- e.g., 'LOAN_OFFICER', 'COMPLIANCE_OFFICER', 'BRANCH_MANAGER', 'ADMIN'
     branch VARCHAR(100) NOT NULL,
     active BOOLEAN DEFAULT TRUE,
+    login_attempts INT DEFAULT 0,
+    locked_until TIMESTAMP NULL DEFAULT NULL,
+    password_reset_token VARCHAR(10) NULL DEFAULT NULL,
+    reset_token_expires_at TIMESTAMP NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -52,6 +57,10 @@ CREATE TABLE customers (
     risk_tier VARCHAR(20) DEFAULT 'LOW', -- 'LOW', 'MEDIUM', 'HIGH'
     status VARCHAR(20) DEFAULT 'ACTIVE', -- 'PENDING_KYC', 'ACTIVE', 'SUSPENDED'
     has_savings_account BOOLEAN DEFAULT FALSE,
+    login_attempts INT DEFAULT 0,
+    locked_until TIMESTAMP NULL DEFAULT NULL,
+    password_reset_token VARCHAR(10) NULL DEFAULT NULL,
+    reset_token_expires_at TIMESTAMP NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_nic (nic_number),
@@ -74,6 +83,7 @@ CREATE TABLE accounts (
     customer_id BIGINT NOT NULL,
     product_name VARCHAR(100) NOT NULL,
     account_number VARCHAR(12) NOT NULL UNIQUE,
+    account_ref VARCHAR(30) NULL,  -- NBLS-DAO-YYYYMMDD-XXXXX format
     status VARCHAR(20) DEFAULT 'ACTIVE',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_acc_customer FOREIGN KEY (customer_id) REFERENCES customers (customer_id) ON DELETE CASCADE
@@ -101,6 +111,7 @@ CREATE TABLE loan_products (
     max_amount DECIMAL(15,2) NOT NULL,
     interest_rate DECIMAL(5,2) NOT NULL,
     default_tenure INT NOT NULL, -- In months
+    max_ltv DECIMAL(5,2) DEFAULT NULL, -- Max LTV for HOME/VEHICLE
     active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -114,7 +125,13 @@ CREATE TABLE loan_applications (
     loan_type VARCHAR(20) NOT NULL,
     requested_amount DECIMAL(15,2) NOT NULL,
     tenure_months INT NOT NULL,
-    status VARCHAR(30) DEFAULT 'SUBMITTED', -- 'DRAFT', 'SUBMITTED', 'UNDER_REVIEW', 'APPROVED', 'APPROVED_CONDITIONAL', 'REJECTED', 'SIGNED', 'DISBURSED'
+    status VARCHAR(30) DEFAULT 'SUBMITTED', -- 'DRAFT', 'SUBMITTED', 'UNDER_REVIEW', 'APPROVED', 'APPROVED_CONDITIONAL', 'REJECTED', 'SIGNED', 'DISBURSED', 'OFFER_EXPIRED'
+    sla_breached BOOLEAN DEFAULT FALSE,
+    e_signed BOOLEAN DEFAULT FALSE,
+    e_signed_at TIMESTAMP NULL DEFAULT NULL,
+    collateral_value DECIMAL(15,2) DEFAULT NULL,
+    purpose VARCHAR(500) DEFAULT NULL,
+    draft_expires_at TIMESTAMP NULL DEFAULT NULL,
     submitted_at TIMESTAMP NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -206,6 +223,40 @@ CREATE TABLE notifications (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- 15. SYSTEM_CONFIG TABLE (Admin-configurable thresholds — FR-ADM-03, FR-CRD-06)
+CREATE TABLE system_config (
+    config_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    config_key VARCHAR(100) NOT NULL UNIQUE,
+    config_value VARCHAR(500) NOT NULL,
+    description VARCHAR(255),
+    updated_by VARCHAR(100),
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 16. APPLICATION_CONDITIONS TABLE (Conditional approval tracking — FR-UW-04)
+CREATE TABLE application_conditions (
+    condition_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    application_id BIGINT NOT NULL,
+    description TEXT NOT NULL,
+    fulfilled BOOLEAN DEFAULT FALSE,
+    fulfilled_by VARCHAR(100),
+    fulfilled_at TIMESTAMP NULL DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_cond_app FOREIGN KEY (application_id) REFERENCES loan_applications (application_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 17. NOTIFICATION_TEMPLATES TABLE (Admin-configurable templates — FR-NOT-02)
+CREATE TABLE notification_templates (
+    template_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    event_type VARCHAR(100) NOT NULL UNIQUE,
+    subject VARCHAR(255) NOT NULL,
+    body_template TEXT NOT NULL,
+    channel VARCHAR(20) DEFAULT 'BOTH', -- 'SMS', 'EMAIL', 'BOTH'
+    active BOOLEAN DEFAULT TRUE,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS system_config;
 
 -- ====================================================================
 -- SEED DATA FOR DEMONSTRATION & TESTING
@@ -224,12 +275,35 @@ INSERT INTO account_products (name, interest_rate, min_balance) VALUES
 ('Youth Savings (18-25)', 4.50, 500.00),
 ('Senior Citizens Savings', 5.50, 1000.00);
 
--- Seed Loan Products
-INSERT INTO loan_products (loan_type, name, min_amount, max_amount, interest_rate, default_tenure) VALUES
-('PERSONAL', 'Speedy Personal Loan', 50000.00, 1000000.00, 14.50, 36),
-('HOME', 'Dream Home Loan', 1000000.00, 25000000.00, 11.20, 180),
-('VEHICLE', 'WheelSphere Vehicle Loan', 500000.00, 10000000.00, 12.80, 60),
-('SME', 'SME Growth Engine Loan', 1000000.00, 50000000.00, 13.50, 48);
+-- Seed Loan Products (with max_ltv for secured loans)
+INSERT INTO loan_products (loan_type, name, min_amount, max_amount, interest_rate, default_tenure, max_ltv) VALUES
+('PERSONAL', 'Speedy Personal Loan', 50000.00, 1000000.00, 14.50, 36, NULL),
+('HOME', 'Dream Home Loan', 1000000.00, 25000000.00, 11.20, 180, 80.00),
+('VEHICLE', 'WheelSphere Vehicle Loan', 500000.00, 10000000.00, 12.80, 60, 75.00),
+('SME', 'SME Growth Engine Loan', 1000000.00, 50000000.00, 13.50, 48, NULL);
+
+-- Seed System Configuration (FR-ADM-03, FR-CRD-06)
+INSERT INTO system_config (config_key, config_value, description, updated_by) VALUES
+('AUTO_APPROVE_SCORE_MIN', '750', 'Minimum credit score for auto-approval', 'system'),
+('AUTO_DECLINE_SCORE_MAX', '599', 'Maximum credit score for auto-decline', 'system'),
+('DTI_THRESHOLD_PCT', '40', 'Maximum DTI ratio % allowed for auto-approval', 'system'),
+('SLA_REVIEW_DAYS', '3', 'Business days before SLA breach escalation', 'system'),
+('MAX_LOGIN_ATTEMPTS', '5', 'Failed login attempts before account lockout', 'system'),
+('LOCKOUT_MINUTES', '30', 'Account lockout duration in minutes', 'system'),
+('DRAFT_EXPIRY_DAYS', '30', 'Days before a draft loan application expires', 'system'),
+('OFFER_VALIDITY_DAYS', '14', 'Days customer has to sign a loan offer before it expires', 'system'),
+('LIVENESS_MATCH_THRESHOLD', '70', 'Minimum liveness match % before routing to manual', 'system');
+
+-- Seed Notification Templates (FR-NOT-02)
+INSERT INTO notification_templates (event_type, subject, body_template, channel) VALUES
+('LOAN_SUBMITTED', 'Loan Application Received — {applicationRef}', 'Dear {customerName}, your loan application {applicationRef} has been received and is under initial review. We will keep you updated on progress.', 'BOTH'),
+('LOAN_APPROVED', 'Loan Approved — {applicationRef}', 'Dear {customerName}, congratulations! Your loan application {applicationRef} for LKR {amount} has been APPROVED. Please log in to review and sign your offer letter.', 'BOTH'),
+('LOAN_REJECTED', 'Loan Application Update — {applicationRef}', 'Dear {customerName}, after review, your loan application {applicationRef} was not approved at this time. Reason: {reason}. Contact us for assistance.', 'BOTH'),
+('LOAN_DISBURSED', 'Loan Disbursed — {applicationRef}', 'Dear {customerName}, your loan of LKR {amount} has been successfully disbursed to account {accountNumber}. Your first EMI of LKR {emi} is due on {firstEmiDate}.', 'BOTH'),
+('PENDING_DOCS', 'Action Required — Documents Needed', 'Dear {customerName}, additional documents are required for your application {applicationRef}: {docList}. Please upload within 7 days to avoid expiry.', 'BOTH'),
+('ACCOUNT_OPENED', 'Account Opened Successfully', 'Dear {customerName}, your new savings account has been successfully opened. Account Number: {accountNumber}. Welcome to NovaBank!', 'BOTH'),
+('KYC_OTP', 'NovaBank OTP Verification', 'Your NovaBank OTP is: {otp}. Valid for 5 minutes. Do not share this code with anyone.', 'SMS'),
+('PASSWORD_RESET', 'Password Reset Request', 'Your NovaBank password reset code is: {otp}. Valid for 15 minutes. If you did not request this, please contact us immediately.', 'SMS');
 
 -- Seed Customers
 INSERT INTO customers (nic_number, full_name, date_of_birth, mobile_number, email, address, occupation, source_of_funds, monthly_turnover, risk_tier, status, has_savings_account) VALUES
@@ -237,13 +311,13 @@ INSERT INTO customers (nic_number, full_name, date_of_birth, mobile_number, emai
 ('198851234567', 'Fathima Rizan', '1988-11-20', '+94719876543', 'fathima@gmail.com', 'No. 12/A, Kandy Road, Kadawatha', 'Business Owner', 'Business Revenue', 800000.00, 'MEDIUM', 'ACTIVE', FALSE);
 
 -- Seed Accounts
-INSERT INTO accounts (customer_id, product_name, account_number, status) VALUES
-(1, 'Regular Savings', '8120045610', 'ACTIVE');
+INSERT INTO accounts (customer_id, product_name, account_number, account_ref, status) VALUES
+(1, 'Regular Savings', '8120045610', 'NBLS-DAO-20260101-00001', 'ACTIVE');
 
 -- Seed loan applications
-INSERT INTO loan_applications (application_ref, customer_id, loan_product_id, loan_type, requested_amount, tenure_months, status, submitted_at) VALUES
-('NBLS-LN-PERSONAL-20260710-001', 1, 1, 'PERSONAL', 500000.00, 24, 'DISBURSED', '2026-07-10 11:00:00'),
-('NBLS-LN-SME-20260718-002', 2, 4, 'SME', 15000000.00, 60, 'UNDER_REVIEW', '2026-07-18 14:20:00');
+INSERT INTO loan_applications (application_ref, customer_id, loan_product_id, loan_type, requested_amount, tenure_months, status, e_signed, submitted_at) VALUES
+('NBLS-LN-PERSONAL-20260710-001', 1, 1, 'PERSONAL', 500000.00, 24, 'DISBURSED', TRUE, '2026-07-10 11:00:00'),
+('NBLS-LN-SME-20260718-002', 2, 4, 'SME', 15000000.00, 60, 'UNDER_REVIEW', FALSE, '2026-07-18 14:20:00');
 
 -- Seed loan documents
 INSERT INTO loan_documents (application_id, name, url, status) VALUES
@@ -266,9 +340,12 @@ INSERT INTO disbursements (application_id, account_number, cbs_reference) VALUES
 -- Seed repayment schedule
 INSERT INTO repayment_schedule_items (application_id, installment_no, due_date, emi_amount, principal_amount, interest_amount, remaining_balance) VALUES
 (1, 1, '2026-08-10', 24115.00, 18115.00, 6000.00, 481885.00),
-(1, 2, '2026-09-10', 24115.00, 18332.00, 5783.00, 463553.00);
+(1, 2, '2026-09-10', 24115.00, 18332.00, 5783.00, 463553.00),
+(1, 3, '2026-10-10', 24115.00, 18552.00, 5563.00, 445001.00),
+(1, 4, '2026-11-10', 24115.00, 18775.00, 5340.00, 426226.00);
 
 -- Seed security logs
 INSERT INTO audit_logs (user_id, action_type, entity_reference, ip_address, details) VALUES
 ('admin', 'SYSTEM_START', 'NovaBank Engine', '127.0.0.1', 'System database schema generated and seeded with standard tables.'),
 ('officer', 'LOGIN', 'User: officer', '192.168.1.10', 'Staff login successful, granted LOAN_OFFICER credentials.');
+

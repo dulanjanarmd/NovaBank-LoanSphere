@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "customers")
@@ -48,6 +49,19 @@ public class Customer {
 
     @Column(name = "has_savings_account")
     private boolean hasSavingsAccount = false;
+
+    @Column(name = "login_attempts", nullable = false)
+    private int loginAttempts = 0;
+
+    @Column(name = "locked_until")
+    private LocalDateTime lockedUntil;
+
+    @JsonIgnore
+    @Column(name = "password_reset_token", length = 10)
+    private String passwordResetToken;
+
+    @Column(name = "reset_token_expires_at")
+    private LocalDateTime resetTokenExpiresAt;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -94,6 +108,18 @@ public class Customer {
 
     public boolean isHasSavingsAccount() { return hasSavingsAccount; }
     public void setHasSavingsAccount(boolean hasSavingsAccount) { this.hasSavingsAccount = hasSavingsAccount; }
+
+    public int getLoginAttempts() { return loginAttempts; }
+    public void setLoginAttempts(int loginAttempts) { this.loginAttempts = loginAttempts; }
+
+    public LocalDateTime getLockedUntil() { return lockedUntil; }
+    public void setLockedUntil(LocalDateTime lockedUntil) { this.lockedUntil = lockedUntil; }
+
+    public String getPasswordResetToken() { return passwordResetToken; }
+    public void setPasswordResetToken(String passwordResetToken) { this.passwordResetToken = passwordResetToken; }
+
+    public LocalDateTime getResetTokenExpiresAt() { return resetTokenExpiresAt; }
+    public void setResetTokenExpiresAt(LocalDateTime resetTokenExpiresAt) { this.resetTokenExpiresAt = resetTokenExpiresAt; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
