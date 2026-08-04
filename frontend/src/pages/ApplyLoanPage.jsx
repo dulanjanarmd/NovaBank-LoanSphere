@@ -17,20 +17,7 @@ const steps = [
   { id: 5, label: 'Confirmation', icon: Check },
 ]
 
-const loanProducts = [
-  { id: 'personal', name: 'Personal Loan', purpose: 'For personal expenses', rate: 15, minAmount: 50000, maxAmount: 3000000, maxTenure: 60 },
-  { id: 'home', name: 'Home Loan', purpose: 'For purchasing or building a home', rate: 12, minAmount: 1000000, maxAmount: 50000000, maxTenure: 360 },
-  { id: 'vehicle', name: 'Vehicle Loan', purpose: 'For purchasing a vehicle', rate: 14, minAmount: 200000, maxAmount: 10000000, maxTenure: 84 },
-  { id: 'education', name: 'Education Loan', purpose: 'For higher education expenses', rate: 10, minAmount: 100000, maxAmount: 5000000, maxTenure: 120 },
-]
-
-const branchList = [
-  { code: 'COL', name: 'Colombo Fort' },
-  { code: 'KDY', name: 'Kandy' },
-  { code: 'GAL', name: 'Galle' },
-  { code: 'MAT', name: 'Matara' },
-  { code: 'JAF', name: 'Jaffna' },
-]
+// Data fetched from API dynamically
 
 function calcEMI(principal, annualRate, tenureMonths) {
   const r = annualRate / 12 / 100
@@ -43,6 +30,8 @@ export default function ApplyLoanPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [submittedApplication, setSubmittedApplication] = useState(null)
+  const [loanProducts, setLoanProducts] = useState([])
+  const [branchList, setBranchList] = useState([])
   const [data, setData] = useState({
     product: '', amount: 1000000, tenure: 60, branch: '',
     firstName: '', lastName: '', nic: '', mobile: '', email: '', income: '',
@@ -58,6 +47,23 @@ export default function ApplyLoanPage() {
         setData(parsed)
       } catch (e) {}
     }
+    
+    // Fetch reference data
+    api.getPublicLoanProducts().then(res => {
+      if (res?.success) setLoanProducts(res.data.map(p => ({
+        id: p.loanType.toLowerCase(),
+        name: p.name,
+        purpose: p.loanType,
+        rate: p.interestRate,
+        minAmount: p.minAmount,
+        maxAmount: p.maxAmount,
+        maxTenure: p.defaultTenure // Note: Backend has defaultTenure, using it as maxTenure for simplicity
+      })))
+    }).catch(console.error)
+
+    api.getPublicBranches().then(res => {
+      if (res?.success) setBranchList(res.data)
+    }).catch(console.error)
   }, [])
 
   const update = (k, v) => {

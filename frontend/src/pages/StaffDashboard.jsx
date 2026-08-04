@@ -5,7 +5,6 @@ import StaffShell from '../components/StaffShell'
 import StatusBadge from '../components/StatusBadge'
 import DataTable from '../components/DataTable'
 import { api } from '../services/api'
-import { staffQueue } from '../data/mockData'
 
 function formatLKR(amount) {
   return 'LKR ' + new Intl.NumberFormat('en-LK').format(amount)
@@ -37,35 +36,16 @@ export default function StaffDashboard() {
     const fetchApplications = async () => {
       try {
         const response = await api.getStaffApplications(null, roleId)
-        if (response?.data && response.data.length > 0) {
-          setApplications(response.data)
-        } else {
-          // Fallback to mock data
-          setApplications(normalizeMock(staffQueue))
-        }
+        setApplications(response?.data || [])
       } catch (err) {
-        console.warn('API unavailable, using mock data:', err.message)
-        setApplications(normalizeMock(staffQueue))
+        console.warn('API unavailable:', err.message)
+        setApplications([])
       } finally {
         setLoading(false)
       }
     }
     fetchApplications()
   }, [roleId])
-
-  function normalizeMock(queue) {
-    return queue.map((q, i) => ({
-      applicationId: q.id || i + 1,
-      applicationRef: q.id,
-      loanType: q.product,
-      requestedAmount: q.amount,
-      submittedAt: q.submittedAt,
-      status: q.status?.toUpperCase().replace(/ /g, '_'),
-      customerName: q.applicant,
-      branch: q.branch,
-      risk: q.risk,
-    }))
-  }
 
   const queue = applications.filter((q) => {
     const matchFilter = filter === 'all' || q.status === filter

@@ -1,10 +1,24 @@
 import { Link } from 'react-router-dom'
 import { ShieldCheck, Clock, Smartphone, ArrowRight, CheckCircle, Star, Users, TrendingUp, Award, Quote } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import Logo, { TrustBar } from '../components/Logo'
 import Chatbot from '../components/Chatbot'
-import { loanProducts, formatLKR } from '../data/mockData'
+import { api } from '../services/api'
+
+function formatLKR(amount) {
+  const n = Number(amount) || 0
+  return 'Rs. ' + n.toLocaleString('en-LK', { maximumFractionDigits: 0 })
+}
 
 export default function LandingPage() {
+  const [loanProducts, setLoanProducts] = useState([])
+
+  useEffect(() => {
+    api.getPublicLoanProducts().then(res => {
+      if (res?.success) setLoanProducts(res.data)
+    }).catch(e => console.error(e))
+  }, [])
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}

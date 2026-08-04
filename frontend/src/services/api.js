@@ -30,6 +30,20 @@ class ApiService {
     return response.json()
   }
 
+  // ── Public ────────────────────────────────────────────────────────────────
+  
+  async getPublicLoanProducts() {
+    return this.request('/public/loan-products')
+  }
+
+  async getPublicAccountProducts() {
+    return this.request('/public/account-products')
+  }
+
+  async getPublicBranches() {
+    return this.request('/public/branches')
+  }
+
   // ── Auth ──────────────────────────────────────────────────────────────────
 
   async login(username, password) {

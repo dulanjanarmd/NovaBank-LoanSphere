@@ -5,7 +5,6 @@ import CustomerHeader from '../components/CustomerHeader'
 import StatusBadge from '../components/StatusBadge'
 import Chatbot from '../components/Chatbot'
 import { api } from '../services/api'
-import { customerAccounts, applications as mockApplications, notificationTemplates } from '../data/mockData'
 
 function formatLKR(amount) {
   return 'LKR ' + new Intl.NumberFormat('en-LK').format(amount)
@@ -36,29 +35,26 @@ export default function CustomerDashboard() {
               api.getCustomerApplications(userData.customerId),
               api.getNotifications(userData.customerId)
             ])
-            if (accountsRes.data?.length > 0) setAccounts(accountsRes.data)
-            else setAccounts(normalizeMockAccounts())
-            if (appsRes.data?.length > 0) setApplications(appsRes.data)
-            else setApplications(normalizeMockApps())
-            if (notifRes.data?.length > 0) setNotifications(notifRes.data)
-            else setNotifications(normalizeMockNotifs())
+            setAccounts(accountsRes.data || [])
+            setApplications(appsRes.data || [])
+            setNotifications(notifRes.data || [])
           } catch (_) {
-            // Backend offline — use mock data
-            setAccounts(normalizeMockAccounts())
-            setApplications(normalizeMockApps())
-            setNotifications(normalizeMockNotifs())
+            // Error fetching
+            setAccounts([])
+            setApplications([])
+            setNotifications([])
           }
         } else {
-          // No user ID — show mock data for demo
-          setAccounts(normalizeMockAccounts())
-          setApplications(normalizeMockApps())
-          setNotifications(normalizeMockNotifs())
+          // No user ID
+          setAccounts([])
+          setApplications([])
+          setNotifications([])
         }
       } catch (err) {
         console.error('Dashboard load error:', err)
-        setAccounts(normalizeMockAccounts())
-        setApplications(normalizeMockApps())
-        setNotifications(normalizeMockNotifs())
+        setAccounts([])
+        setApplications([])
+        setNotifications([])
       } finally {
         setLoading(false)
       }
@@ -111,24 +107,6 @@ export default function CustomerDashboard() {
         window.speechSynthesis.speak(utterance)
       }
     }
-  }
-
-  function normalizeMockAccounts() {
-    return customerAccounts.map((a) => ({
-      accountId: a.id, productName: a.type, accountNumber: a.id, balance: a.balance, createdAt: a.opened
-    }))
-  }
-  function normalizeMockApps() {
-    return mockApplications.map((a) => ({
-      applicationId: a.id, applicationRef: a.id, loanType: a.type,
-      requestedAmount: a.amount, tenureMonths: a.tenure, submittedAt: a.submittedAt,
-      status: a.status?.toUpperCase().replace(/ /g, '_'),
-    }))
-  }
-  function normalizeMockNotifs() {
-    return notificationTemplates.map((n) => ({
-      id: n.id, type: n.type, title: n.title, body: n.body, createdAt: n.time
-    }))
   }
 
   const totalBalance = accounts.reduce((s, a) => s + (a.balance || 0), 0)
