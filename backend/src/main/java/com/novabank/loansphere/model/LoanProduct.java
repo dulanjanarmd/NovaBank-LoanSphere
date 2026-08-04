@@ -29,6 +29,9 @@ public class LoanProduct {
     @Column(name = "default_tenure", nullable = false)
     private Integer defaultTenure;
 
+    @Column(name = "max_ltv", precision = 5, scale = 2)
+    private BigDecimal maxLtv;
+
     @Column(nullable = false)
     private boolean active = true;
 
@@ -56,6 +59,9 @@ public class LoanProduct {
 
     public Integer getDefaultTenure() { return defaultTenure; }
     public void setDefaultTenure(Integer defaultTenure) { this.defaultTenure = defaultTenure; }
+
+    public BigDecimal getMaxLtv() { return maxLtv; }
+    public void setMaxLtv(BigDecimal maxLtv) { this.maxLtv = maxLtv; }
 
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }

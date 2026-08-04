@@ -8,5 +8,9 @@ import java.util.List;
 
 @Repository
 public interface RepaymentScheduleItemRepository extends JpaRepository<RepaymentScheduleItem, Long> {
-    List<RepaymentScheduleItem> findByApplicationApplicationIdOrderByInstallmentNoAsc(Long applicationId);
+    List<RepaymentScheduleItem> findByApplicationIdOrderByInstallmentNoAsc(Long applicationId);
+    // Keep backward compat alias
+    default List<RepaymentScheduleItem> findByApplicationId(Long applicationId) {
+        return findByApplicationIdOrderByInstallmentNoAsc(applicationId);
+    }
 }

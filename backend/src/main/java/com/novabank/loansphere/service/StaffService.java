@@ -4,7 +4,9 @@ import com.novabank.loansphere.dto.ApprovalRequest;
 import com.novabank.loansphere.dto.LoanApplicationResponse;
 import com.novabank.loansphere.model.*;
 import com.novabank.loansphere.repository.*;
+import com.novabank.loansphere.service.LoanService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +25,11 @@ public class StaffService {
     private final CustomerRepository customerRepository;
     private final LoanProductRepository productRepository;
     private final CreditAssessmentRepository creditAssessmentRepository;
+    private final ApplicationConditionRepository conditionRepository;
     private final NotificationService notificationService;
     private final CbsIntegrationService cbsIntegrationService;
     private final SmsEmailGatewayService smsEmailGatewayService;
+    @Lazy private final LoanService loanService;
 
     public List<LoanApplicationResponse> getApplicationsByStatus(String status) {
         List<LoanApplication> applications;
@@ -68,15 +72,26 @@ public class StaffService {
         // Update application status based on decision
         switch (request.getDecision()) {
             case "APPROVE":
-                if (approverRole.equals("BRANCH_MANAGER") || approverRole.equals("ADMIN")) {
+                if (approverRole.equals("BRANCH_MANAGER") || approverRole.equals("ROLE_BRANCH_MANAGER") || approverRole.equals("ADMIN") || approverRole.equals("ROLE_ADMIN")) {
                     application.setStatus("APPROVED");
                 } else {
-                    // Loan Officer forwards to next stage
                     application.setStatus("UNDER_REVIEW");
                 }
                 break;
             case "APPROVE_CONDITIONAL":
                 application.setStatus("APPROVED_CONDITIONAL");
+                // Create condition items if provided in comments
+                if (request.getComments() != null && request.getComments().startsWith("CONDITIONS:")) {
+                    String[] condParts = request.getComments().substring(11).split(";");
+                    for (String cond : condParts) {
+                        if (!cond.isBlank()) {
+                            ApplicationCondition condition = new ApplicationCondition();
+                            condition.setApplicationId(application.getApplicationId());
+                            condition.setDescription(cond.trim());
+                            conditionRepository.save(condition);
+                        }
+                    }
+                }
                 break;
             case "REJECT":
                 application.setStatus("REJECTED");
@@ -106,8 +121,22 @@ public class StaffService {
         LoanApplication application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Application not found"));
 
-        if (!application.getStatus().equals("APPROVED") && !application.getStatus().equals("APPROVED_CONDITIONAL")) {
-            throw new RuntimeException("Application must be APPROVED before disbursement.");
+        if (!application.getStatus().equals("APPROVED") && !application.getStatus().equals("APPROVED_CONDITIONAL")
+                && !application.getStatus().equals("SIGNED")) {
+            throw new RuntimeException("Application must be APPROVED or SIGNED before disbursement.");
+        }
+
+        // FR-DIS-01: Verify e-signature
+        if (!application.iseSigned()) {
+            throw new RuntimeException("Loan agreement must be e-signed by the customer before disbursement.");
+        }
+
+        // FR-UW-04: Check all conditions fulfilled
+        if (application.getStatus().equals("APPROVED_CONDITIONAL")) {
+            boolean allFulfilled = !conditionRepository.existsByApplicationIdAndFulfilledFalse(applicationId);
+            if (!allFulfilled) {
+                throw new RuntimeException("Not all conditional approval requirements have been fulfilled.");
+            }
         }
 
         // Step 1: Verify account exists in CBS before posting
@@ -116,7 +145,7 @@ public class StaffService {
             throw new RuntimeException("CBS account verification failed for account: " + accountNumber);
         }
 
-        // Step 2: Post disbursement to CBS with retry logic (3 retries per SRS FR-DIS-05)
+        // Step 2: Post disbursement to CBS with retry logic (FR-DIS-05)
         cbsIntegrationService.postDisbursement(
             application.getApplicationRef(),
             application.getRequestedAmount(),
@@ -127,23 +156,28 @@ public class StaffService {
         application.setStatus("DISBURSED");
         application.setUpdatedAt(LocalDateTime.now());
         LoanApplication updated = applicationRepository.save(application);
-        
+
+        // FR-DIS-03: Generate and persist repayment schedule
+        try {
+            loanService.generateAndSaveRepaymentSchedule(applicationId);
+        } catch (Exception e) {
+            System.err.println("[WARN] Failed to generate repayment schedule: " + e.getMessage());
+        }
+
         // Trigger in-app notification
         if (application.getCustomer() != null) {
-            String title = "Loan Disbursed";
-            String body = "Your loan application " + application.getApplicationRef() + " has been successfully disbursed to account " + accountNumber + ".";
-            notificationService.createNotification(application.getCustomer().getCustomerId(), title, body, "DISBURSEMENT");
-            
-            // Step 3: Trigger SMS + Email via gateway stub
+            notificationService.createNotification(application.getCustomer().getCustomerId(),
+                    "Loan Disbursed",
+                    "Your loan " + application.getApplicationRef() + " of LKR " + application.getRequestedAmount() + " has been disbursed to account " + accountNumber + ".",
+                    "DISBURSEMENT");
             smsEmailGatewayService.notifyCustomer(
                 application.getCustomer().getMobileNumber(),
-                null, // email not directly on Customer model — extend if needed
+                null,
                 "LOAN_DISBURSED",
                 "Your loan of LKR " + application.getRequestedAmount() + " has been disbursed to account " + accountNumber + ".",
                 application.getApplicationRef()
             );
         }
-        
         return mapToResponse(updated);
     }
 

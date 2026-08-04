@@ -41,6 +41,21 @@ public class LoanApplication {
     @Column(name = "sla_breached", nullable = false)
     private boolean slaBreached = false;
 
+    @Column(name = "e_signed", nullable = false)
+    private boolean eSigned = false;
+
+    @Column(name = "e_signed_at")
+    private LocalDateTime eSignedAt;
+
+    @Column(name = "collateral_value", precision = 15, scale = 2)
+    private BigDecimal collateralValue;
+
+    @Column(name = "purpose", length = 500)
+    private String purpose;
+
+    @Column(name = "draft_expires_at")
+    private LocalDateTime draftExpiresAt;
+
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -77,6 +92,21 @@ public class LoanApplication {
 
     public boolean isSlaBreached() { return slaBreached; }
     public void setSlaBreached(boolean slaBreached) { this.slaBreached = slaBreached; }
+
+    public boolean iseSigned() { return eSigned; }
+    public void seteSigned(boolean eSigned) { this.eSigned = eSigned; }
+
+    public LocalDateTime geteSignedAt() { return eSignedAt; }
+    public void seteSignedAt(LocalDateTime eSignedAt) { this.eSignedAt = eSignedAt; }
+
+    public BigDecimal getCollateralValue() { return collateralValue; }
+    public void setCollateralValue(BigDecimal collateralValue) { this.collateralValue = collateralValue; }
+
+    public String getPurpose() { return purpose; }
+    public void setPurpose(String purpose) { this.purpose = purpose; }
+
+    public LocalDateTime getDraftExpiresAt() { return draftExpiresAt; }
+    public void setDraftExpiresAt(LocalDateTime draftExpiresAt) { this.draftExpiresAt = draftExpiresAt; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
 
