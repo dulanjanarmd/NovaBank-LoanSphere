@@ -8,8 +8,29 @@ import {
 import CustomerHeader from '../components/CustomerHeader'
 import StatusBadge from '../components/StatusBadge'
 import Stepper from '../components/Stepper'
-import { applications, applicationStages, formatLKR, formatDate, formatDateTime } from '../data/mockData'
 import { api } from '../services/api'
+
+function formatLKR(amount) {
+  return 'LKR ' + new Intl.NumberFormat('en-LK').format(amount)
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '—'
+  return new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+}
+
+function formatDateTime(dateStr) {
+  if (!dateStr) return '—'
+  return new Date(dateStr).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+}
+
+const applicationStages = [
+  { id: 1, key: 'submitted', label: 'Submitted', description: 'Application received and queued' },
+  { id: 2, key: 'under_review', label: 'Under Review', description: 'Loan officer verifying details' },
+  { id: 3, key: 'compliance', label: 'Compliance Check', description: 'AML, KYC and credit checks' },
+  { id: 4, key: 'manager_approval', label: 'Manager Approval', description: 'Branch manager review' },
+  { id: 5, key: 'approved', label: 'Approved / Disbursed', description: 'Funds released to account' },
+]
 
 export default function ApplicationDetailPage() {
   const { id } = useParams()
@@ -31,24 +52,21 @@ export default function ApplicationDetailPage() {
           const res = await api.getApplicationDetail(Number(id))
           if (res?.data) {
             setApp(normalizeApiApp(res.data))
-            // Fetch repayment schedule
             try {
               const schedRes = await api.getRepaymentSchedule(Number(id))
               if (schedRes?.data) setSchedule(schedRes.data)
             } catch (_) {}
-            // Fetch conditions
             try {
               const condRes = await api.getApplicationConditions(Number(id))
               if (condRes?.data) setConditions(condRes.data)
             } catch (_) {}
-            setLoading(false)
-            return
           }
         }
-      } catch (_) {}
-      const found = applications.find((a) => a.id === id)
-      setApp(found || null)
-      setLoading(false)
+      } catch (err) {
+        console.error('Failed to load application:', err)
+      } finally {
+        setLoading(false)
+      }
     }
     fetchApp()
   }, [id])

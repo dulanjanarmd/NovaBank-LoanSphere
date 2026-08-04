@@ -4,8 +4,16 @@ import { ArrowLeft, User, Building2, CreditCard, FileText, CheckCircle, XCircle,
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts'
 import StaffShell from '../components/StaffShell'
 import StatusBadge from '../components/StatusBadge'
-import { applications, staffQueue, formatLKR, formatDate } from '../data/mockData'
 import { api } from '../services/api'
+
+function formatLKR(amount) {
+  return 'LKR ' + new Intl.NumberFormat('en-LK').format(amount)
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '—'
+  return new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+}
 
 const ROLE_ACTIONS = {
   officer: { label: 'Submit Recommendation', icon: Send, next: 'Forward to Compliance' },
@@ -35,31 +43,17 @@ export default function StaffApplicationReview() {
     const fetchApp = async () => {
       setLoading(true)
       try {
-        // Try API first
         if (id && !isNaN(id)) {
           const res = await api.getStaffApplicationDetail(Number(id))
           if (res?.data) {
             setApp(normalizeApiApp(res.data))
-            setLoading(false)
-            return
           }
         }
-      } catch (_) {
-        // API offline — use mock
+      } catch (err) {
+        console.error('API Error:', err.message)
+      } finally {
+        setLoading(false)
       }
-
-      // Fallback: find in mock data by id or ref
-      const fromQueue = staffQueue.find((q) => String(q.id) === String(id))
-      const fromApps = applications.find((a) => String(a.id) === String(id) || String(a.applicationId) === String(id))
-      if (fromQueue) {
-        setApp(normalizeQueueApp(fromQueue))
-      } else if (fromApps) {
-        setApp(fromApps)
-      } else {
-        // Default to first mock app for demo
-        setApp({ ...applications[0], id: id || 'DEMO-001' })
-      }
-      setLoading(false)
     }
     fetchApp()
   }, [id])
@@ -88,32 +82,7 @@ export default function StaffApplicationReview() {
     }
   }
 
-  function normalizeQueueApp(q) {
-    return {
-      id: q.id,
-      type: q.product,
-      applicant: q.applicant,
-      branch: q.branch,
-      officer: q.assignedTo,
-      amount: q.amount,
-      tenure: 36,
-      rate: 14.5,
-      monthlyIncome: 185000,
-      status: q.status,
-      submittedAt: q.submittedAt,
-      documents: [
-        { name: 'NIC Copy', uploaded: true, verified: true },
-        { name: 'Salary Slips', uploaded: true, verified: true },
-        { name: 'Bank Statement', uploaded: true, verified: false },
-        { name: 'Utility Bill', uploaded: false, verified: false },
-      ],
-      internalScore: 742,
-      cribReference: 'CRIB-12345',
-      dtiRatio: 35,
-      ltvRatio: 65,
-      decisionBand: 'AUTO_APPROVE'
-    }
-  }
+
 
   const handleSubmit = async () => {
     if (!decision) return

@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Plus, Edit, Trash2, ToggleLeft, ToggleRight, Save, X, Settings, Shield, Download } from 'lucide-react'
 import StaffShell from '../components/StaffShell'
-import { loanProductsAdmin, formatLKR } from '../data/mockData'
 import { api } from '../services/api'
+
+function formatLKR(amount) {
+  return 'LKR ' + new Intl.NumberFormat('en-LK').format(amount)
+}
 
 export default function StaffAdminPage() {
   const [products, setProducts] = useState([])
@@ -70,10 +73,10 @@ export default function StaffAdminPage() {
       if (res.data && res.data.length > 0) {
         setProducts(res.data.map(mapApiProduct))
       } else {
-        setProducts(loanProductsAdmin)
+        setProducts([])
       }
     } catch (e) {
-      setProducts(loanProductsAdmin)
+      setProducts([])
     }
   }
 

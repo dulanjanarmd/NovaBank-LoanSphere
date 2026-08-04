@@ -2,8 +2,11 @@ import { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line } from 'recharts'
 import { TrendingUp, TrendingDown, Download, Calendar, Filter, Shield, AlertTriangle } from 'lucide-react'
 import StaffShell from '../components/StaffShell'
-import { monthlyDisbursements, productMix, branchPerformance, kpiCards, formatLKR } from '../data/mockData'
 import { api } from '../services/api'
+
+function formatLKR(amount) {
+  return 'LKR ' + new Intl.NumberFormat('en-LK').format(amount)
+}
 
 export default function StaffReportsPage() {
   const [range, setRange] = useState('6m')
@@ -70,12 +73,12 @@ export default function StaffReportsPage() {
   // Fallbacks if backend fails
   const displayKpi = kpiData ? [
     { label: 'Total Disbursements', value: formatLKR(kpiData.totalDisbursed), delta: '+12%', trend: 'up' },
-    { label: 'Applications Received', value: kpiData.applicationsReceived.toString(), delta: '+5%', trend: 'up' },
-    { label: 'Approval Rate', value: `${kpiData.approvalRate}%`, delta: '+1.2%', trend: 'up' },
-    { label: 'Avg Turnaround Time', value: `${kpiData.avgTatDays.toFixed(1)} days`, delta: '-0.5 days', trend: 'down' }
-  ] : kpiCards
+    { label: 'Applications Received', value: (kpiData.applicationsReceived || 0).toString(), delta: '+5%', trend: 'up' },
+    { label: 'Approval Rate', value: `${kpiData.approvalRate || 0}%`, delta: '+1.2%', trend: 'up' },
+    { label: 'Avg Turnaround Time', value: `${(kpiData.avgTatDays || 0).toFixed(1)} days`, delta: '-0.5 days', trend: 'down' }
+  ] : []
 
-  const displayBranchPerf = opData?.branchPerformance || branchPerformance
+  const displayBranchPerf = opData?.branchPerformance || []
 
   return (
     <StaffShell active="Reports">
@@ -141,7 +144,7 @@ export default function StaffReportsPage() {
                 <span className="chip bg-accent-50 text-accent-700"><Calendar className="h-3.5 w-3.5" /> Last 6 months</span>
               </div>
               <ResponsiveContainer width="100%" height={280}>
-                <BarChart data={monthlyDisbursements}>
+                <BarChart data={opData?.monthlyDisbursements || []}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#eef0f4" vertical={false} />
                   <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#6f7a91' }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 11, fill: '#6f7a91' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v / 1000000}M`} />
@@ -156,8 +159,8 @@ export default function StaffReportsPage() {
               <h2 className="mb-4 font-bold text-navy-800">Product Mix</h2>
               <ResponsiveContainer width="100%" height={280}>
                 <PieChart>
-                  <Pie data={productMix} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={90} paddingAngle={2}>
-                    {productMix.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                  <Pie data={opData?.productMix || []} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={90} paddingAngle={2}>
+                    {(opData?.productMix || []).map((entry, i) => <Cell key={i} fill={entry.color || '#1f3864'} />)}
                   </Pie>
                   <Tooltip contentStyle={{ borderRadius: 8, border: '1px solid #eef0f4', fontSize: 12 }} />
                   <Legend wrapperStyle={{ fontSize: 11 }} />
