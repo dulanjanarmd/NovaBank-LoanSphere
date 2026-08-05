@@ -105,7 +105,7 @@ public class AuthService {
                 customerRepository.save(customer);
                 logAuditEvent(customer.getNicNumber(), "LOGIN_SUCCESS", "Customer: " + customer.getNicNumber(), "127.0.0.1", "Customer login successful");
                 String token = jwtHelper.generateToken(customer.getNicNumber(), "CUSTOMER");
-                return buildAuthResponse(token, customer.getNicNumber(), customer.getFullName(), "CUSTOMER", "Digital Branch", customer.getCustomerId());
+                return buildCustomerAuthResponse(token, customer);
             } else {
                 int attempts = customer.getLoginAttempts() + 1;
                 customer.setLoginAttempts(attempts);
@@ -176,7 +176,7 @@ public class AuthService {
 
         logAuditEvent(customer.getNicNumber(), "OTP_VERIFIED", "Customer: " + customer.getNicNumber(), "127.0.0.1", "Registration OTP verified successfully");
         String token = jwtHelper.generateToken(customer.getNicNumber(), "CUSTOMER");
-        return buildAuthResponse(token, customer.getNicNumber(), customer.getFullName(), "CUSTOMER", "Digital Branch", customer.getCustomerId());
+        return buildCustomerAuthResponse(token, customer);
     }
 
     /**
@@ -290,6 +290,36 @@ public class AuthService {
         userObj.put("role", role);
         userObj.put("branch", branch);
         if (customerId != null) userObj.put("customerId", customerId);
+        response.put("user", userObj);
+        return response;
+    }
+
+    /**
+     * Builds a full auth response for customers, including all profile fields
+     * so the frontend can auto-fill the DAO Step 1 form without an extra API call.
+     */
+    public Map<String, Object> buildCustomerAuthResponse(String token, Customer customer) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("token", token);
+        Map<String, Object> userObj = new HashMap<>();
+        userObj.put("username", customer.getNicNumber());
+        userObj.put("nicNumber", customer.getNicNumber());
+        userObj.put("fullName", customer.getFullName());
+        userObj.put("role", "CUSTOMER");
+        userObj.put("branch", "Digital Branch");
+        userObj.put("customerId", customer.getCustomerId());
+        userObj.put("email", customer.getEmail());
+        userObj.put("mobileNumber", customer.getMobileNumber());
+        userObj.put("address", customer.getAddress());
+        userObj.put("occupation", customer.getOccupation());
+        userObj.put("sourceOfFunds", customer.getSourceOfFunds());
+        userObj.put("monthlyTurnover", customer.getMonthlyTurnover() != null ? customer.getMonthlyTurnover().toPlainString() : "0");
+        userObj.put("riskTier", customer.getRiskTier());
+        userObj.put("status", customer.getStatus());
+        if (customer.getDateOfBirth() != null) {
+            userObj.put("dateOfBirth", customer.getDateOfBirth().toString());
+        }
         response.put("user", userObj);
         return response;
     }

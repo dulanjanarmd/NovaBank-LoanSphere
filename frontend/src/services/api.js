@@ -431,6 +431,13 @@ class ApiService {
       body: JSON.stringify({ principal, annualRate, tenureMonths }),
     })
   }
+
+  async openAccount(data) {
+    return this.request('/accounts/open', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  }
 }
 
 export const api = new ApiService()

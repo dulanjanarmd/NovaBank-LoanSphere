@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, Mail, Phone, MapPin, Briefcase, User, Shield, CreditCard, Loader2 } from 'lucide-react'
 import CustomerHeader from '../components/CustomerHeader'
