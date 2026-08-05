@@ -87,6 +87,19 @@ export default function OpenAccountPage() {
     emergencyContactRelation: '',
     emergencyContactPhone: '',
 
+    // ── Section F: Additional Profile ───────────────────────────
+    residentialStatus: 'Resident',
+    educationLevel: '',
+    numberOfDependents: '0',
+    preferredLanguage: 'English',
+
+    // ── Section G: Financial Declarations (CBSL/AML/FATCA) ──────
+    taxIdNumber: '',
+    purposeOfAccount: '',
+    isPep: 'No',
+    pepDetails: '',
+    isUsPerson: 'No',
+    existingBanks: '',
     // Step 2: e-KYC Files & Verification
     nicFrontFile: null,
     nicBackFile: null,
@@ -226,7 +239,9 @@ export default function OpenAccountPage() {
         formData.permAddress &&
         formData.occupation &&
         formData.sourceOfFunds &&
-        formData.monthlyTurnover
+        formData.monthlyTurnover &&
+        formData.purposeOfAccount &&
+        (formData.isPep !== 'Yes' || formData.pepDetails)
       )
     }
     if (step === 2) {
@@ -847,6 +862,159 @@ export default function OpenAccountPage() {
                           onChange={(e) => update('emergencyContactPhone', e.target.value)}
                           placeholder="+94 71 234 5678"
                         />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* SECTION F: ADDITIONAL PROFILE */}
+                  <div className="mt-4 rounded-2xl border border-ink-200 bg-white p-5 shadow-sm">
+                    <h3 className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-accent-700">
+                      <User className="h-4 w-4" /> F. Additional Profile Details
+                    </h3>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="label">Residential Status <span className="text-danger-500">*</span></label>
+                        <select className="input" value={formData.residentialStatus} onChange={(e) => update('residentialStatus', e.target.value)}>
+                          <option value="Resident">Sri Lanka Resident Citizen</option>
+                          <option value="Non-Resident">Non-Resident Sri Lankan (NRSL)</option>
+                          <option value="Dual Citizen">Dual Citizen</option>
+                          <option value="Foreign Resident">Foreign National Resident in SL</option>
+                          <option value="Expatriate">Expatriate</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="label">Highest Education Level</label>
+                        <select className="input" value={formData.educationLevel} onChange={(e) => update('educationLevel', e.target.value)}>
+                          <option value="">Select education level</option>
+                          <option value="Primary">Primary / O/L</option>
+                          <option value="Secondary">Secondary / A/L</option>
+                          <option value="Diploma">Diploma / Certificate</option>
+                          <option value="Undergraduate">Undergraduate Degree</option>
+                          <option value="Postgraduate">Postgraduate / Masters</option>
+                          <option value="Doctorate">Doctorate / PhD</option>
+                          <option value="Professional">Professional Qualification (CA, CMA, etc.)</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="label">Number of Dependents</label>
+                        <select className="input" value={formData.numberOfDependents} onChange={(e) => update('numberOfDependents', e.target.value)}>
+                          {['0','1','2','3','4','5','6+'].map(n => <option key={n} value={n}>{n}</option>)}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="label">Preferred Communication Language</label>
+                        <select className="input" value={formData.preferredLanguage} onChange={(e) => update('preferredLanguage', e.target.value)}>
+                          <option value="English">English</option>
+                          <option value="Sinhala">Sinhala (සිංහල)</option>
+                          <option value="Tamil">Tamil (தமிழ்)</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* SECTION G: FINANCIAL DECLARATIONS (CBSL / AML / FATCA) */}
+                  <div className="mt-4 rounded-2xl border border-warning-200 bg-warning-50/40 p-5 shadow-sm">
+                    <h3 className="mb-1 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-warning-700">
+                      <ShieldAlert className="h-4 w-4" /> G. Regulatory &amp; Financial Declarations
+                    </h3>
+                    <p className="mb-4 text-[11px] text-ink-500">Required under CBSL Anti-Money Laundering Act, FATCA, and Common Reporting Standard (CRS) regulations.</p>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="label">Tax Identification Number (TIN)</label>
+                        <input
+                          className="input font-mono uppercase"
+                          value={formData.taxIdNumber}
+                          onChange={(e) => update('taxIdNumber', e.target.value)}
+                          placeholder="e.g. 123456789V or N/A"
+                          maxLength="15"
+                        />
+                        <p className="mt-1 text-[10px] text-ink-400">Enter your Inland Revenue Department TIN. Enter N/A if not applicable.</p>
+                      </div>
+
+                      <div>
+                        <label className="label">Primary Purpose of Account Opening <span className="text-danger-500">*</span></label>
+                        <select className="input" value={formData.purposeOfAccount} onChange={(e) => update('purposeOfAccount', e.target.value)}>
+                          <option value="">Select purpose</option>
+                          <option value="Savings">Personal Savings</option>
+                          <option value="Salary">Salary / Payroll Account</option>
+                          <option value="Business">Business Transactions</option>
+                          <option value="Investment">Investments & Wealth Management</option>
+                          <option value="Remittance">Receiving Foreign Remittances</option>
+                          <option value="Education">Education Fees / Student Account</option>
+                          <option value="Travel">Travel & Overseas Expenses</option>
+                          <option value="General">General / Everyday Banking</option>
+                        </select>
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <label className="label font-semibold">PEP Self-Declaration — Politically Exposed Person <span className="text-danger-500">*</span></label>
+                        <p className="mb-2 text-[11px] text-ink-500">A PEP is a person entrusted with a prominent public function (e.g., government official, senior politician, military officer, judicial officer or their immediate family members).</p>
+                        <div className="flex gap-6">
+                          {['No', 'Yes'].map(v => (
+                            <label key={v} className="flex items-center gap-2 text-sm font-medium text-navy-800 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="isPep"
+                                value={v}
+                                checked={formData.isPep === v}
+                                onChange={() => update('isPep', v)}
+                                className="h-4 w-4 accent-accent-600"
+                              />
+                              {v === 'Yes' ? '✅ Yes, I am a PEP or related to a PEP' : '✔ No, I am not a PEP'}
+                            </label>
+                          ))}
+                        </div>
+                        {formData.isPep === 'Yes' && (
+                          <div className="mt-3">
+                            <label className="label">Please provide details of PEP status</label>
+                            <textarea
+                              className="input border-warning-300 bg-warning-50"
+                              rows="2"
+                              value={formData.pepDetails}
+                              onChange={(e) => update('pepDetails', e.target.value)}
+                              placeholder="e.g. Senior Government Official, Ministry of Finance (retired 2020)"
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <label className="label font-semibold">FATCA Declaration — US Person Status <span className="text-danger-500">*</span></label>
+                        <p className="mb-2 text-[11px] text-ink-500">Under the US Foreign Account Tax Compliance Act (FATCA), NovaBank is required to identify US persons. A US person includes US citizens, US residents, or US tax residents.</p>
+                        <div className="flex gap-6">
+                          {['No', 'Yes'].map(v => (
+                            <label key={v} className="flex items-center gap-2 text-sm font-medium text-navy-800 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="isUsPerson"
+                                value={v}
+                                checked={formData.isUsPerson === v}
+                                onChange={() => update('isUsPerson', v)}
+                                className="h-4 w-4 accent-accent-600"
+                              />
+                              {v === 'Yes' ? '🇺🇸 Yes, I am a US Person' : '✔ No, I am not a US Person'}
+                            </label>
+                          ))}
+                        </div>
+                        {formData.isUsPerson === 'Yes' && (
+                          <div className="mt-3 rounded-xl bg-warning-100 border border-warning-300 p-3 text-xs text-warning-900">
+                            <b>Important:</b> As a US Person, your account details may be reported to the US Internal Revenue Service (IRS) under FATCA. Please provide your US Tax Identification Number (TIN/SSN) in the TIN field above.
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <label className="label">Existing Banking Relationships</label>
+                        <input
+                          className="input"
+                          value={formData.existingBanks}
+                          onChange={(e) => update('existingBanks', e.target.value)}
+                          placeholder="e.g. Commercial Bank, BOC, HNB (or enter None)"
+                        />
+                        <p className="mt-1 text-[10px] text-ink-400">List any other banks where you currently hold accounts. Enter &quot;None&quot; if this is your first bank account.</p>
                       </div>
                     </div>
                   </div>
