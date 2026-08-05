@@ -1261,17 +1261,54 @@ export default function OpenAccountPage() {
 
                   <div className="mt-6 space-y-4">
                     <div className="rounded-xl border border-ink-200 p-4 bg-white">
-                      <h4 className="font-bold text-xs uppercase tracking-wider text-accent-700 mb-2">Personal Summary</h4>
+                      <h4 className="font-bold text-xs uppercase tracking-wider text-accent-700 mb-3">A. Identity</h4>
                       <div className="grid grid-cols-2 gap-2 text-xs">
                         <div><span className="text-ink-400">Full Name:</span> <b>{formData.fullName}</b></div>
                         <div><span className="text-ink-400">NIC Number:</span> <b className="font-mono">{formData.nicNumber}</b></div>
-                        <div><span className="text-ink-400">Mobile:</span> <b>{formData.mobileNumber}</b></div>
-                        <div><span className="text-ink-400">Email:</span> <b>{formData.email}</b></div>
+                        <div><span className="text-ink-400">Date of Birth:</span> <b>{formData.dob}</b></div>
+                        <div><span className="text-ink-400">Gender:</span> <b>{formData.gender}</b></div>
+                        <div><span className="text-ink-400">Marital Status:</span> <b>{formData.maritalStatus}</b></div>
+                        <div><span className="text-ink-400">Nationality:</span> <b>{formData.nationality}</b></div>
                       </div>
                     </div>
 
                     <div className="rounded-xl border border-ink-200 p-4 bg-white">
-                      <h4 className="font-bold text-xs uppercase tracking-wider text-accent-700 mb-2">e-KYC &amp; Biometric Results</h4>
+                      <h4 className="font-bold text-xs uppercase tracking-wider text-accent-700 mb-3">B–C. Contact & Address</h4>
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div><span className="text-ink-400">Mobile:</span> <b>{formData.mobileNumber}</b></div>
+                        <div><span className="text-ink-400">Email:</span> <b>{formData.email}</b></div>
+                        {formData.alternateMobile && <div><span className="text-ink-400">Alt. Mobile:</span> <b>{formData.alternateMobile}</b></div>}
+                        <div className="col-span-2"><span className="text-ink-400">Address:</span> <b>{formData.permAddress}</b></div>
+                        {formData.district && <div><span className="text-ink-400">District:</span> <b>{formData.district}</b></div>}
+                        {formData.province && <div><span className="text-ink-400">Province:</span> <b>{formData.province}</b></div>}
+                        {formData.postalCode && <div><span className="text-ink-400">Postal Code:</span> <b>{formData.postalCode}</b></div>}
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl border border-ink-200 p-4 bg-white">
+                      <h4 className="font-bold text-xs uppercase tracking-wider text-accent-700 mb-3">D. Employment & Financial</h4>
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div><span className="text-ink-400">Occupation:</span> <b>{formData.occupation}</b></div>
+                        {formData.employerName && <div><span className="text-ink-400">Employer:</span> <b>{formData.employerName}</b></div>}
+                        <div><span className="text-ink-400">Source of Funds:</span> <b>{formData.sourceOfFunds}</b></div>
+                        <div><span className="text-ink-400">Monthly Turnover:</span> <b>LKR {Number(formData.monthlyTurnover).toLocaleString()}</b></div>
+                        <div><span className="text-ink-400">Purpose of Account:</span> <b>{formData.purposeOfAccount}</b></div>
+                        {formData.taxIdNumber && <div><span className="text-ink-400">Tax ID (TIN):</span> <b className="font-mono">{formData.taxIdNumber}</b></div>}
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl border border-ink-200 p-4 bg-white">
+                      <h4 className="font-bold text-xs uppercase tracking-wider text-accent-700 mb-3">G. Regulatory Declarations</h4>
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div><span className="text-ink-400">PEP Status:</span> <b className={formData.isPep === 'Yes' ? 'text-warning-700' : 'text-success-700'}>{formData.isPep === 'Yes' ? '⚠ PEP Declared' : '✓ Not a PEP'}</b></div>
+                        <div><span className="text-ink-400">US Person (FATCA):</span> <b className={formData.isUsPerson === 'Yes' ? 'text-warning-700' : 'text-success-700'}>{formData.isUsPerson === 'Yes' ? '⚠ US Person' : '✓ Not a US Person'}</b></div>
+                        <div><span className="text-ink-400">Residential Status:</span> <b>{formData.residentialStatus}</b></div>
+                        <div><span className="text-ink-400">Preferred Language:</span> <b>{formData.preferredLanguage}</b></div>
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl border border-ink-200 p-4 bg-white">
+                      <h4 className="font-bold text-xs uppercase tracking-wider text-accent-700 mb-3">e-KYC &amp; Biometric Results</h4>
                       <div className="grid grid-cols-3 gap-2 text-xs">
                         <div><span className="text-ink-400">OCR Extraction:</span> <b className="text-success-700">VERIFIED ✓</b></div>
                         <div><span className="text-ink-400">Liveness Score:</span> <b>{formData.livenessScore}%</b></div>
@@ -1280,9 +1317,10 @@ export default function OpenAccountPage() {
                     </div>
 
                     <div className="rounded-xl border border-ink-200 p-4 bg-white">
-                      <h4 className="font-bold text-xs uppercase tracking-wider text-accent-700 mb-2">Selected Product &amp; Branch</h4>
+                      <h4 className="font-bold text-xs uppercase tracking-wider text-accent-700 mb-3">Selected Product &amp; Branch</h4>
                       <div className="grid grid-cols-2 gap-2 text-xs">
                         <div><span className="text-ink-400">Product Name:</span> <b>{formData.accountType}</b></div>
+                        <div><span className="text-ink-400">Currency:</span> <b>{formData.currency}</b></div>
                         <div><span className="text-ink-400">Home Branch:</span> <b>{selectedBranch.name}</b></div>
                       </div>
                     </div>
